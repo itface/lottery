@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name="user")
-public class User implements Serializable{
+public class User implements Serializable,Comparable<User>{
 
 
 	private static final long serialVersionUID = -453211585815429686L;
@@ -29,6 +29,7 @@ public class User implements Serializable{
 	@Column(name="uid",length = 100, unique = true)
 	private String uid;
 
+	private String usernumber;
 	
     @NotEmpty(message = "姓名不可以为空")
     @Pattern(regexp = "[^'<>=\\\\]*", message = "姓名不能包含特殊字符")
@@ -37,6 +38,8 @@ public class User implements Serializable{
     private String username;
     private String dept;
     private String region;
+    private String ywdy;
+    private String ywdy2;
     private int status;
     
 	@Override
@@ -98,5 +101,27 @@ public class User implements Serializable{
 	public void setRegion(String region) {
 		this.region = region;
 	}
-	
+	public String getYwdy() {
+		return ywdy;
+	}
+	public void setYwdy(String ywdy) {
+		this.ywdy = ywdy;
+	}
+	public String getUsernumber() {
+		return usernumber;
+	}
+	public void setUsernumber(String usernumber) {
+		this.usernumber = usernumber;
+	}
+	public String getYwdy2() {
+		return ywdy2;
+	}
+	public void setYwdy2(String ywdy2) {
+		this.ywdy2 = ywdy2;
+	}
+	@Override
+	public int compareTo(User user) {
+		// TODO Auto-generated method stub
+		return this.usernumber.compareTo(user.getUsernumber());
+	}
 }

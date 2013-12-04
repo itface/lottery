@@ -19,6 +19,9 @@ public class Prize implements Serializable{
 	
 	private String prizetype;
 	private int num;
+	private int indexorder;
+	private int status;
+	private String sm;
 	public long getId() {
 		return id;
 	}
@@ -36,6 +39,25 @@ public class Prize implements Serializable{
 	}
 	public void setNum(int num) {
 		this.num = num;
+	}
+	
+	public int getIndexorder() {
+		return indexorder;
+	}
+	public void setIndexorder(int indexorder) {
+		this.indexorder = indexorder;
+	}
+	public String getSm() {
+		return sm;
+	}
+	public void setSm(String sm) {
+		this.sm = sm;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	
 

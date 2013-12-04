@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script src="resources/script/jquery-1.7.2.min.js" type="text/javascript"></script>
+		<script src="resources/script/lhgdialog/lhgdialog.js" type="text/javascript"></script>
+	<title></title>
+	<style>
+	.top{
+		height:40px;
+		
+	}
+	.tbar{
+		text-align:right;
+	}
+	</style>
+  </head>
+<body>
+	<div	class="top">
+		<div class='tbar'>
+			<div style="float:right;width:80px"><a class='prizeSetting' href='javascript:void(0);'>设置奖项</a></div>
+			<div style="float:right;width:80px"><a class='impExcel' href='javascript:void(0);'>导入excel</a></div>
+			<div style="float:right;width:80px"><select class='prizeList'></select></div>
+		</div>
+		<div style="clear:both;text-align:center;padding-top:30px;"><input type='button' value='开始' style='width:550px;height:30px'/></div>
+	</div>
+	<script>
+	$(document).ready(function(){
+		$('.prizeList').html('<option value="1">1</option>');
+		function getPrizeList(){
+			$.ajax({});
+		}
+		$('.impExcel').bind('click',function(){
+			var dialog = $.dialog({
+		 		id:'dia',
+			    lock: true,
+			    width: 500,
+		    	height: 250,
+			    min:false,
+			    max:false,
+			    cancel:true,
+			    background: '#FFF',
+			    opacity: 0.5,
+			    content: 'url:pages/readExcel.jsp',
+			    title:''
+			});
+		});
+		$('.prizeSetting').bind('click',function(){
+			var dialog = $.dialog({
+		 		id:'dia',
+			    lock: true,
+			    width: 800,
+		    	height: 550,
+			    min:false,
+			    max:false,
+			    cancel:true,
+			    background: '#FFF',
+			    opacity: 0.5,
+			    content: 'url:pages/prizeSetting.jsp',
+			    title:''
+			});
+		});
+	});
+	</script>
+  </body>
+</html>

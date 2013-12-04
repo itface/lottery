@@ -1,6 +1,5 @@
 package com.lottery.util;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -19,9 +18,10 @@ public class RandomNumUtil {
 		}
 		return null;
 	}
-	 public static Set<User> getRandomNumber(List<User> list,int range,int length){ 
+	 public static Set<User> getRandomNumber(List<User> list,int length){ 
 		Random random = new Random(); 
         Set<User> users = new HashSet<User>(length);
+        int range = list.size();
         for(int i=0;i<length;i++){  
         	User user = list.get(random.nextInt(range));
         	if(users.contains(user)){
@@ -33,6 +33,7 @@ public class RandomNumUtil {
         return users;  
 	}  
 	public static void main(String[] args){
+		/*
 		List<User> list = new ArrayList<User>();
 		for(int i=0;i<100;i++){  
 			User user = new User();
@@ -43,6 +44,6 @@ public class RandomNumUtil {
 		for(User user : users){
 			System.out.println(user.getId());
 		}
-		
+		*/
 	}
 }

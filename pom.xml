@@ -15,6 +15,8 @@
     <org.slf4j.version>1.7.5</org.slf4j.version>
     <spring.version>3.2.3.RELEASE</spring.version>
     <hibernate.version>4.2.3.Final</hibernate.version>
+    <net.sf.json-lib.version>2.2.2</net.sf.json-lib.version>
+    <org.codehaus.jackson.version>1.7.4</org.codehaus.jackson.version>
     <hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
     <tomcat-jdbc.version>7.0.42</tomcat-jdbc.version>
   </properties>
@@ -43,6 +45,41 @@
 			<version>${tomcat-jdbc.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		  <!--******************************** spring MappingJacksonHttpMessageConverter 要使用到的jar包 *******************************************************-->
+  <dependency>
+       <groupId>org.codehaus.jackson</groupId>
+       <artifactId>jackson-core-asl</artifactId>
+       <version>${org.codehaus.jackson.version}</version>
+   </dependency>
+   <dependency>
+       <groupId>org.codehaus.jackson</groupId>
+       <artifactId>jackson-core-lgpl</artifactId>
+       <version>${org.codehaus.jackson.version}</version>
+   </dependency>
+   <dependency>
+       <groupId>org.codehaus.jackson</groupId>
+       <artifactId>jackson-mapper-asl</artifactId>
+       <version>${org.codehaus.jackson.version}</version>
+   </dependency>
+   <dependency>
+       <groupId>org.codehaus.jackson</groupId>
+       <artifactId>jackson-mapper-lgpl</artifactId>
+       <version>${org.codehaus.jackson.version}</version>
+   </dependency>
+  <!--******************************** spring MappingJacksonHttpMessageConverter 要使用到的jar包 *******************************************************-->
+		 <!--******************************** net.sf.json-lib begin *******************************************************-->
+    <dependency>
+		<groupId>net.sf.ezmorph</groupId>
+		<artifactId>ezmorph</artifactId>
+		<version>1.0.6</version>
+	</dependency>
+    <dependency>
+		<groupId>net.sf.json-lib</groupId>
+		<artifactId>json-lib</artifactId>
+		<version>2.2.2</version>
+		<classifier>jdk15</classifier>
+	</dependency>
+        <!--******************************** net.sf.json-lib end *******************************************************-->     
 		 <!--******************************** poi begin *******************************************************-->
     <dependency>
 		<groupId>org.apache.poi</groupId>
@@ -84,6 +121,11 @@
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.1</version>
 		</dependency>
 	     <!-- commons-fileupload end -->     
 		 <!--******************************** log4j begin *******************************************************-->
