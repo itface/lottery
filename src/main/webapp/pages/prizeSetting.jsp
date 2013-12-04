@@ -50,7 +50,7 @@ $(document).ready(function() {
 		    },
 			autowidth: false,
 		    width:780,
-		   // height:600,
+		   	height:440,
 		   colNames: ['ID','状态','名称','中奖人数','顺序','说明'],
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true, width:1,key:true},
@@ -70,14 +70,15 @@ $(document).ready(function() {
 			multiselect: true,
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
 		    	//editData为添加的参数，是为了让参数能正常的put到后台
-		    	$('#list').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:400,reloadAfterSubmit:true,modal:true,recreateForm:true,mtype: "POST", url: basePath,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();}});
+		    	$('#list').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:400,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
 		    }
 		});
-		jQuery("#list").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:400,recreateForm:true,closeAfterAdd:true,reloadAfterSubmit:true,clearAfterAdd:true,modal:true,url:basePath,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();},beforeSubmit:function(postdata, formid){postdata.list_id=0;return [true,'']}},{url:basePath,reloadAfterSubmit:true,jqModal:false});
+		jQuery("#list").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:400,recreateForm:true,closeAfterAdd:true,reloadAfterSubmit:true,modal:true,url:basePath,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();},onclickSubmit:function(){return {list_id:0,id:0};}},{url:basePath,reloadAfterSubmit:true,jqModal:false});
 		var topPagerDiv = $("#list_toppager")[0];
 		$("#edit_list_top", topPagerDiv).remove();
 		$("#list_toppager_center", topPagerDiv).remove();
 		$("#search_list_top").remove();
+		$(".ui-jqgrid-titlebar-close").remove();
 		$(".ui-paging-info", topPagerDiv).remove();//
 });
 </script>

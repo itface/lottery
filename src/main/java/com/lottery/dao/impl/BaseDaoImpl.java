@@ -1,8 +1,8 @@
 package com.lottery.dao.impl;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,12 +35,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
-	public void saveList(Set<T> set) {
+	public void saveList(List<T> list) {
 		// TODO Auto-generated method stub
-		if(set!=null){
-			Iterator<T> it = set.iterator();
-			while(it.hasNext()){
-				T t = it.next();
+		if(list!=null&&list.size()>0){
+			for(T t : list){
 				this.persist(t);
 			}
 		}

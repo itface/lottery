@@ -57,12 +57,18 @@ public class PrizeSettingServiceImpl implements PrizeSettingService{
 
 	@Override
 	@Transactional
-	public void deletePrize(long id) {
+	public void deletePrize(String ids) {
 		// TODO Auto-generated method stub
-		Prize prize = this.findById(id);
-		int order = prize.getIndexorder();
-		dao.deleteById(Prize.class, id);
-		dao.executeUpdate("update Prize t set t.indexorder=t.indexorder-1 where t.indexorder>?1",new Object[]{order});
+		if(ids!=null&&!"".equals(ids)){
+			String[] arr = ids.split(",");
+			for(int i=0;i<arr.length;i++){
+				long id = Long.parseLong(arr[i]);
+				Prize prize = this.findById(id);
+				int order = prize.getIndexorder();
+				dao.deleteById(Prize.class, id);
+				dao.executeUpdate("update Prize t set t.indexorder=t.indexorder-1 where t.indexorder>?1",new Object[]{order});
+			}
+		}
 	}
 
 	@Override

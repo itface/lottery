@@ -5,8 +5,10 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -62,13 +64,14 @@ public class ExcelReader {
      * @throws IllegalArgumentException 
      * @throws IOException 
      */
-    public Set<User> readExcelContent(InputStream is,String[] fields) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException {
+    public List<User> readExcelContent(InputStream is,String[] fields) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException {
     	fs = new POIFSFileSystem(is);
         wb = new HSSFWorkbook(fs);
         sheet = wb.getSheetAt(0);
         // 得到总行数
         int rowNum = sheet.getLastRowNum();
         if(rowNum>0){
+        	 List<User> all = new ArrayList<User>(rowNum);
         	 Set<User> users = new HashSet<User>(rowNum);
              row = sheet.getRow(0);
              int colNum = row.getPhysicalNumberOfCells();
@@ -84,9 +87,13 @@ public class ExcelReader {
                      setMethod.invoke(user, new Object[]{value});
                      j++;
                  }
-                 users.add(user);
+                 user.setIndexorder(i);
+                 if(!users.contains(user)){
+                	  users.add(user);
+                	  all.add(user);
+                 }
              }
-             return users;
+             return all;
         }
         return null;
     }

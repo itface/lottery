@@ -28,15 +28,15 @@ public class ActionServiceImpl implements ActionService{
 		Prize prize = prizeSettingService.findById(prizeId);
 		if(prize!=null){
 			List<User> list = userService.findAllActiveUser();
-			Set<User> users = RandomNumUtil.getRandomNumber(list,prize.getNum());
+			List<User> users = RandomNumUtil.getRandomNumber(list,prize.getNum());
 			if(users!=null&&users.size()>0){
 				List<User> u = new ArrayList<User>(prize.getNum());
-				Iterator<User> it = users.iterator();
-				while(it.hasNext()){
-					User user = it.next();
-				}
+//				Iterator<User> it = users.iterator();
+//				while(it.hasNext()){
+//					User user = it.next();
+//				}
 				u.addAll(users);
-				userService.updateUsetStatus(u);
+				userService.updateUserStatus(u);
 				Collections.sort(u);
 				return u;
 			}

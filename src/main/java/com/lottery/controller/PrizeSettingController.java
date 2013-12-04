@@ -27,9 +27,9 @@ public class PrizeSettingController {
 	public @ResponseBody void _new(Prize prize){
 		prizeSettingService.addPrize(prize);
 	}
-	@RequestMapping(value=("/{id}"),method = RequestMethod.DELETE)
-	public @ResponseBody void delete(@PathVariable long id){
-		prizeSettingService.deletePrize(id);
+	@RequestMapping(method = RequestMethod.DELETE)
+	public @ResponseBody void delete(String param){
+		prizeSettingService.deletePrize(param);
 	}
 	@RequestMapping(value=("/{prizeid}"),method = RequestMethod.PUT)
 	public @ResponseBody void update(Prize prize){

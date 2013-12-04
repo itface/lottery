@@ -13,7 +13,7 @@ public interface PrizeSettingService {
 	public List<Prize> findAll();
 	public void addPrize(Prize prize);
 	public void updatePrize(Prize prize);
-	public void deletePrize(long id);
+	public void deletePrize(String ids);
 	public JSONObject findAllJson();
 	public String getOrderSelection(String order);
 	public long getPrizeNum();

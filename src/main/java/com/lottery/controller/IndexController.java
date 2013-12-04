@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lottery.domain.Prize;
 import com.lottery.service.ActionService;
 import com.lottery.service.PrizeSettingService;
+import com.lottery.service.UserService;
 
 @Controller
 @RequestMapping(value="/index")
@@ -22,6 +23,8 @@ public class IndexController {
 	private PrizeSettingService prizeSettingService;
 	@Autowired
 	private ActionService actionService;
+	@Autowired
+	private UserService userService;
 	@RequestMapping
 	public ModelAndView index(){
 		List<Prize> list = prizeSettingService.findAll();
@@ -32,5 +35,12 @@ public class IndexController {
 	@RequestMapping(value="/action/{prizeid}")
 	public @ResponseBody Object action(@PathVariable long prizeid){
 		return actionService.action(prizeid);
+	}
+	@RequestMapping(value="/initall")
+	public @ResponseBody void initall(){
+	}
+	@RequestMapping(value="/inituserstatus")
+	public @ResponseBody void inituserstatus(){
+		userService.updateAllUserStatus();
 	}
 }

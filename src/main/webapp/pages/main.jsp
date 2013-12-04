@@ -20,9 +20,17 @@
 		<div class='tbar'>
 			<div style="float:right;width:80px"><a class='prizeSetting' href='javascript:void(0);'>设置奖项</a></div>
 			<div style="float:right;width:80px"><a class='impExcel' href='javascript:void(0);'>导入excel</a></div>
+			
+			<div style="float:right;width:120px"><a class='initUser' href='javascript:void(0);'>初始化用户状态</a></div>
+			<div style="float:right;width:80px"><a class='initAll' href='javascript:void(0);'>初始化</a></div>
 			<div style="float:right;width:80px"><form:select id="prizelist"  name="prizelist" path="prizelist"  items="${prizelist}" itemValue="id" itemLabel="prizetype"/></div>
 		</div>
-		<div style="clear:both;text-align:center;padding-top:30px;"><input class='action' type='button' value='开始' style='width:550px;height:30px'/></div>
+		<div  style="clear:both;text-align:center;padding-top:30px;height:35px">
+			<input class='actionstart' type='button' value='开始' style='width:250px;height:30px'/>
+		</div>
+		<div  style="clear:both;text-align:center;height:35px">
+			<input class='actionend' type='button' value='停止' style='width:250px;height:30px;display:none;'/>
+		</div>
 		<div  class='userListTable' style='padding-top:20px;display:none'>
 			<table class='userList' width="100%" border="1px solid #ccc" style='border-collapse: collapse;'>
 			</table>
@@ -30,44 +38,59 @@
 	</div>
 	<script>
 	$(document).ready(function(){
-		$('.action').bind('click',function(){
-			var v = $('.action').val();
-			var header = '<tr>';
-				header += '<td>序号</td>';
-				header += '<td>员工编号</td>';
-				header += '<td>员工帐号</td>';
-				header += '<td>员工姓名</td>';
-				header += '<td>业务单元</td>';
-				header += '<td>地域</td>';
-				header += '</tr>';
-			$('.userListTable').hide();
-			$('.userList').html('');
-			if(v=='停止'){
-				var temp = (v=='开始'?$('.action').val('停止'):$('.action').val('开始'));
-				$('.userList').html(header);
-				$.ajax({
-					url:'${ctx}/index/action/'+$('#prizelist').val(),
-					async:false,
+		$('.initAll').bind('click',function(){
+			$.ajax({
+					url:'${ctx}/index/initall',
 					success:function(obj){
-						if(obj!=null&&obj.length>0){
-							$(obj).each(function(i,v){
-								var s = '<tr>';
-								s += '<td>'+(i+1)+'</td>';
-								s += '<td>'+v['usernumber']+'</td>';
-								s += '<td>'+v['uid']+'</td>';
-								s += '<td>'+v['username']+'</td>';
-								s += '<td>'+v['ywdy2']+'</td>';
-								s += '<td>'+v['region']+'</td>';
-								s += '</tr>';
-								$('.userList').append(s);
-							});
-						}
+						alert('初始化完毕！');
 					}
-				});
-				$('.userListTable').show();
-			}else{
-				var temp = (v=='开始'?$('.action').val('停止'):$('.action').val('开始'));
-			}
+			});
+		});
+		$('.initUser').bind('click',function(){
+			$.ajax({
+					url:'${ctx}/index/inituserstatus',
+					success:function(obj){
+						alert('用户状态初始化完毕！');
+					}
+			});
+		});
+		$('.actionstart').bind('click',function(){
+			$('.actionstart').hide();
+			$('.actionend').show();
+			$('.userList').empty();
+			$('.userListTable').hide();
+		});
+		$('.actionend').bind('click',function(){
+			$('.actionstart').show();
+			$('.actionend').hide();
+			$('.userListTable').show();
+			var s = '<tr>';
+				s += '<td>序号</td>';
+				s += '<td>员工编号</td>';
+				s += '<td>员工帐号</td>';
+				s += '<td>员工姓名</td>';
+				s += '<td>业务单元</td>';
+				s += '<td>地域</td>';
+				s += '</tr>';
+			$.ajax({
+				url:'${ctx}/index/action/'+$('#prizelist').val(),
+				async:false,
+				success:function(obj){
+					if(obj!=null&&obj.length>0){
+						$(obj).each(function(i,v){
+							s += '<tr>';
+							s += '<td>'+(i+1)+'</td>';
+							s += '<td>'+(v['usernumber']==null?'':v['usernumber'])+'</td>';
+							s += '<td>'+(v['uid']==null?'':v['uid'])+'</td>';
+							s += '<td>'+(v['username']==null?'':v['username'])+'</td>';
+							s += '<td>'+(v['ywdy2']==null?'':v['ywdy2'])+'</td>';
+							s += '<td>'+(v['region']==null?'':v['region'])+'</td>';
+							s += '</tr>';
+						});
+						$('.userList').html(s);
+					}
+				}
+			});
 		});
 		$('.impExcel').bind('click',function(){
 			var dialog = $.dialog({
@@ -96,7 +119,10 @@
 			    background: '#FFF',
 			    opacity: 0.5,
 			    content: 'url:pages/prizeSetting.jsp',
-			    title:''
+			    title:'',
+			    close:function(){
+			    	parent.location=parent.location;
+			    }
 			});
 		});
 	});

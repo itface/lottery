@@ -13,11 +13,11 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 @Entity
-@Table(name="user")
-public class User implements Serializable,Comparable<User>{
+@Table(name="tempuser")
+public class TempUser implements Serializable{
 
 
-	private static final long serialVersionUID = -453211585815429686L;
+	private static final long serialVersionUID = -884192681296194661L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -56,15 +56,29 @@ public class User implements Serializable,Comparable<User>{
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
-		if(!(obj instanceof User)){
+		if(!(obj instanceof TempUser)){
 			return false;
 		}
-		User obj2 = (User)obj;
+		TempUser obj2 = (TempUser)obj;
 		if(this.uid!=null&&!"".equals(uid)){
 			return this.uid==obj2.getUid();
 		}else{
 			return false;
 		}
+	}
+	public TempUser(){
+		
+	}
+	public TempUser(User user){
+		this.dept=user.getDept();
+		this.indexorder=user.getIndexorder();
+		this.region=user.getRegion();
+		this.status=user.getStatus();
+		this.uid=user.getUid();
+		this.username=user.getUsername();
+		this.usernumber=user.getUsernumber();
+		this.ywdy=user.getYwdy();
+		this.ywdy2=user.getYwdy2();
 	}
 	public long getId() {
 		return id;
@@ -126,9 +140,5 @@ public class User implements Serializable,Comparable<User>{
 	public void setIndexorder(int indexorder) {
 		this.indexorder = indexorder;
 	}
-	@Override
-	public int compareTo(User user) {
-		// TODO Auto-generated method stub
-		return this.usernumber.compareTo(user.getUsernumber());
-	}
+	
 }
