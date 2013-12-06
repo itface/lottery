@@ -1,12 +1,21 @@
 package com.lottery.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 @Entity
 @Table(name="prize")
 public class Prize implements Serializable{
@@ -22,6 +31,17 @@ public class Prize implements Serializable{
 	private int indexorder;
 	private int status;
 	private String sm;
+	private String jp;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "prizeserial_id", referencedColumnName = "id")
+	private PrizeSerial prizeSerial=new PrizeSerial();
+	
+//	@JsonIgnore
+//	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.REFRESH,CascadeType.PERSIST},mappedBy="prize")  
+//    private Set<PrizeUsers> prizeUsers= new HashSet<PrizeUsers>();
+	
 	public long getId() {
 		return id;
 	}
@@ -59,6 +79,17 @@ public class Prize implements Serializable{
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	public PrizeSerial getPrizeSerial() {
+		return prizeSerial;
+	}
+	public void setPrizeSerial(PrizeSerial prizeSerial) {
+		this.prizeSerial = prizeSerial;
+	}
+	public String getJp() {
+		return jp;
+	}
+	public void setJp(String jp) {
+		this.jp = jp;
+	}
 	
-
 }

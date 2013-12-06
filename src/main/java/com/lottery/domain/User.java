@@ -1,15 +1,21 @@
 package com.lottery.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 @Entity
@@ -42,7 +48,8 @@ public class User implements Serializable,Comparable<User>{
     private String ywdy2;
     private int status;
     private int indexorder;
-    
+//    @OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.REFRESH,CascadeType.PERSIST},mappedBy="user")  
+//	Set<PrizeUsers> prizeUsers = new HashSet<PrizeUsers>();
 	@Override
 	public int hashCode() {
 		// TODO Auto-generated method stub

@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lottery.domain.Prize;
-import com.lottery.service.PrizeSettingService;
+import com.lottery.service.PrizeService;
 
 @Controller
 @RequestMapping(value="/prizesetting")
 public class PrizeSettingController {
 	@Autowired
-	private PrizeSettingService prizeSettingService;
+	private PrizeService prizeSettingService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody Object getJqgridData() {

@@ -38,6 +38,29 @@
 	</div>
 	<script>
 	$(document).ready(function(){
+		init();
+		 function init(){
+			 var initflag = ${initflag};
+			 if(initflag==true||initflag=='true'){
+				showInitPage();
+			 }
+		 }
+		 function showInitPage(){
+		 	var dialog = $.dialog({
+		 		id:'dia',
+			    lock: true,
+			    width: 800,
+		    	height: 550,
+			    min:false,
+			    max:false,
+			    cancel:false,
+			    background: '#FFF',
+			    opacity: 0.5,
+			    content: 'url:${ctx}/index/initpage',
+			    title:''
+			});
+			$.dialog.data('dialog',dialog);
+		 }
 		$('.initAll').bind('click',function(){
 			$.ajax({
 					url:'${ctx}/index/initall',
@@ -55,6 +78,11 @@
 			});
 		});
 		$('.actionstart').bind('click',function(){
+			var prize = $('#prizelist').val();
+			if(prize==null||prize==''||prize==undefined){
+				alert('请选择要抽的奖项。');
+				return false;
+			}
 			$('.actionstart').hide();
 			$('.actionend').show();
 			$('.userList').empty();

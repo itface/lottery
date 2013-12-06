@@ -25,6 +25,7 @@ $(document).ready(function() {
 	    'uploader'    : '${ctx}/uploadify/upload',
 	    'fileTypeExts'	: '*.xls',
 	    'fileObjName':'uploadify',
+	    'buttonText' : '上传人员名单...',
 	     'multi':false,
 	     'onUploadComplete' : function(file) {
             alert('导入成功!');

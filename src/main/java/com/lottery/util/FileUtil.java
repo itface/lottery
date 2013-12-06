@@ -22,7 +22,7 @@ public class FileUtil {
 			try {
 				writer = new PrintWriter(new FileOutputStream(f));
 				for(PrizeUsers p : list){
-					writer.println(p.getId()+"	"+p.getPrizeid()+"	"+p.getSerialnumber()+"	"+p.getUid()+"	"+sd.format(p.getPrizetime()));
+					//writer.println(p.getId()+"	"+p.getPrizeid()+"	"+p.getSerialnumber()+"	"+p.getUid()+"	"+sd.format(p.getPrizetime()));
 				}
 			}finally{
 				if(writer!=null){

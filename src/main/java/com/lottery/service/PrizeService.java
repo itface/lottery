@@ -6,7 +6,7 @@ import net.sf.json.JSONObject;
 
 import com.lottery.domain.Prize;
 
-public interface PrizeSettingService {
+public interface PrizeService {
 
 	public int getPrizeOrder(long id);
 	public Prize findById(long id);

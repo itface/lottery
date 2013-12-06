@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService{
 		 is = mf.getInputStream();
 	     List<User> users = excelReader.readExcelContent(is,fields);
 	     if(users!=null&&users.size()>0){
-	    	 List<User> randomUser = RandomNumUtil.getRandomList(users);
 	    	 tempUserService.saveList(users);
+	    	 List<User> randomUser = RandomNumUtil.getRandomList(users);
 	    	 dao.saveList(randomUser);
 	     }
 	}

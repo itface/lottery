@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface BaseDao<T>{
 
-	public void persist(T t);
+	public T persist(T t);
 	public List<T> find(String jpql, Object[] param);
 	public T findById(Class<T> clazz,long id);
 	public void saveList(List<T> list);

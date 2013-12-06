@@ -1,7 +1,5 @@
 package com.lottery.dao.impl;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -19,9 +17,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     private EntityManager em;
 
 	@Override
-	public void persist(T t) {
+	public T persist(T t) {
 		// TODO Auto-generated method stub
-		em.persist(t);
+		 em.persist(t);
+		 return t;
 	}
 
 	@Override
