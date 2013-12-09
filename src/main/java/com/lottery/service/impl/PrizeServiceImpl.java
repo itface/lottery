@@ -1,6 +1,7 @@
 package com.lottery.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.sf.json.JSONObject;
@@ -63,7 +64,8 @@ public class PrizeServiceImpl implements PrizeService{
 			}else if(oldOrder<newOrder){
 				dao.executeUpdate("update Prize t set t.indexorder=t.indexorder-1 where t.indexorder<=?1 and t.id!=?2",new Object[]{newOrder,prize.getId()});
 			}
-			dao.update(prize);
+			//dao.update(prize);
+			old.update(prize);
 		}
 	}
 
@@ -97,6 +99,7 @@ public class PrizeServiceImpl implements PrizeService{
 		if(prizeSerial!=null){
 			List<Prize> list = new ArrayList<Prize>();
 			list.addAll(prizeSerial.getPrizes());
+			Collections.sort(list);
 			return list;
 		}
 		return null;

@@ -7,11 +7,11 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import com.lottery.domain.PrizeUsers;
+import com.lottery.domain.PrizeUser;
 
 public class FileUtil {
 
-	public void writeFile(String file,List<PrizeUsers> list) throws IOException{
+	public void writeFile(String file,List<PrizeUser> list) throws IOException{
 		File f = new File(file);
 		if(!f.exists()){
 			f.createNewFile();
@@ -21,7 +21,7 @@ public class FileUtil {
 			PrintWriter writer = null;
 			try {
 				writer = new PrintWriter(new FileOutputStream(f));
-				for(PrizeUsers p : list){
+				for(PrizeUser p : list){
 					//writer.println(p.getId()+"	"+p.getPrizeid()+"	"+p.getSerialnumber()+"	"+p.getUid()+"	"+sd.format(p.getPrizetime()));
 				}
 			}finally{

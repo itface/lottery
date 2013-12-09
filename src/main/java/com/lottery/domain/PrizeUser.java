@@ -23,7 +23,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="prizeusers")
-public class PrizeUsers implements Serializable{
+public class PrizeUser implements Serializable{
 
 	private static final long serialVersionUID = 5757795679672816084L;
 	@Id
@@ -34,8 +34,8 @@ public class PrizeUsers implements Serializable{
 	private Date prizetime;
 	
 	private String prizeSerial;
-	private String prizetype;
-	private int num;
+	private String prizename;
+	private int prizenum;
 	private String sm;
 	private String jp;
 	
@@ -58,7 +58,28 @@ public class PrizeUsers implements Serializable{
 //    @JoinColumn(name = "prize_id", referencedColumnName = "id")
 //	Prize prize = new Prize();
 	
-	
+	public PrizeUser(){
+		
+	}
+	public PrizeUser(Prize prize,User user){
+		if(prize!=null){
+			this.jp=prize.getJp();
+			this.prizenum=prize.getPrizenum();
+			this.prizeSerial=prize.getPrizeSerial().getNum();
+			this.prizename=prize.getPrizename();
+			this.sm=prize.getSm();
+		}
+		if(user!=null){
+			this.region=user.getRegion();
+			this.dept=user.getDept();
+			this.uid=user.getUid();
+			this.username=user.getUsername();
+			this.usernumber=user.getUsernumber();
+			this.ywdy=user.getYwdy();
+			this.ywdy2=user.getYwdy2();
+		}
+		this.prizetime=new Date();
+	}
 	public long getId() {
 		return id;
 	}
@@ -77,17 +98,19 @@ public class PrizeUsers implements Serializable{
 	public void setPrizeSerial(String prizeSerial) {
 		this.prizeSerial = prizeSerial;
 	}
-	public String getPrizetype() {
-		return prizetype;
+	
+	
+	public String getPrizename() {
+		return prizename;
 	}
-	public void setPrizetype(String prizetype) {
-		this.prizetype = prizetype;
+	public void setPrizename(String prizename) {
+		this.prizename = prizename;
 	}
-	public int getNum() {
-		return num;
+	public int getPrizenum() {
+		return prizenum;
 	}
-	public void setNum(int num) {
-		this.num = num;
+	public void setPrizenum(int prizenum) {
+		this.prizenum = prizenum;
 	}
 	public String getSm() {
 		return sm;

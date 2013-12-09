@@ -9,37 +9,35 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lottery.domain.Prize;
-import com.lottery.domain.PrizeUsers;
+import com.lottery.domain.PrizeUser;
 import com.lottery.domain.User;
 import com.lottery.service.ActionService;
 import com.lottery.service.PrizeService;
+import com.lottery.service.PrizeUserService;
 import com.lottery.service.UserService;
 import com.lottery.util.RandomNumUtil;
 @Service
 public class ActionServiceImpl implements ActionService{
 
 	@Autowired
-	private PrizeService prizeSettingService;
+	private PrizeService prizeService;
 	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	private PrizeUserService prizeUserService;
 	@Override
 	@Transactional
 	public List<User> action(long prizeId) {
 		// TODO Auto-generated method stub
-		Prize prize = prizeSettingService.findById(prizeId);
+		Prize prize = prizeService.findById(prizeId);
 		if(prize!=null){
 			List<User> list = userService.findAllActiveUser();
-			List<User> users = RandomNumUtil.getRandomNumber(list,prize.getNum());
+			RandomNumUtil util = new RandomNumUtil();
+			List<User> users = util.getRandom(list,prize.getPrizenum());
 			if(users!=null&&users.size()>0){
-				Date date = new Date();
 				for(User user:users){
-//					PrizeUsers prizeUsers = new PrizeUsers();
-//					prizeUsers.setPrizetime(date);
-//					prizeUsers.setPrize(prize);
-//					prizeUsers.setUser(user);
-//					user.getPrizeUsers().add(prizeUsers);
-//					prize.getPrizeUsers().add(prizeUsers);
+					PrizeUser prizeUser = new PrizeUser(prize,user);
+					prizeUserService.addPrizeUser(prizeUser);
 				}
 				userService.updateUserStatus(users);
 				Collections.sort(users);

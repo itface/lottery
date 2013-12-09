@@ -1,8 +1,6 @@
 package com.lottery.domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,13 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 @Entity
 @Table(name="prize")
-public class Prize implements Serializable{
+public class Prize implements Serializable,Comparable<Prize>{
 
 	
 	private static final long serialVersionUID = -1108604706063040536L;
@@ -26,12 +23,13 @@ public class Prize implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 	
-	private String prizetype;
-	private int num;
+	private String prizename;
+	private int prizenum;
 	private int indexorder;
 	private int status;
 	private String sm;
 	private String jp;
+	private String jppic;
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -42,25 +40,39 @@ public class Prize implements Serializable{
 //	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.REFRESH,CascadeType.PERSIST},mappedBy="prize")  
 //    private Set<PrizeUsers> prizeUsers= new HashSet<PrizeUsers>();
 	
+	public Prize(){
+		
+	}
+	public void update(Prize prize){
+		if(prize!=null){
+			this.id=prize.getId();
+			this.prizename=prize.getPrizename();
+			this.prizenum=prize.getPrizenum();
+			this.indexorder=prize.getIndexorder();
+			this.status=prize.getStatus();
+			this.sm=prize.getSm();
+			this.jp=prize.getJp();
+			this.jppic=prize.getJppic();
+		}
+	}
 	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getPrizetype() {
-		return prizetype;
+	public String getPrizename() {
+		return prizename;
 	}
-	public void setPrizetype(String prizetype) {
-		this.prizetype = prizetype;
+	public void setPrizename(String prizename) {
+		this.prizename = prizename;
 	}
-	public int getNum() {
-		return num;
+	public int getPrizenum() {
+		return prizenum;
 	}
-	public void setNum(int num) {
-		this.num = num;
+	public void setPrizenum(int prizenum) {
+		this.prizenum = prizenum;
 	}
-	
 	public int getIndexorder() {
 		return indexorder;
 	}
@@ -90,6 +102,18 @@ public class Prize implements Serializable{
 	}
 	public void setJp(String jp) {
 		this.jp = jp;
+	}
+	
+	public String getJppic() {
+		return jppic;
+	}
+	public void setJppic(String jppic) {
+		this.jppic = jppic;
+	}
+	@Override
+	public int compareTo(Prize o) {
+		// TODO Auto-generated method stub
+		return this.indexorder-o.getIndexorder();
 	}
 	
 }

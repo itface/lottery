@@ -15,4 +15,5 @@ public interface UserService {
 	public List<User> findAllActiveUser();
 	public void updateUserStatus(List<User> users);
 	public void updateAllUserStatus();
+	public long findActiveUserNum();
 }

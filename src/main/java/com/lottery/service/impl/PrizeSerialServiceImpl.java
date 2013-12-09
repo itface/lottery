@@ -30,7 +30,7 @@ public class PrizeSerialServiceImpl implements PrizeSerialService{
 	@Transactional
 	public void stopActivePrizeSerial() {
 		// TODO Auto-generated method stub
-		dao.executeUpdate("update PrizeSerial t set t.enddate=getdate() where t.status=0", null);
+		dao.executeUpdate("update PrizeSerial t set t.enddate=?1 where t.status=0", new Object[]{new Date()});
 		dao.executeUpdate("update PrizeSerial t set t.status=-1", null);
 	}
 
@@ -38,8 +38,9 @@ public class PrizeSerialServiceImpl implements PrizeSerialService{
 	@Transactional
 	public PrizeSerial addActivePrizeSerial(PrizeSerial prizeSerial) {
 		// TODO Auto-generated method stub
-		dao.executeUpdate("update PrizeSerial t set t.status=-1", null);
-		prizeSerial.setBegindate(new Date());
+//		dao.executeUpdate("update PrizeSerial t set t.enddate=getdate() where t.status=0", null);
+//		dao.executeUpdate("update PrizeSerial t set t.status=-1", null);
+		stopActivePrizeSerial();
 		dao.persist(prizeSerial);
 		return prizeSerial;
 	}

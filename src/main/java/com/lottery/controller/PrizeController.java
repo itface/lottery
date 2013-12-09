@@ -14,7 +14,7 @@ import com.lottery.service.PrizeService;
 
 @Controller
 @RequestMapping(value="/prizesetting")
-public class PrizeSettingController {
+public class PrizeController {
 	@Autowired
 	private PrizeService prizeSettingService;
 	

@@ -18,7 +18,7 @@
 </head>
 <body>
 	<div>
-		本次抽奖名称:<input type='text' id='name'/>
+		本次抽奖名称:<input type='text' id='name' value='${name}'/>
 	</div>
 	<div style="padding-top:25px">
 		<table id="list"></table>
@@ -30,7 +30,8 @@
 	</div>
 	<div>
 		<div style='bottom:5px;right:10px;position:absolute;'>
-			<input class='initBtn' type='button' value='完成初始化'/>
+			<input class='initBtn' type='button' value='保存'/>
+			<input class='cancelBtn' type='button' value='取消'/>
 		</div>
 	</div>
 </body>
@@ -54,6 +55,15 @@ $(document).ready(function() {
 		        }
 			  });
 		  }
+		function closeWin(){
+			var api = frameElement.api;
+			var  W = api.opener; 
+			var dia = W.$.dialog.data('dialog');
+			dia.close();
+		}
+		$('.cancelBtn').bind('click',function(){
+			 closeWin();
+		});
 		$('.initBtn').bind('click',function(){
 			var pname = $('#name').val();
 			if(pname!=null&&pname!=''&&pname!=undefined){
@@ -62,7 +72,7 @@ $(document).ready(function() {
 					type:'POST',
 					data:{name:pname,pnum:pnum},
 					success:function(){
-						alert('初始化成功.');
+						alert('保存成功.');
 						parent.location=parent.location;
 					}
 				});
@@ -100,12 +110,14 @@ $(document).ready(function() {
 			autowidth: false,
 		    width:770,
 		   	height:240,
-		   colNames: ['ID','状态','名称','中奖人数','顺序','说明'],
+		   colNames: ['ID','状态','名称','中奖人数','奖品','奖品照片名称','顺序','说明'],
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true, width:1,key:true},
 		   		{name:'status',index:'status',hidden:true},
-		   		{name:'prizetype',index:'prizetype',editable:true,editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},
-		   		{name:'num',index:'num',editable:true,editrules:{integer:true,required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},//dataUrl:"${ctx}/prizesetting/getOrderSelection"
+		   		{name:'prizename',index:'prizename',editable:true,editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},
+		   		{name:'prizenum',index:'prizenum',editable:true,editrules:{integer:true,required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},
+		   		{name:'jp',index:'jp',editable:true,editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},
+		   		{name:'jppic',index:'jppic',editable:true},
 		   		{name:'indexorder',index:'indexorder',editable:true,edittype:'custom',editoptions:{custom_element:my_input,custom_value:my_value},editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>"}}},
 		   		{name:'sm',index:'sm',editable:true,editrules:{required:true}}
 		   	],

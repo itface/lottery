@@ -34,12 +34,13 @@ public class UserServiceImpl implements UserService{
 		dao.executeUpdate("delete from TempUser t", null);
 		InputStream is = mf.getInputStream();
 		ExcelReader excelReader = new ExcelReader();
+		RandomNumUtil util = new RandomNumUtil();
 		String[] fields = excelReader.readExcelTitle(is);
 		 is = mf.getInputStream();
 	     List<User> users = excelReader.readExcelContent(is,fields);
 	     if(users!=null&&users.size()>0){
 	    	 tempUserService.saveList(users);
-	    	 List<User> randomUser = RandomNumUtil.getRandomList(users);
+	    	 List<User> randomUser = util.getRandomList(users);
 	    	 dao.saveList(randomUser);
 	     }
 	}
@@ -68,6 +69,12 @@ public class UserServiceImpl implements UserService{
 	public void updateAllUserStatus() {
 		// TODO Auto-generated method stub
 		dao.executeUpdate("update User t set t.status=0", null);
+	}
+	@Override
+	public long findActiveUserNum() {
+		// TODO Auto-generated method stub
+		long num = dao.findTotalCount("select count(t.id) as num from User t where t.status=0", null);
+		return num;
 	}
 
 }
