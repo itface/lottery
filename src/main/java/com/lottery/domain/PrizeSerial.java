@@ -37,6 +37,7 @@ public class PrizeSerial implements Serializable{
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date enddate;
 	private int status;
+	private int prizecount;
 	@JsonIgnore
 	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.PERSIST},mappedBy="prizeSerial")
 	private Set<Prize> prizes = new HashSet<Prize>();
@@ -83,5 +84,10 @@ public class PrizeSerial implements Serializable{
 	public void setPrizes(Set<Prize> prizes) {
 		this.prizes = prizes;
 	}
-	
+	public int getPrizecount() {
+		return prizecount;
+	}
+	public void setPrizecount(int prizecount) {
+		this.prizecount = prizecount;
+	}
 }

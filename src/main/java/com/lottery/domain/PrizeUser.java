@@ -3,22 +3,15 @@ package com.lottery.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Pattern;
+import javax.persistence.Transient;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -32,8 +25,12 @@ public class PrizeUser implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date prizetime;
+	private int indexorder;
+	@Transient
+	private String indexordername;
 	
-	private String prizeSerial;
+	private String prizeserialnum;
+	private String prizeserialname;
 	private String prizename;
 	private int prizenum;
 	private String sm;
@@ -61,11 +58,12 @@ public class PrizeUser implements Serializable{
 	public PrizeUser(){
 		
 	}
-	public PrizeUser(Prize prize,User user){
+	public PrizeUser(Prize prize,User user,int indexorder){
 		if(prize!=null){
 			this.jp=prize.getJp();
 			this.prizenum=prize.getPrizenum();
-			this.prizeSerial=prize.getPrizeSerial().getNum();
+			this.prizeserialnum=prize.getPrizeSerial().getNum();
+			this.prizeserialname=prize.getPrizeSerial().getName();
 			this.prizename=prize.getPrizename();
 			this.sm=prize.getSm();
 		}
@@ -79,6 +77,7 @@ public class PrizeUser implements Serializable{
 			this.ywdy2=user.getYwdy2();
 		}
 		this.prizetime=new Date();
+		this.indexorder=indexorder;
 	}
 	public long getId() {
 		return id;
@@ -92,14 +91,18 @@ public class PrizeUser implements Serializable{
 	public void setPrizetime(Date prizetime) {
 		this.prizetime = prizetime;
 	}
-	public String getPrizeSerial() {
-		return prizeSerial;
+	public String getPrizeserialnum() {
+		return prizeserialnum;
 	}
-	public void setPrizeSerial(String prizeSerial) {
-		this.prizeSerial = prizeSerial;
+	public void setPrizeserialnum(String prizeserialnum) {
+		this.prizeserialnum = prizeserialnum;
 	}
-	
-	
+	public String getPrizeserialname() {
+		return prizeserialname;
+	}
+	public void setPrizeserialname(String prizeserialname) {
+		this.prizeserialname = prizeserialname;
+	}
 	public String getPrizename() {
 		return prizename;
 	}
@@ -166,6 +169,19 @@ public class PrizeUser implements Serializable{
 	public void setYwdy2(String ywdy2) {
 		this.ywdy2 = ywdy2;
 	}
+	public int getIndexorder() {
+		return indexorder;
+	}
+	public void setIndexorder(int indexorder) {
+		this.indexorder = indexorder;
+	}
+	public String getIndexordername() {
+		return "第"+indexorder+"次";
+	}
+	public void setIndexordername(String indexordername) {
+		this.indexordername = indexordername;
+	}
 
+	
 	
 }

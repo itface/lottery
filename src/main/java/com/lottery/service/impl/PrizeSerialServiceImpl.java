@@ -11,7 +11,7 @@ import com.lottery.dao.BaseDao;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.service.PrizeSerialService;
 @Service
-public class PrizeSerialServiceImpl implements PrizeSerialService{
+public  class PrizeSerialServiceImpl implements PrizeSerialService{
 
 	@Autowired
 	private BaseDao<PrizeSerial> dao;
@@ -49,7 +49,30 @@ public class PrizeSerialServiceImpl implements PrizeSerialService{
 	@Transactional
 	public void updatePrizeSerialName(long id, String name) {
 		// TODO Auto-generated method stub
-		dao.executeUpdate("update PrizeSerial t set t.status=0 , t.name=?1 where t.id=?2", new Object[]{name,id});
+		dao.executeUpdate("update PrizeSerial t set t.name=?1 where t.id=?2", new Object[]{name,id});
+	}
+
+	@Override
+	@Transactional
+	public void updatePrizeCount(long id) {
+		// TODO Auto-generated method stub
+		dao.executeUpdate("update PrizeSerial t set t.prizecount=t.prizecount+1 where t.id=?1", new Object[]{id});
+	}
+
+	@Override
+	public List<PrizeSerial> getInActivePrizeSerial() {
+		// TODO Auto-generated method stub
+		return dao.find("from PrizeSerial t where t.status!=0", null);
+	}
+
+	@Override
+	public PrizeSerial getPrizeSerialByNum(String num) {
+		// TODO Auto-generated method stub
+		List<PrizeSerial> list = dao.find("from PrizeSerial t where t.num=?1", new Object[]{num});
+		if(list!=null&&list.size()>0){
+			return list.get(0);
+		}
+		return null;
 	}
 
 }

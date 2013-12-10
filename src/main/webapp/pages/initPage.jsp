@@ -73,7 +73,7 @@ $(document).ready(function() {
 					data:{name:pname,pnum:pnum},
 					success:function(){
 						alert('保存成功.');
-						parent.location=parent.location;
+						//parent.location=parent.location;
 					}
 				});
 			}else{
@@ -119,7 +119,7 @@ $(document).ready(function() {
 		   		{name:'jp',index:'jp',editable:true,editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},
 		   		{name:'jppic',index:'jppic',editable:true},
 		   		{name:'indexorder',index:'indexorder',editable:true,edittype:'custom',editoptions:{custom_element:my_input,custom_value:my_value},editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>"}}},
-		   		{name:'sm',index:'sm',editable:true,editrules:{required:true}}
+		   		{name:'sm',index:'sm',editable:true}
 		   	],
 		   	pginput:false,
 		   	toppager: true,

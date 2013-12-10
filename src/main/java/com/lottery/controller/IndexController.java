@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JsonConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,9 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
+import com.lottery.domain.PrizeUser;
 import com.lottery.service.ActionService;
 import com.lottery.service.PrizeSerialService;
 import com.lottery.service.PrizeService;
+import com.lottery.service.PrizeUserService;
 import com.lottery.service.UserService;
 
 @Controller
@@ -33,10 +38,21 @@ public class IndexController {
 	private UserService userService;
 	@Autowired
 	private PrizeSerialService prizeSerialService;
+	@Autowired
+	private PrizeUserService prizeUserService;
+	
 	@RequestMapping
 	public ModelAndView index(){
-		List<Prize> list = prizeSettingService.findAll();
 		Map<String,Object> map = new HashMap<String,Object>();
+		List<Prize> list = prizeSettingService.findAll();
+		if(list!=null&&list.size()>0){
+			JsonConfig config = new JsonConfig();
+			config.setExcludes(new String[]{"prizeSerial","prizelistlabel"});
+			JSONArray jsonlist = JSONArray.fromObject(list,config);
+			map.put("prizelistjson", jsonlist);
+		}else{
+			map.put("prizelistjson", "[]");
+		}
 		map.put("prizelist", list==null?new ArrayList():list);
 		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
 		long usernum = userService.findActiveUserNum();
@@ -45,11 +61,13 @@ public class IndexController {
 		}else{
 			map.put("initflag",false);
 		}
+		map.put("title", prizeSerial==null?"":prizeSerial.getName());
 		return new ModelAndView("/main",map);
 	}
 	@RequestMapping(value="/action/{prizeid}")
 	public @ResponseBody Object action(@PathVariable long prizeid){
 		return actionService.action(prizeid);
+		//return null;
 	}
 	@RequestMapping(value="/initall")
 	public @ResponseBody void initall(){
@@ -84,5 +102,29 @@ public class IndexController {
 	@RequestMapping(value="/inituserstatus")
 	public @ResponseBody void inituserstatus(){
 		userService.updateAllUserStatus();
+	}
+	@RequestMapping(value="/currentprizepage",method = RequestMethod.GET)
+	public ModelAndView currentprizepage(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<PrizeUser> list = prizeUserService.findCurrentPrizeUser();
+		map.put("prizelist", list);
+		return new ModelAndView("/prizeCurrent",map);
+	}
+	@RequestMapping(value="/historyprizepage")
+	public ModelAndView historyprizepage(String serialnum){
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<PrizeSerial> prizeSerials = prizeSerialService.getInActivePrizeSerial();
+		List<PrizeUser> list = prizeUserService.findPrizeUserBySerialnum(serialnum);
+		map.put("prizeSerials", prizeSerials==null?new ArrayList():prizeSerials);
+		map.put("prizelist", list);
+		return new ModelAndView("/prizeHistory",map);
+	}
+	@RequestMapping(value="/resultreportpage",method = RequestMethod.GET)
+	public ModelAndView resultreportpage(){
+		return new ModelAndView("/resultReport");
+	}
+	@RequestMapping(value="/resultreport",method = RequestMethod.GET)
+	public @ResponseBody Object resultreport(){
+		return prizeUserService.findCurrentPrizeUser();
 	}
 }
