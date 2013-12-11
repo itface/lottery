@@ -111,11 +111,11 @@ public class IndexController {
 		return new ModelAndView("/prizeCurrent",map);
 	}
 	@RequestMapping(value="/historyprizepage")
-	public ModelAndView historyprizepage(String serialnum){
+	public ModelAndView historyprizepage(String prizeSerials){
 		Map<String,Object> map = new HashMap<String,Object>();
-		List<PrizeSerial> prizeSerials = prizeSerialService.getInActivePrizeSerial();
-		List<PrizeUser> list = prizeUserService.findPrizeUserBySerialnum(serialnum);
-		map.put("prizeSerials", prizeSerials==null?new ArrayList():prizeSerials);
+		List<PrizeSerial> prizeSerialsList = prizeSerialService.getInActivePrizeSerial();
+		List<PrizeUser> list = prizeUserService.findPrizeUserBySerialnum(prizeSerials);
+		map.put("prizeSerials", prizeSerialsList==null?new ArrayList():prizeSerialsList);
 		map.put("prizelist", list);
 		return new ModelAndView("/prizeHistory",map);
 	}

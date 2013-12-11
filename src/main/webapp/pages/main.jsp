@@ -60,6 +60,7 @@
 						url:'${ctx}/index/endprize',
 						success:function(obj){
 							alert('结束抽奖成功！');
+							location=location;
 						}
 				});
 			}

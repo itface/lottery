@@ -73,7 +73,7 @@ $(document).ready(function() {
 					data:{name:pname,pnum:pnum},
 					success:function(){
 						alert('保存成功.');
-						//parent.location=parent.location;
+						parent.location=parent.location;
 					}
 				});
 			}else{
