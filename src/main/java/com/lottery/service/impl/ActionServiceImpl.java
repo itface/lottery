@@ -1,5 +1,6 @@
 package com.lottery.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ActionServiceImpl implements ActionService{
 	private PrizeUserService prizeUserService;
 	@Override
 	@Transactional
-	public List<User> action(long prizeId) {
+	public List<PrizeUser> action(long prizeId) {
 		// TODO Auto-generated method stub
 		Prize prize = prizeService.findById(prizeId);
 		if(prize!=null){
@@ -37,14 +38,16 @@ public class ActionServiceImpl implements ActionService{
 			List<User> list = userService.findAllActiveUser();
 			RandomNumUtil util = new RandomNumUtil();
 			List<User> users = util.getRandom(list,prize.getPrizenum());
+			List<PrizeUser> prizeUsers = new ArrayList<PrizeUser>();
 			if(users!=null&&users.size()>0){
 				for(User user:users){
 					PrizeUser prizeUser = new PrizeUser(prize,user,prizecount+1);
 					prizeUserService.addPrizeUser(prizeUser);
+					prizeUsers.add(prizeUser);
 				}
 				userService.updateUserStatus(users);
-				Collections.sort(users);
-				return users;
+				Collections.sort(prizeUsers);
+				return prizeUsers;
 			}
 		}
 		return null;

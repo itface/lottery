@@ -179,20 +179,25 @@
 			$('.actionstart').show();
 			$('.actionend').hide();
 			$('.userListTable').show();
-			var s = '<tr>';
-				s += '<td>序号</td>';
-				s += '<td>员工编号</td>';
-				s += '<td>员工帐号</td>';
-				s += '<td>员工姓名</td>';
-				s += '<td>业务单元</td>';
-				s += '<td>地域</td>';
-				s += '</tr>';
+			
 			$.ajax({
 				url:'${ctx}/index/action/'+$('#prizelist').val(),
 				//async:false,
 				success:function(obj){
+					var s = '';
 					if(obj!=null&&obj.length>0){
 						$(obj).each(function(i,v){
+							if(i==0){
+									s = "<tr><td colspan='6'>"+v.indexordername+"</td></tr>";
+									s += '<tr>';
+									s += '<td>序号</td>';
+									s += '<td>员工编号</td>';
+									s += '<td>员工帐号</td>';
+									s += '<td>员工姓名</td>';
+									s += '<td>业务单元</td>';
+									s += '<td>地域</td>';
+									s += '</tr>';
+							}
 							s += '<tr>';
 							s += '<td>'+(i+1)+'</td>';
 							s += '<td>'+(v['usernumber']==null?'':v['usernumber'])+'</td>';

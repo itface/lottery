@@ -2,9 +2,9 @@ package com.lottery.service;
 
 import java.util.List;
 
-import com.lottery.domain.User;
+import com.lottery.domain.PrizeUser;
 
 public interface ActionService {
 
-	public List<User> action(long prizeId);
+	public List<PrizeUser> action(long prizeId);
 }

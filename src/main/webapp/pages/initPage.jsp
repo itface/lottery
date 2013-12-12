@@ -39,21 +39,29 @@
 $(document).ready(function() {
 		 init();
 		 var pnum=${pnum};
+		 var uploadshow = ${uploadshow};
+		 var uploadflag =false;
 		 function init(){
 		 	initUplodify();
 		 }
 		  function initUplodify(){
-			  $('#uploadify').uploadify({
-			    'swf'  : '${ctx}/resources/script/uploadify3.2.1/uploadify.swf',
-			    'uploader'    : '${ctx}/uploadify/upload',
-			    'fileTypeExts'	: '*.xls',
-			    'buttonText' : '上传人员名单...',
-			    'fileObjName':'uploadify',
-			     'multi':false,
-			     'onUploadComplete' : function(file) {
-		            alert('导入成功!');
-		        }
-			  });
+		  	if(uploadshow==true){
+		  		$('#uploadify').show();
+			  	 $('#uploadify').uploadify({
+				    'swf'  : '${ctx}/resources/script/uploadify3.2.1/uploadify.swf',
+				    'uploader'    : '${ctx}/uploadify/upload',
+				    'fileTypeExts'	: '*.xls',
+				    'buttonText' : '上传人员名单...',
+				    'fileObjName':'uploadify',
+				     'multi':false,
+				     'onUploadComplete' : function(file) {
+				     	uploadflag=true;
+			            alert('导入成功!');
+			        }
+				  });
+		  	}else{
+		  		$('#uploadify').hide();
+		  	}
 		  }
 		function closeWin(){
 			var api = frameElement.api;
@@ -66,6 +74,10 @@ $(document).ready(function() {
 		});
 		$('.initBtn').bind('click',function(){
 			var pname = $('#name').val();
+			if(!uploadflag&&uploadshow==true){
+				alert('请先上传人员。');
+				return false;
+			}
 			if(pname!=null&&pname!=''&&pname!=undefined){
 				$.ajax({
 					url:'${ctx}/index/saveprizeserial',
@@ -79,6 +91,7 @@ $(document).ready(function() {
 			}else{
 				alert('抽奖名称不能为空');
 			}
+			
 		});
 		function updateSelectOptions(){
 			var selectedValue = $('#indexorder').val();

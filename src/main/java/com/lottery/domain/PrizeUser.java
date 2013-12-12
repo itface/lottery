@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="prizeusers")
-public class PrizeUser implements Serializable{
+public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 
 	private static final long serialVersionUID = 5757795679672816084L;
 	@Id
@@ -180,6 +180,11 @@ public class PrizeUser implements Serializable{
 	}
 	public void setIndexordername(String indexordername) {
 		this.indexordername = indexordername;
+	}
+	@Override
+	public int compareTo(PrizeUser o) {
+		// TODO Auto-generated method stub
+		return this.usernumber.compareTo(o.getUsernumber());
 	}
 
 	

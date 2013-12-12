@@ -17,9 +17,104 @@
 		<span class='title'></span>
 	</div>
 	<div>
-		<div id="chart1" style="margin-top:20px; margin-left:20px; width:350px; height:450px;float:left"></div>
-		<div id="chart2" style="margin-top:20px; margin-left:20px; width:350px; height:450px;float:left"></div>
-		<div id="chart3" style="margin-top:20px; margin-left:20px; width:350px; height:450px;float:left"></div>
+		<div id="chart1" style="margin-top:20px; margin-left:20px; width:350px; height:250px;float:left"></div>
+		<div id="chart2" style="margin-top:20px; margin-left:20px; width:350px; height:250px;float:left"></div>
+		<div id="chart3" style="margin-top:20px; margin-left:20px; width:350px; height:250px;float:left"></div>
+	</div>
+	<div>
+		<div style="float:left">
+			<table border="1px solid #ccc" style="border-collapse:collapse;">
+				<tr>
+					<td colspan='${dysize}'>地域分布情况</td>
+				</tr>
+				<tr>
+						<td width='80px'>&nbsp;</td>
+						<c:forEach items="${dylist}" var="percentage">
+								<td width='80px'>${percentage.name}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td width='80px'>抽奖人</td>
+						<c:forEach items="${dylist}" var="percentage">
+								<td width='80px'>${percentage.percentOfAll}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td width='80px'>中奖人</td>
+						<c:forEach items="${dylist}" var="percentage">
+								<td width='80px'>${percentage.percentOfPrize}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td width='80px'>差异</td>
+						<c:forEach items="${dylist}" var="percentage">
+								<td width='80px'>${percentage.percentOfDiff}</td>
+						</c:forEach>
+				</tr>
+			</table>
+		</div>
+		<div style="float:left;padding-left:30px;">
+			<table border="1px solid #ccc" style="border-collapse:collapse;">
+				<tr >
+					<td colspan='${ywdysize}'>业务单元分布情况</td>
+				</tr>
+				<tr>
+						<td width='80px'>&nbsp;</td>
+						<c:forEach items="${ywdylist}" var="percentage">
+								<td width='80px'>${percentage.name}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td width='80px'>抽奖人</td>
+						<c:forEach items="${ywdylist}" var="percentage">
+								<td width='80px'>${percentage.percentOfAll}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td width='80px'>中奖人</td>
+						<c:forEach items="${ywdylist}" var="percentage">
+								<td width='80px'>${percentage.percentOfPrize}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td width='80px'>差异</td>
+						<c:forEach items="${ywdylist}" var="percentage">
+								<td width='80px'>${percentage.percentOfDiff}</td>
+						</c:forEach>
+				</tr>
+			</table>
+		</div>
+		<div style="clear:both;padding-top:20px;">
+			<table border="1px solid #ccc" style="border-collapse:collapse;">
+				<tr>
+					<td colspan='${usernumbersize}'>员工编号分布情况</td>
+				</tr>
+				<tr>
+						<td width='80px'>&nbsp;</td>
+						<c:forEach items="${usernumberlist}" var="percentage">
+								<td width='80px'>${percentage.name}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td width='80px'>抽奖人</td>
+						<c:forEach items="${usernumberlist}" var="percentage">
+								<td width='80px'>${percentage.percentOfAll}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td width='80px'>中奖人</td>
+						<c:forEach items="${usernumberlist}" var="percentage">
+								<td width='80px'>${percentage.percentOfPrize}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td width='80px'>差异</td>
+						<c:forEach items="${usernumberlist}" var="percentage">
+								<td width='80px'>${percentage.percentOfDiff}</td>
+						</c:forEach>
+				</tr>
+			</table>
+		</div>
 	</div>
 </body>
 <script>
@@ -28,7 +123,7 @@ $(document).ready(function() {
 	  	url:'${ctx}/index/resultreport',
 	  	success:function(obj){
 	  		if(obj!=null&&obj.length>0){
-	  			$('.title').html('共有'+obj.length+'个获奖人员');
+	  			$('.title').html('参与抽奖的人共有${totaluser}，有'+obj.length+'个获奖人员');
 	  			var map = {};
 	  			var map2 = {};
 	  			var map3 = {};
@@ -87,7 +182,7 @@ $(document).ready(function() {
 							  showDataLabels: true
 							}
 						  }, 
-						  title:'中奖人员编号分布图',
+						  title:'中奖人员员工编号分布图',
 						  legend: { show:true, location: 'e'}
 						}
 					  );

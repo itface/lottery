@@ -1,9 +1,12 @@
 package com.lottery.controller;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lottery.domain.Percentage;
 import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.PrizeUser;
@@ -81,6 +85,7 @@ public class IndexController {
 		if(currentPrizeSerial!=null){
 			map.put("pnum", currentPrizeSerial.getId());
 			map.put("name", currentPrizeSerial.getName());
+			map.put("uploadshow", false);
 		}else{
 			PrizeSerial prizeSerial = new PrizeSerial();
 			prizeSerial.setNum(sd.format(date));
@@ -88,6 +93,7 @@ public class IndexController {
 			prizeSerialService.addActivePrizeSerial(prizeSerial);
 			map.put("pnum", prizeSerial.getId());
 			map.put("name", "");
+			map.put("uploadshow", true);
 		}
 		return new ModelAndView("/initPage",map);
 	}
@@ -121,7 +127,62 @@ public class IndexController {
 	}
 	@RequestMapping(value="/resultreportpage",method = RequestMethod.GET)
 	public ModelAndView resultreportpage(){
-		return new ModelAndView("/resultReport");
+		long totaluser  = userService.countTotalUser();
+		long totalprizeuser  = 0;
+		List<PrizeUser> prizeUserlist = prizeUserService.findCurrentPrizeUser();
+		if(prizeUserlist!=null){
+			totalprizeuser=prizeUserlist.size();
+		}
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<Percentage> usernumberPercentage = new ArrayList<Percentage>();
+		List<Percentage> regionPercentage= new ArrayList<Percentage>();
+		List<Percentage> ywdyPercentage= new ArrayList<Percentage>();
+		Map<String,Percentage> dymap = new HashMap<String,Percentage>();
+		Map<String,Percentage> ywdymap = new HashMap<String,Percentage>();
+		Map<String,Percentage> usernumbermap = new HashMap<String,Percentage>();
+		DecimalFormat df = new DecimalFormat();
+		String pattern = "#%";
+		df.applyPattern(pattern);
+		userService.getUserPercentage(dymap, ywdymap, usernumbermap);
+		prizeUserService.getUserPercentage(dymap, ywdymap, usernumbermap);
+		Iterator<String> dyit = dymap.keySet().iterator();
+		while(dyit.hasNext()){
+			Percentage percentage = dymap.get(dyit.next());
+			regionPercentage.add(percentage);
+			double allp = Double.parseDouble(percentage.getPercentOfAll().replaceAll("%", ""));
+			double prizep = Double.parseDouble(percentage.getPercentOfPrize()==null?"0":percentage.getPercentOfPrize().replaceAll("%", ""));
+			double d = (prizep-allp)/allp;
+			//new DecimalFormat("0").format(d);
+			//new BigDecimal("2").setScale(0, BigDecimal.ROUND_HALF_UP)
+			percentage.setPercentOfDiff(df.format(d));
+		}
+		Iterator<String> ywdyit = ywdymap.keySet().iterator();
+		while(ywdyit.hasNext()){
+			Percentage percentage = ywdymap.get(ywdyit.next());
+			ywdyPercentage.add(percentage);
+			double allp = Double.parseDouble(percentage.getPercentOfAll().replaceAll("%", ""));
+			double prizep = Double.parseDouble(percentage.getPercentOfPrize()==null?"0":percentage.getPercentOfPrize().replaceAll("%", ""));
+			double d = (prizep-allp)/allp;
+			percentage.setPercentOfDiff(df.format(d));
+		}
+		Iterator<String> usernumberit = usernumbermap.keySet().iterator();
+		while(usernumberit.hasNext()){
+			Percentage percentage = usernumbermap.get(usernumberit.next());
+			usernumberPercentage.add(percentage);
+			double allp = Double.parseDouble(percentage.getPercentOfAll().replaceAll("%", ""));
+			double prizep = Double.parseDouble(percentage.getPercentOfPrize()==null?"0":percentage.getPercentOfPrize().replaceAll("%", ""));
+			double d = (prizep-allp)/allp;
+			percentage.setPercentOfDiff(df.format(d));
+		}
+		Collections.sort(usernumberPercentage);
+		map.put("usernumberlist",usernumberPercentage);
+		map.put("ywdylist",ywdyPercentage);
+		map.put("dylist",regionPercentage);
+		map.put("usernumbersize",usernumberPercentage.size()+1);
+		map.put("ywdysize",ywdyPercentage.size()+1);
+		map.put("dysize",regionPercentage.size()+1);
+		map.put("totaluser", totaluser);
+		return new ModelAndView("/resultReport",map);
 	}
 	@RequestMapping(value="/resultreport",method = RequestMethod.GET)
 	public @ResponseBody Object resultreport(){
