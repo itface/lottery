@@ -85,7 +85,6 @@ public class IndexController {
 		if(currentPrizeSerial!=null){
 			map.put("pnum", currentPrizeSerial.getId());
 			map.put("name", currentPrizeSerial.getName());
-			map.put("uploadshow", false);
 		}else{
 			PrizeSerial prizeSerial = new PrizeSerial();
 			prizeSerial.setNum(sd.format(date));
@@ -93,6 +92,12 @@ public class IndexController {
 			prizeSerialService.addActivePrizeSerial(prizeSerial);
 			map.put("pnum", prizeSerial.getId());
 			map.put("name", "");
+			
+		}
+		List<PrizeUser> prizeUserlist = prizeUserService.findCurrentPrizeUser();
+		if(prizeUserlist!=null&&prizeUserlist.size()>0){
+			map.put("uploadshow", false);
+		}else{
 			map.put("uploadshow", true);
 		}
 		return new ModelAndView("/initPage",map);
@@ -128,11 +133,6 @@ public class IndexController {
 	@RequestMapping(value="/resultreportpage",method = RequestMethod.GET)
 	public ModelAndView resultreportpage(){
 		long totaluser  = userService.countTotalUser();
-		long totalprizeuser  = 0;
-		List<PrizeUser> prizeUserlist = prizeUserService.findCurrentPrizeUser();
-		if(prizeUserlist!=null){
-			totalprizeuser=prizeUserlist.size();
-		}
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<Percentage> usernumberPercentage = new ArrayList<Percentage>();
 		List<Percentage> regionPercentage= new ArrayList<Percentage>();
