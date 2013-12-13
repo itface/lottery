@@ -8,7 +8,7 @@
      </appender>  
 	<appender name="ERRORFILE" class="org.apache.log4j.rolling.RollingFileAppender">
 		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
-			<param name="FileNamePattern"  value="${star}/logs/error/%d{yyyy-MM-dd}_error.log"/>
+			<param name="FileNamePattern"  value="${lottery}/log/error/%d{yyyy-MM-dd}_error.log"/>
 		</rollingPolicy>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p][%c{1}] - %m%n"/>
@@ -16,7 +16,7 @@
 	</appender>
 	<appender name="ACCESSFILE" class="org.apache.log4j.rolling.RollingFileAppender">
 		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
-			<param name="FileNamePattern"  value="${star}/logs/access/%d{yyyy-MM-dd}_access.log"/>
+			<param name="FileNamePattern"  value="${lottery}/log/access/%d{yyyy-MM-dd}_access.log"/>
 		</rollingPolicy>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p][%c{1}] - %m%n"/>
@@ -77,7 +77,7 @@
 		<appender-ref ref="ACCESSFILE"/>
 	</logger>
 	<root>
-		<level value="INFO"></level>
+		<level value="ERROR"></level>
 		<appender-ref ref="CONSOLE"/>
 	</root>
 </log4j:configuration>
