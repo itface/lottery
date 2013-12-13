@@ -19,6 +19,8 @@
     <org.codehaus.jackson.version>1.7.4</org.codehaus.jackson.version>
     <hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
     <tomcat-jdbc.version>7.0.42</tomcat-jdbc.version>
+    <h2.version>1.3.173</h2.version>
+    <jetty.version>8.1.10.v20130312</jetty.version>
   </properties>
   <dependencies>
 	    <dependency>
@@ -39,6 +41,27 @@
 			<version>2.2.1</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- h2 -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+		</dependency>
+		<!-- h2 -->
+		<!-- jetty -->
+        <dependency>
+                <groupId>org.eclipse.jetty.aggregate</groupId>
+                <artifactId>jetty-webapp</artifactId>
+                <version>${jetty.version}</version>
+                <scope>test</scope>
+        </dependency>
+        <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-jsp</artifactId>
+                <version>${jetty.version}</version>
+                <scope>test</scope>
+        </dependency>
+        <!-- jetty -->
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-jdbc</artifactId>
@@ -297,6 +320,17 @@
   </dependencies>
   <build>
     <plugins>
+         <!-- jetty插件, 设定context path与spring profile -->
+       <plugin>
+         <groupId>org.mortbay.jetty</groupId>
+         <artifactId>jetty-maven-plugin</artifactId>
+         <version>${jetty.version}</version>
+         <configuration>
+              <webAppConfig>
+                      <contextPath>/${project.artifactId}</contextPath>
+              </webAppConfig>
+         </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
       </plugin>
