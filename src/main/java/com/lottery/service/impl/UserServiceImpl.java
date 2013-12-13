@@ -34,8 +34,8 @@ public class UserServiceImpl implements UserService{
 	@Transactional
 	public void impUser(MultipartFile mf) throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		// TODO Auto-generated method stub
-		dao.executeUpdate("delete from User t", null);
-		dao.executeUpdate("delete from TempUser t", null);
+		this.deleteAll();
+		tempUserService.deleteAll();
 		InputStream is = mf.getInputStream();
 		ExcelReader excelReader = new ExcelReader();
 		RandomNumUtil util = new RandomNumUtil();
@@ -155,6 +155,12 @@ public class UserServiceImpl implements UserService{
 				usernumbermap.put(usernumber, percentage);
 			}
 		}
+	}
+	@Override
+	@Transactional
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		dao.executeUpdate("delete from User t", null);
 	}
 
 }

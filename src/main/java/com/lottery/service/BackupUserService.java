@@ -6,5 +6,5 @@ import com.lottery.domain.User;
 
 public interface BackupUserService {
 
-	public void saveList(List<User> list);
+	public void saveList(List<User> list,String prizeSerialNum);
 }

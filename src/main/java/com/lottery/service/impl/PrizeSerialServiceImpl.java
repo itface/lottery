@@ -9,12 +9,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lottery.dao.BaseDao;
 import com.lottery.domain.PrizeSerial;
+import com.lottery.domain.User;
+import com.lottery.service.BackupUserService;
 import com.lottery.service.PrizeSerialService;
+import com.lottery.service.UserService;
 @Service
 public  class PrizeSerialServiceImpl implements PrizeSerialService{
 
 	@Autowired
 	private BaseDao<PrizeSerial> dao;
+	@Autowired
+	private BackupUserService backupUserService;
+	@Autowired
+	private UserService userService;
 	
 	@Override
 	public PrizeSerial getActivePrizeSerial() {
@@ -30,8 +37,15 @@ public  class PrizeSerialServiceImpl implements PrizeSerialService{
 	@Transactional
 	public void stopActivePrizeSerial() {
 		// TODO Auto-generated method stub
+		PrizeSerial prizeSerial = this.getActivePrizeSerial();
+		if(prizeSerial!=null){
+			List<User> users = userService.findAll();
+			backupUserService.saveList(users, prizeSerial.getNum());
+			userService.deleteAll();
+		}
 		dao.executeUpdate("update PrizeSerial t set t.enddate=?1 where t.status=0", new Object[]{new Date()});
 		dao.executeUpdate("update PrizeSerial t set t.status=-1", null);
+		
 	}
 
 	@Override

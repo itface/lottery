@@ -12,6 +12,7 @@ import com.lottery.domain.User;
 
 public interface UserService {
 
+	public void deleteAll();
 	public void impUser(MultipartFile mf)throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 	public List<User> findAll();
 	public List<User> findAllActiveUser();

@@ -28,4 +28,11 @@ public class TempUserServiceImpl implements TempUserService{
 		
 	}
 
+	@Override
+	@Transactional
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		dao.executeUpdate("delete from TempUser t", null);
+	}
+
 }

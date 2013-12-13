@@ -85,6 +85,12 @@ public class IndexController {
 		if(currentPrizeSerial!=null){
 			map.put("pnum", currentPrizeSerial.getId());
 			map.put("name", currentPrizeSerial.getName());
+			List<PrizeUser> prizeUserlist = prizeUserService.findCurrentPrizeUser();
+			if(prizeUserlist!=null&&prizeUserlist.size()>0){
+				map.put("uploadshow", false);
+			}else{
+				map.put("uploadshow", true);
+			}
 		}else{
 			PrizeSerial prizeSerial = new PrizeSerial();
 			prizeSerial.setNum(sd.format(date));
@@ -92,12 +98,6 @@ public class IndexController {
 			prizeSerialService.addActivePrizeSerial(prizeSerial);
 			map.put("pnum", prizeSerial.getId());
 			map.put("name", "");
-			
-		}
-		List<PrizeUser> prizeUserlist = prizeUserService.findCurrentPrizeUser();
-		if(prizeUserlist!=null&&prizeUserlist.size()>0){
-			map.put("uploadshow", false);
-		}else{
 			map.put("uploadshow", true);
 		}
 		return new ModelAndView("/initPage",map);

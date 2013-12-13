@@ -37,10 +37,11 @@
 </body>
 <script>
 $(document).ready(function() {
-		 init();
+		 
 		 var pnum=${pnum};
 		 var uploadshow = ${uploadshow};
 		 var uploadflag =false;
+		 init();
 		 function init(){
 		 	initUplodify();
 		 }
