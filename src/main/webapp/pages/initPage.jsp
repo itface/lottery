@@ -20,7 +20,7 @@
 </head>
 <body>
 	<div>
-		本次抽奖名称:<input type='text' id='name' value='${name}'/>
+		本次抽奖名称:<input type='text' id='name' value='${name}' size=50/>
 	</div>
 	<div style="padding-top:25px">
 		<table id="list"></table>

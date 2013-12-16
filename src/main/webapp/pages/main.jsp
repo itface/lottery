@@ -44,8 +44,8 @@
 		<div style="text-align:center">		
 			<img class='img' style='width:900px;height:400px;display:none;'/>	
 		</div>
-		<div  class='userListTable' style='clear:both;padding-top:20px;display:none'>
-			<table class='userList' width="100%" border="1px solid #ccc" style='border-collapse: collapse;'>
+		<div  class='userListTable' style='clear:both;padding-top:20px;display:none;'>
+			<table class='userList'  border="1px solid #ccc" style='border-collapse: collapse;margin:0 auto;width:650px;'>
 			</table>
 		</div>
 	</div>
@@ -79,7 +79,7 @@
 						}else{
 							$('.img').attr('src','${ctx}/prizepic/default.png');
 						}
-						$('.prizeclass').html('中奖人数:'+v['prizenum']+"人，奖品："+v['jp']);
+						$('.prizeclass').html('中奖人数:'+v['prizenum']+"人  奖品："+v['jp']);
 					}
 				});
 			}
@@ -161,7 +161,7 @@
 		});
 		$('.actionstart').bind('click',function(){
 			if(initflag==false||initflag=='false'){
-				alert('您还没有进行初始化设置，请到设置里进行初始化设置!');
+				alert('您还没有进行初始化设置，请到【系统设置】里进行初始化设置!');
 				return false;
 			}
 			var prize = $('#prizelist').val();
@@ -190,12 +190,12 @@
 							if(i==0){
 									s = "<tr><td colspan='6'>"+v.indexordername+"</td></tr>";
 									s += '<tr>';
-									s += '<td>序号</td>';
-									s += '<td>员工编号</td>';
-									s += '<td>员工帐号</td>';
-									s += '<td>员工姓名</td>';
-									s += '<td>业务单元</td>';
-									s += '<td>地域</td>';
+									s += '<td width="50px">序号</td>';
+									s += '<td width="100px">员工编号</td>';
+									s += '<td width="100px">员工帐号</td>';
+									s += '<td width="100px">员工姓名</td>';
+									s += '<td width="150px">业务单元</td>';
+									s += '<td width="100px">地域</td>';
 									s += '</tr>';
 							}
 							s += '<tr>';
