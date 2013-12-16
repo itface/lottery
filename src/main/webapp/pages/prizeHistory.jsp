@@ -19,10 +19,11 @@
 		<div>
 			<table class='prizeclass' border="1px solid #ccc" style='border-collapse: collapse;' width='1150px'>
 				<tr>
+					<td width='5%'>序号</td>
 					<td width='10%'>抽奖顺序</td>
 					<td width='15%'>抽奖批次</td>
 					<td width='10%'>奖项名称</td>
-					<td width='10%'>奖品</td>
+					<td width='5%'>奖品</td>
 					<td width='10%'>中奖人姓名</td>
 					<td width='5%'>中奖人帐号</td>
 					<td width='5%'>中奖人员工编号</td>
@@ -31,8 +32,9 @@
 					<td width='10%'>业务单元</td>
 					<td width='10%'>业务单元2</td>
 				</tr>
-				<c:forEach items="${prizelist}" var="prize">
+				<c:forEach items="${prizelist}" var="prize" varStatus="status">
 					<tr>
+						<td>${status.index+1}</td>
 						<td>${prize.indexordername}</td>
 						<td>${prize.prizeserialnum}</td>
 						<td>${prize.prizename}</td>

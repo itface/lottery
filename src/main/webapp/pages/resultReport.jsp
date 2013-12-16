@@ -9,7 +9,9 @@
 <script type="text/javascript" src="<c:url value='/resources/script/jqplot/jquery.jqplot.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/script/jqplot/plugins/jqplot.pieRenderer.js'/>"></script>
 <style>
-
+body{
+	font-size:10px;
+}
 </style>
 </head>
 <body>
@@ -17,105 +19,95 @@
 		<span class='title'></span>
 	</div>
 	<div>
-		<div id="chart1" style="margin-top:20px; margin-left:20px; width:350px; height:200px;float:left"></div>
-		<div id="chart2" style="margin-top:20px; margin-left:20px; width:350px; height:200px;float:left"></div>
-		<div id="chart3" style="margin-top:20px; margin-left:20px; width:350px; height:200px;float:left"></div>
+		<div id="chart3" style="margin-top:20px; margin-left:20px; width:300px; height:300px;float:left"></div>
+		<div id="chart2" style="margin-top:20px; margin-left:20px; width:300px; height:300px;float:left"></div>
+		<div id="chart1" style="margin-top:20px; margin-left:20px; width:500px; height:300px;float:left"></div>
 	</div>
 	<div>
-		<div style="clear:both;">
-			<table border="1px solid #ccc" style="border-collapse:collapse;">
-				<tr>
-					<td colspan='${usernumbersize}'>员工编号分布情况</td>
-				</tr>
-				<tr>
-						<td width='80px'>&nbsp;</td>
-						<c:forEach items="${usernumberlist}" var="percentage">
-								<td width='80px'>${percentage.name}</td>
-						</c:forEach>
-				</tr>
-				<tr>
-						<td width='80px'>抽奖人</td>
-						<c:forEach items="${usernumberlist}" var="percentage">
-								<td width='80px'>${percentage.percentOfAll}</td>
-						</c:forEach>
-				</tr>
-				<tr>
-						<td width='80px'>中奖人</td>
-						<c:forEach items="${usernumberlist}" var="percentage">
-								<td width='80px'>${percentage.percentOfPrize}</td>
-						</c:forEach>
-				</tr>
-				<tr>
-						<td width='80px'>差异</td>
-						<c:forEach items="${usernumberlist}" var="percentage">
-								<td width='80px'>${percentage.percentOfDiff}</td>
-						</c:forEach>
-				</tr>
-			</table>
-		</div>
 		<div style="float:left;padding-top:20px;">
 			<table border="1px solid #ccc" style="border-collapse:collapse;">
 				<tr>
-					<td colspan='${dysize}'>地域分布情况</td>
-				</tr>
-				<tr>
-						<td width='80px'>&nbsp;</td>
-						<c:forEach items="${dylist}" var="percentage">
-								<td width='80px'>${percentage.name}</td>
+						<td width='100px'>业务单元分布</td>
+						<c:forEach items="${ywdylist}" var="percentage">
+								<td width='120px'>${percentage.name}</td>
 						</c:forEach>
 				</tr>
 				<tr>
-						<td width='80px'>抽奖人</td>
-						<c:forEach items="${dylist}" var="percentage">
-								<td width='80px'>${percentage.percentOfAll}</td>
+						<td>抽奖人</td>
+						<c:forEach items="${ywdylist}" var="percentage">
+								<td>${percentage.percentOfAll}</td>
 						</c:forEach>
 				</tr>
 				<tr>
-						<td width='80px'>中奖人</td>
-						<c:forEach items="${dylist}" var="percentage">
-								<td width='80px'>${percentage.percentOfPrize}</td>
+						<td>中奖人</td>
+						<c:forEach items="${ywdylist}" var="percentage">
+								<td>${percentage.percentOfPrize}</td>
 						</c:forEach>
 				</tr>
 				<tr>
-						<td width='80px'>差异</td>
-						<c:forEach items="${dylist}" var="percentage">
-								<td width='80px'>${percentage.percentOfDiff}</td>
+						<td>差异</td>
+						<c:forEach items="${ywdylist}" var="percentage">
+								<td>${percentage.percentOfDiff}</td>
 						</c:forEach>
 				</tr>
 			</table>
 		</div>
 		<div style="float:left;padding-left:30px;padding-top:20px;">
 			<table border="1px solid #ccc" style="border-collapse:collapse;">
-				<tr >
-					<td colspan='${ywdysize}'>业务单元分布情况</td>
-				</tr>
 				<tr>
-						<td width='80px'>&nbsp;</td>
-						<c:forEach items="${ywdylist}" var="percentage">
-								<td width='80px'>${percentage.name}</td>
+						<td width='80px'>地域分布</td>
+						<c:forEach items="${dylist}" var="percentage">
+								<td width='70px'>${percentage.name}</td>
 						</c:forEach>
 				</tr>
 				<tr>
-						<td width='80px'>抽奖人</td>
-						<c:forEach items="${ywdylist}" var="percentage">
-								<td width='80px'>${percentage.percentOfAll}</td>
+						<td>抽奖人</td>
+						<c:forEach items="${dylist}" var="percentage">
+								<td>${percentage.percentOfAll}</td>
 						</c:forEach>
 				</tr>
 				<tr>
-						<td width='80px'>中奖人</td>
-						<c:forEach items="${ywdylist}" var="percentage">
-								<td width='80px'>${percentage.percentOfPrize}</td>
+						<td>中奖人</td>
+						<c:forEach items="${dylist}" var="percentage">
+								<td>${percentage.percentOfPrize}</td>
 						</c:forEach>
 				</tr>
 				<tr>
-						<td width='80px'>差异</td>
-						<c:forEach items="${ywdylist}" var="percentage">
-								<td width='80px'>${percentage.percentOfDiff}</td>
+						<td>差异</td>
+						<c:forEach items="${dylist}" var="percentage">
+								<td>${percentage.percentOfDiff}</td>
 						</c:forEach>
 				</tr>
 			</table>
 		</div>
-		
+		<div style="clear:both;padding-top:20px;">
+			<table border="1px solid #ccc" style="border-collapse:collapse;">
+				<tr>
+						<td width='100px'>员工编号分布</td>
+						<c:forEach items="${usernumberlist}" var="percentage">
+								<td width='100px'>${percentage.name}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td>抽奖人</td>
+						<c:forEach items="${usernumberlist}" var="percentage">
+								<td>${percentage.percentOfAll}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td>中奖人</td>
+						<c:forEach items="${usernumberlist}" var="percentage">
+								<td>${percentage.percentOfPrize}</td>
+						</c:forEach>
+				</tr>
+				<tr>
+						<td>差异</td>
+						<c:forEach items="${usernumberlist}" var="percentage">
+								<td>${percentage.percentOfDiff}</td>
+						</c:forEach>
+				</tr>
+			</table>
+		</div>
 	</div>
 </body>
 <script>

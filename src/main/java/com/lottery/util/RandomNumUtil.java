@@ -19,7 +19,7 @@ public class RandomNumUtil {
 			for(int j=0;j<length;j++){
 				Set<Integer> set1 = getRandom1(listSize,100);
 				Set<Integer> set2 = getRandom2(listSize,100);
-				Set<Integer> set3 = getRandom2(listSize,100);
+				Set<Integer> set3 = getRandom3(listSize,2,100);
 				if(set1!=null&&set2!=null&&set3!=null){
 					Iterator<Integer> it = set1.iterator();
 					boolean flag = true;

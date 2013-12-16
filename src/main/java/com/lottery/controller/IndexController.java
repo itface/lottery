@@ -178,9 +178,9 @@ public class IndexController {
 		map.put("usernumberlist",usernumberPercentage);
 		map.put("ywdylist",ywdyPercentage);
 		map.put("dylist",regionPercentage);
-		map.put("usernumbersize",usernumberPercentage.size()+1);
-		map.put("ywdysize",ywdyPercentage.size()+1);
-		map.put("dysize",regionPercentage.size()+1);
+		//map.put("usernumbersize",usernumberPercentage.size()+1);
+		//map.put("ywdysize",ywdyPercentage.size()+1);
+		//map.put("dysize",regionPercentage.size()+1);
 		map.put("totaluser", totaluser);
 		return new ModelAndView("/resultReport",map);
 	}

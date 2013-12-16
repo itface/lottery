@@ -1,0 +1,14 @@
+.transparent_class {
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	-khtml-opacity: 0.6;
+	opacity: 0.6;
+}
+.blockUI_class{
+	
+}
+.blockUI_progress{
+	background-image:url(../../images/waiting.gif);
+	width:30px;
+	height:30px;
+}

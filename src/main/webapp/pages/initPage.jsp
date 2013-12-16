@@ -7,11 +7,13 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/uploadify3.2.1/uploadify.css'/>">
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/jqgrid/css/jquery.jqgrid.css'/>">
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/jqgrid/css/jquery.ui.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/blockUI/blockUI.css'/>">
 <script type="text/javascript" src="<c:url value='/resources/script/jquery-1.7.2.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/script/jqgrid/grid.locale-cn.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/script/jqgrid/jquery.jqGrid.src.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/script/jqgrid/jqgrid_extend.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/script/uploadify3.2.1/jquery.uploadify.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/script/blockUI/blockUI.js'/>" ></script>
 <style>
 
 </style>
@@ -55,9 +57,13 @@ $(document).ready(function() {
 				    'buttonText' : '上传人员名单...',
 				    'fileObjName':'uploadify',
 				     'multi':false,
+				     'onUploadStart':function(){
+				     	$(window).blockUI();
+				     },
 				     'onUploadComplete' : function(file) {
 				     	uploadflag=true;
 			            alert('导入成功!');
+			            $(window).blockUI('remove');
 			        }
 				  });
 		  	}else{
