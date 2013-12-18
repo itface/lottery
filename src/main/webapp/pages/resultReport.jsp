@@ -10,7 +10,7 @@
 <script type="text/javascript" src="<c:url value='/resources/script/jqplot/plugins/jqplot.pieRenderer.js'/>"></script>
 <style>
 body{
-	font-size:10px;
+	font-size:12px;
 }
 </style>
 </head>
@@ -114,9 +114,10 @@ body{
 $(document).ready(function() {
 	  $.ajax({
 	  	url:'${ctx}/index/resultreport',
+	  	cache:false,
 	  	success:function(obj){
 	  		if(obj!=null&&obj.length>0){
-	  			$('.title').html('参与抽奖的人共有${totaluser}，有'+obj.length+'个获奖人员');
+	  			$('.title').html('<span style="font-size:14px">参与抽奖的人共有${totaluser}，有'+obj.length+'个获奖人员</span>');
 	  			var map = {};
 	  			var map2 = {};
 	  			var map3 = {};

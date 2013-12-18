@@ -20,32 +20,32 @@
 			<table class='prizeclass' border="1px solid #ccc" style='border-collapse: collapse;' width='1150px'>
 				<tr>
 					<td width='5%'>序号</td>
-					<td width='10%'>抽奖顺序</td>
-					<td width='15%'>抽奖批次</td>
-					<td width='10%'>奖项名称</td>
-					<td width='5%'>奖品</td>
-					<td width='10%'>中奖人姓名</td>
-					<td width='5%'>中奖人帐号</td>
-					<td width='5%'>中奖人员工编号</td>
-					<td width='10%'>部门</td>
-					<td width='5%'>地域</td>
+					<td width='11%'>抽奖活动批号</td>
+					<td width='6%'>抽奖次数</td>
+					<td width='6%'>姓名</td>
+					<td width='6%'>员工编号</td>
+					<td width='5%'>帐号</td>
+					<td width='20%'>部门</td>
+					<td width='4%'>地域</td>
 					<td width='10%'>业务单元</td>
 					<td width='10%'>业务单元2</td>
+					<td width='10%'>奖项名称</td>
+					<td width='5%'>奖品</td>
 				</tr>
 				<c:forEach items="${prizelist}" var="prize" varStatus="status">
 					<tr>
 						<td>${status.index+1}</td>
-						<td>${prize.indexordername}</td>
 						<td>${prize.prizeserialnum}</td>
-						<td>${prize.prizename}</td>
-						<td>${prize.jp}</td>
+						<td>${prize.indexordername}</td>
 						<td>${prize.username}</td>
-						<td>${prize.uid}</td>
 						<td>${prize.usernumber}</td>
+						<td>${prize.uid}</td>
 						<td>${prize.dept}</td>
 						<td>${prize.region}</td>
 						<td>${prize.ywdy}</td>
 						<td>${prize.ywdy2}</td>
+						<td>${prize.prizename}</td>
+						<td>${prize.jp}</td>
 					</tr>
 				</c:forEach>
 			</table>

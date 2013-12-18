@@ -20,14 +20,16 @@
 </head>
 <body>
 	<div>
-		本次抽奖名称:<input type='text' id='name' value='${name}' size=50/>
+		抽奖活动名称:<input type='text' id='name' value='${name}' size=50/>
+		<span style='font-size: 12px;color: red;' class='titlenotice'>本批次抽奖活动正在进行中，请谨慎修改!</span>
 	</div>
 	<div style="padding-top:25px">
 		<table id="list"></table>
 	</div>
-	<div style="padding-top:25px;height:100px;">
+	<div style="padding-top:25px;height:100px;" class="uploadform">
 		<form action="${ctx}/uploadify/upload" method="post" enctype="multipart/form-data">
 			<input id="uploadify" name="uploadify" type="file" />
+			<span style='font-size: 12px;color: red;'>注意：导入时系统将先清空全部抽奖人员，再导入新的抽奖人员。</span>
 		</form>
 	</div>
 	<div>
@@ -46,15 +48,23 @@ $(document).ready(function() {
 		 init();
 		 function init(){
 		 	initUplodify();
+		 	initNotice();
+		 }
+		 function initNotice(){
+		 	if(uploadshow==true){
+		 		$('.titlenotice').hide();
+		 	}else{
+		 		$('.titlenotice').show();
+		 	}
 		 }
 		  function initUplodify(){
 		  	if(uploadshow==true){
-		  		$('#uploadify').show();
+		  		$('.uploadform').show();
 			  	 $('#uploadify').uploadify({
 				    'swf'  : '${ctx}/resources/script/uploadify3.2.1/uploadify.swf',
 				    'uploader'    : '${ctx}/uploadify/upload',
 				    'fileTypeExts'	: '*.xls',
-				    'buttonText' : '上传人员名单...',
+				    'buttonText' : '上传抽奖人员名单...',
 				    'fileObjName':'uploadify',
 				     'multi':false,
 				     'onUploadStart':function(){
@@ -67,7 +77,7 @@ $(document).ready(function() {
 			        }
 				  });
 		  	}else{
-		  		$('#uploadify').hide();
+		  		$('.uploadform').hide();
 		  	}
 		  }
 		function closeWin(){
@@ -81,22 +91,27 @@ $(document).ready(function() {
 		});
 		$('.initBtn').bind('click',function(){
 			var pname = $('#name').val();
-			if(!uploadflag&&uploadshow==true){
-				alert('请先上传人员。');
-				return false;
-			}
 			if(pname!=null&&pname!=''&&pname!=undefined){
+				var dataLength =$('#list').jqGrid('getRowData').length;
+				if(dataLength<1){
+					alert('请设置奖项。');
+					return false;
+				}
+				if(!uploadflag&&uploadshow==true){
+					alert('请上传抽奖人员名单。');
+					return false;
+				}
 				$.ajax({
 					url:'${ctx}/index/saveprizeserial',
 					type:'POST',
+					cache:false,
 					data:{name:pname,pnum:pnum},
 					success:function(){
-						alert('保存成功.');
 						parent.location=parent.location;
 					}
 				});
 			}else{
-				alert('抽奖名称不能为空');
+				alert('请输入抽奖活动名称。');
 			}
 			
 		});
@@ -107,6 +122,7 @@ $(document).ready(function() {
 				url:'${ctx}/prizesetting/getOrderSelection?indexorder='+selectedValue,
 				type:'GET',
 				async:false,
+				cache:false,
 				success:function(num){
 					$('#indexorder').html(num);
 				}
@@ -130,7 +146,7 @@ $(document).ready(function() {
 			autowidth: false,
 		    width:770,
 		   	height:240,
-		   colNames: ['ID','状态','名称','中奖人数','奖品','奖品照片名称','顺序','说明'],
+		   colNames: ['ID','状态','奖项名称','中奖人数','奖品','奖品照片文件名','顺序','说明'],
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true, width:1,key:true},
 		   		{name:'status',index:'status',hidden:true},

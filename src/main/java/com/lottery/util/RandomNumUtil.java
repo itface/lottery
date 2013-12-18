@@ -16,10 +16,11 @@ public class RandomNumUtil {
 			List<User> users = new ArrayList<User>(length);
 			Set<Integer> set = new HashSet<Integer>(length);
 			int listSize = list.size();
+			int persize = listSize%10==0?listSize/10:listSize/10+1;
 			for(int j=0;j<length;j++){
-				Set<Integer> set1 = getRandom1(listSize,100);
-				Set<Integer> set2 = getRandom2(listSize,100);
-				Set<Integer> set3 = getRandom3(listSize,2,100);
+				Set<Integer> set1 = getRandom1(listSize,persize);
+				Set<Integer> set2 = getRandom2(listSize,persize);
+				Set<Integer> set3 = getRandom3(listSize,2,persize);
 				if(set1!=null&&set2!=null&&set3!=null){
 					Iterator<Integer> it = set1.iterator();
 					boolean flag = true;

@@ -4,8 +4,10 @@
 <head>
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/blockUI/blockUI.css'/>">
 <script src="<c:url value='/resources/script/jquery-1.7.2.min.js'/>"  type="text/javascript"></script>
 <script src="<c:url value='/resources/script/lhgdialog/lhgdialog.js'/>" type="text/javascript"></script>
+<script type="text/javascript" src="<c:url value='/resources/script/blockUI/blockUI.js'/>" ></script>
 <style>
 .top{
 	height:40px;
@@ -26,17 +28,17 @@
 			<div style="float:right;width:80px"><a class='impExcel' href='javascript:void(0);'>导入excel</a></div>
 			<div style="float:right;width:80px"><a class='initAll' href='javascript:void(0);'>初始化</a></div>
 			-->
-			<div style="float:right;width:100px"><a class='setting' href='javascript:void(0);'>系统设置</a></div>
-			<div style="float:right;width:140px"><a class='endprize' href='javascript:void(0);'>结束本次抽奖活动</a></div>
-			<div style="float:right;width:140px"><a class='initUser' href='javascript:void(0);'>初始化用户状态</a></div>
+			<div style="float:right;width:100px"><a class='setting' href='javascript:void(0);'>初始化设置</a></div>
+			<div style="float:right;width:140px"><a class='endprize' href='javascript:void(0);'>结束抽奖活动</a></div>
+			<div style="float:right;width:140px"><a class='initUser' href='javascript:void(0);'>重置人员状态</a></div>
 			
-			<div style="float:right;width:140px"><a class='currentprize' href='javascript:void(0);'>查看现场中奖</a></div>
-			<div style="float:right;width:140px"><a class='historyprize' href='javascript:void(0);'>查看历史中奖</a></div>
+			<div style="float:right;width:140px"><a class='currentprize' href='javascript:void(0);'>现场中奖记录</a></div>
+			<div style="float:right;width:140px"><a class='historyprize' href='javascript:void(0);'>历史中奖记录</a></div>
 			
-			<div style="float:right;width:140px"><a class='resultreport' href='javascript:void(0);'>查看中奖分布</a></div>
+			<div style="float:right;width:145px"><a class='resultreport' href='javascript:void(0);'>现场中奖分布图</a></div>
 		</div>
 		<div  style="clear:both;text-align:center;padding-top:30px;height:35px">
-			<span><form:select id="prizelist"  name="prizelist" path="prizelist"  items="${prizelist}" itemValue="id" itemLabel="prizelistlabel"/></span>
+			<span class='prizeselect'><form:select id="prizelist"  name="prizelist" path="prizelist"  items="${prizelist}" itemValue="id" itemLabel="prizelistlabel"/></span>
 			<span class='prizeclass'></span>
 			<span style='width:160px'><input class='actionstart' type='button' value='开始' style='width:150px;height:30px'/></span>
 			<span style='width:160px;margin-left:160px'><input class='actionend' type='button' value='停止' style='width:150px;height:30px;display:none'/></span>
@@ -54,15 +56,27 @@
 	$(document).ready(function(){
 		var initflag = ${initflag};
 		var prizelistjson = ${prizelistjson};
+		init();
+		function init(){
+			if(initflag){
+				$('.prizeselect').show();
+			}else{
+				$('.prizeselect').hide();
+			}
+		}
 		$('.endprize').bind('click',function(){
-			if(confirm('结束抽奖后，您将只能在“查看历史中奖”中查看历史中奖记录，本批次导入的人员和初始化设置都将失效，请确认是否结束抽奖？')){
+			if(confirm('结束抽奖后，您将只能在“历史中奖记录”中查看历史中奖记录，本批次导入的人员和初始化设置都将失效，请确认是否结束抽奖？')){
+				$(window).blockUI();
 				$.ajax({
 						url:'${ctx}/index/endprize',
+						cache:false,
+						async:false,
 						success:function(obj){
-							alert('结束抽奖成功！');
+							alert('本批次抽奖活动已结束！');
 							location=location;
 						}
 				});
+				$(window).blockUI('remove');
 			}
 		});
 		$('#prizelist').bind('change',function(){
@@ -85,6 +99,10 @@
 			}
 		});
 		$('.resultreport').bind('click',function(){
+			if(initflag==false||initflag=='false'){
+				alert("亲，请现场抽奖后再查看现场中奖分布图。");
+				return false;
+			}
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
@@ -101,6 +119,10 @@
 			$.dialog.data('dialog',dialog);
 		});
 		$('.currentprize').bind('click',function(){
+			if(initflag==false||initflag=='false'){
+				alert("亲，请现场抽奖后再查看现场中奖记录。");
+				return false;
+			}
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
@@ -154,14 +176,15 @@
 		$('.initUser').bind('click',function(){
 			$.ajax({
 					url:'${ctx}/index/inituserstatus',
+					cache:false,
 					success:function(obj){
-						alert('用户状态初始化完毕！');
+						alert('抽奖人员状态重置完毕！');
 					}
 			});
 		});
 		$('.actionstart').bind('click',function(){
 			if(initflag==false||initflag=='false'){
-				alert('您还没有进行初始化设置，请到【系统设置】里进行初始化设置!');
+				alert('亲，请到【初始化设置】里设置奖项和人员!');
 				return false;
 			}
 			var prize = $('#prizelist').val();
@@ -182,7 +205,8 @@
 			
 			$.ajax({
 				url:'${ctx}/index/action/'+$('#prizelist').val(),
-				//async:false,
+				async:false,
+				cache:false,
 				success:function(obj){
 					var s = '';
 					if(obj!=null&&obj.length>0){
