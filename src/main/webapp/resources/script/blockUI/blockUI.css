@@ -8,7 +8,7 @@
 	
 }
 .blockUI_progress{
-	background-image:url(../../../images/waiting.gif);
+	background-image:url(../../images/waiting.gif);
 	width:30px;
 	height:30px;
 }

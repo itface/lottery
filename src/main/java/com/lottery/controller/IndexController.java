@@ -1,5 +1,6 @@
 package com.lottery.controller;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -46,7 +49,7 @@ public class IndexController {
 	private PrizeUserService prizeUserService;
 	
 	@RequestMapping
-	public ModelAndView index(){
+	public ModelAndView index(HttpServletRequest request){
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<Prize> list = prizeSettingService.findAll();
 		if(list!=null&&list.size()>0){
@@ -66,6 +69,33 @@ public class IndexController {
 			map.put("initflag",false);
 		}
 		map.put("title", prizeSerial==null?"":prizeSerial.getName());
+		String basePath = request.getSession().getServletContext().getRealPath("/");
+		String savePath = basePath+"resources"+File.separator+"bg";
+		File bg = new File(savePath +File.separator+ "bg.jpg");
+		if(bg.exists()){
+			map.put("bgname", "bg.jpg");
+		}else{
+			map.put("bgname", "defaultbg.jpg");
+		}
+		savePath = basePath+"resources"+File.separator+"music";
+		bg = new File(savePath +File.separator+ "bgmusic.mp3");
+		if(bg.exists()){
+			map.put("bgmusic", "bgmusic.mp3");
+		}else{
+			map.put("bgmusic", "defaultbgmusic.mp3");
+		}
+		bg = new File(savePath +File.separator+ "startmusic.mp3");
+		if(bg.exists()){
+			map.put("startmusic", "startmusic.mp3");
+		}else{
+			map.put("startmusic", "defaultbgmusic.mp3");
+		}
+		bg = new File(savePath +File.separator+ "stopmusic.mp3");
+		if(bg.exists()){
+			map.put("stopmusic", "stopmusic.mp3");
+		}else{
+			map.put("stopmusic", "defaultstopmusic.mp3");
+		}
 		return new ModelAndView("/main",map);
 	}
 	@RequestMapping(value="/action/{prizeid}")
@@ -187,5 +217,13 @@ public class IndexController {
 	@RequestMapping(value="/resultreport",method = RequestMethod.GET)
 	public @ResponseBody Object resultreport(){
 		return prizeUserService.findCurrentPrizeUser();
+	}
+	@RequestMapping(value="/checkuser")
+	public @ResponseBody boolean checkuser(int prizelength){
+		long totaluser  = userService.findActiveUserNum();
+		if(prizelength>totaluser||prizelength<1){
+			return false;
+		}
+		return true;
 	}
 }

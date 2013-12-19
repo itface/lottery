@@ -33,13 +33,13 @@ public class ActionServiceImpl implements ActionService{
 		Prize prize = prizeService.findById(prizeId);
 		if(prize!=null){
 			PrizeSerial prizeSerial = prize.getPrizeSerial();
-			int prizecount = prizeSerial.getPrizecount();
-			prizeSerial.setPrizecount(prizecount+1);
 			List<User> list = userService.findAllActiveUser();
 			RandomNumUtil util = new RandomNumUtil();
 			List<User> users = util.getRandom(list,prize.getPrizenum());
 			List<PrizeUser> prizeUsers = new ArrayList<PrizeUser>();
 			if(users!=null&&users.size()>0){
+				int prizecount = prizeSerial.getPrizecount();
+				prizeSerial.setPrizecount(prizecount+1);
 				for(User user:users){
 					PrizeUser prizeUser = new PrizeUser(prize,user,prizecount+1);
 					prizeUserService.addPrizeUser(prizeUser);

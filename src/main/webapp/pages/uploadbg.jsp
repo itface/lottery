@@ -13,7 +13,7 @@
 </head>
 <body>
 	<div>
-		<form action="${ctx}/uploadify/upload" method="post" enctype="multipart/form-data">
+		<form action="${ctx}/uploadify/uploadbg" method="post" enctype="multipart/form-data">
 			<input id="uploadify" name="uploadify" type="file" />
 		</form>
 	</div>
@@ -22,13 +22,13 @@
 $(document).ready(function() {
 	  $('#uploadify').uploadify({
 	    'swf'  : '${ctx}/resources/script/uploadify3.2.1/uploadify.swf',
-	    'uploader'    : '${ctx}/uploadify/upload',
-	    'fileTypeExts'	: '*.xls',
+	    'uploader'    : '${ctx}/uploadify/uploadbg',
+	    'fileTypeExts'	: '*.gif; *.jpg; *.png',
 	    'fileObjName':'uploadify',
-	    'buttonText' : '上传人员名单...',
+	    'buttonText' : '上传...',
 	     'multi':false,
 	     'onUploadComplete' : function(file) {
-            alert('导入成功!');
+            alert('上传成功!');
         }
 	  		
 	  });

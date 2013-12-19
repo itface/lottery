@@ -8,6 +8,7 @@
 <script src="<c:url value='/resources/script/jquery-1.7.2.min.js'/>"  type="text/javascript"></script>
 <script src="<c:url value='/resources/script/lhgdialog/lhgdialog.js'/>" type="text/javascript"></script>
 <script type="text/javascript" src="<c:url value='/resources/script/blockUI/blockUI.js'/>" ></script>
+<script src="<c:url value='/resources/script/audiojs/audio.min.js'/>" type="text/javascript"></script>
 <style>
 .top{
 	height:40px;
@@ -17,10 +18,19 @@
 }
 </style>
 </head>
-<body onload="$('#prizelist').trigger('change');">
+<body onload="$('#prizelist').trigger('change');" style='background-image:url(${ctx}/resources/bg/${bgname})'>
 	<div class="top">
-		<div style="text-align:center;height:50px;font-weight: bolder;font-size: 30px;">
+		<div style="text-align:center;height:50px;font-weight: bolder;font-size: 30px;" class='title'>
 			${title}
+			<!--  
+			<audio src="${ctx}/resources/music/bg.mp3" autoplay loop></audio>
+			<audio src="${ctx}/resources/music/bg.mp3" preload="auto" />
+			<bgsound src="${ctx}/resources/music/bg.mp3" loop="-1"> 
+			<embed　src="${ctx}/resources/music/bg.mp3"　autostart="true"　loop="true"　hidden="true"></embed>
+			-->
+		</div>
+		<div style="display:block" class="musicplayer">
+			
 		</div>
 		<div class='tbar'>
 			<!-- 
@@ -34,7 +44,8 @@
 			
 			<div style="float:right;width:140px"><a class='currentprize' href='javascript:void(0);'>现场中奖记录</a></div>
 			<div style="float:right;width:140px"><a class='historyprize' href='javascript:void(0);'>历史中奖记录</a></div>
-			
+			<div style="float:right;width:140px"><a class='bgsetting' href='javascript:void(0);'>设置背景图</a></div>
+			<div style="float:right;width:140px"><a class='musicsetting' href='javascript:void(0);'>设置音乐</a></div>
 			<div style="float:right;width:145px"><a class='resultreport' href='javascript:void(0);'>现场中奖分布图</a></div>
 		</div>
 		<div  style="clear:both;text-align:center;padding-top:30px;height:35px">
@@ -56,6 +67,9 @@
 	$(document).ready(function(){
 		var initflag = ${initflag};
 		var prizelistjson = ${prizelistjson};
+		var bgmusic='${bgmusic}';
+		var startmusic='${startmusic}';
+		var stopmusic='${stopmusic}';
 		init();
 		function init(){
 			if(initflag){
@@ -63,7 +77,81 @@
 			}else{
 				$('.prizeselect').hide();
 			}
+			setMusic(bgmusic);
 		}
+		function setMusic(musicname){
+			if($.browser.msie){
+				if(document.getElementById('sound')){
+					document.getElementById('sound').loop=0;
+					document.getElementById('sound').src="${ctx}/resources/music/"+musicname;
+					document.getElementById('sound').loop=-1;
+				}else{
+					var  sound=document.createElement("bgsound");
+			         sound.id="sound";
+			         document.body.appendChild(sound); 
+			         sound.src="${ctx}/resources/music/"+musicname;
+			         sound.loop=-1;
+				}
+			}else{
+				var s = "<audio src='${ctx}/resources/music/"+musicname+"' loop  autoplay></audio>";
+				$('.musicplayer').empty();
+				 $('.musicplayer').show();
+				$('.musicplayer').append(s);
+				if (typeof(Worker) !== "undefined") {
+		 			if ( $.browser.msie||$.browser.mozilla)
+		 				audiojs.createAll();
+		 		}
+				 else {
+				 	audiojs.createAll();
+				 }
+				 $('.musicplayer').hide();
+			}
+			//var audio = a[0];
+			 //audio.playPause();
+			 
+			/*
+			var a = audiojs.createAll();
+			var audio = a[0];
+			 audio.playPause();
+			 */
+			
+		}
+		$('.bgsetting').bind('click',function(){
+			var dialog = $.dialog({
+		 		id:'dia',
+			    lock: true,
+			    width: 500,
+		    	height: 200,
+			    min:false,
+			    max:false,
+			    cancel:true,
+			    background: '#FFF',
+			    opacity: 0.5,
+			    content: 'url:${ctx}/uploadify/uploadbgpage',
+			    title:'设置背景图',
+			    close:function(){
+			    	location=location;
+			    }
+			});
+		});
+		$('.musicsetting').bind('click',function(){
+			var dialog = $.dialog({
+		 		id:'dia',
+			    lock: true,
+			    width: 600,
+		    	height: 400,
+			    min:false,
+			    max:false,
+			    cancel:true,
+			    background: '#FFF',
+			    opacity: 0.5,
+			    content: 'url:${ctx}/uploadify/uploadmusicpage',
+			    title:'设置音乐',
+			    close:function(){
+			    	location=location;
+			    }
+			});
+		});
 		$('.endprize').bind('click',function(){
 			if(confirm('结束抽奖后，您将只能在“历史中奖记录”中查看历史中奖记录，本批次导入的人员和初始化设置都将失效，请确认是否结束抽奖？')){
 				$(window).blockUI();
@@ -89,11 +177,11 @@
 					if(v['id']==id){
 						var jppic = v['jppic'];
 						if(jppic!=''){
-							$('.img').attr('src','${ctx}/prizepic/'+jppic);
+							$('.img').attr('src','${ctx}/resources/prizepic/'+jppic);
 						}else{
-							$('.img').attr('src','${ctx}/prizepic/default.png');
+							$('.img').attr('src','${ctx}/resources/prizepic/default.png');
 						}
-						$('.prizeclass').html('中奖人数:'+v['prizenum']+"人  奖品："+v['jp']);
+						$('.prizeclass').html('中奖人数:<span id="prizenum">'+v['prizenum']+"</span>人  奖品："+v['jp']);
 					}
 				});
 			}
@@ -192,17 +280,35 @@
 				alert('请选择要抽的奖项。');
 				return false;
 			}
-			$('.actionstart').hide();
-			$('.actionend').show();
-			$('.userList').empty();
-			$('.userListTable').hide();
-			$('.img').hide();
+			var prizenum = $('#prizenum').html();
+			if(prizenum!=null&&prizenum!=''&&parseInt(prizenum)>0){
+				$.ajax({
+					url:'${ctx}/index/checkuser?prizelength='+prizenum,
+					async:false,
+					cache:false,
+					success:function(obj){
+						if(obj==false||obj=='false'){
+							alert("奖项的中奖名额多于抽奖的人员数。");
+							return;
+						}else{
+							setMusic(startmusic);
+							$('.actionstart').hide();
+							$('.actionend').show();
+							$('.userList').empty();
+							$('.userListTable').hide();
+							$('.img').hide();
+						}
+					}
+				});
+			}else{
+				alert("奖项的中奖名额必须大于0。");
+				return;
+			}
 		});
 		$('.actionend').bind('click',function(){
 			$('.actionstart').show();
 			$('.actionend').hide();
 			$('.userListTable').show();
-			
 			$.ajax({
 				url:'${ctx}/index/action/'+$('#prizelist').val(),
 				async:false,
@@ -232,7 +338,10 @@
 							s += '</tr>';
 						});
 						$('.userList').html(s);
+					}else{
+						//alert("没有抽到。");
 					}
+					setMusic(stopmusic);
 				}
 			});
 		});
