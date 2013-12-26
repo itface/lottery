@@ -14,7 +14,7 @@
 <body>
 	<form action='${ctx}/index/historyprizepage'>
 		<div>
-			抽奖名称:<form:select id="prizeSerials"  name="prizeSerials" path="prizeSerials"  items="${prizeSerials}" itemValue="num" itemLabel="name"/><button/>查询</button>
+			抽奖名称:<form:select id="prizeSerials" value="${prizeSerialid}"  name="prizeSerials" path="prizeSerials"  items="${prizeSerials}" itemValue="num" itemLabel="name"/><button/>查询</button>
 		</div>
 		<div>
 			<table class='prizeclass' border="1px solid #ccc" style='border-collapse: collapse;' width='1150px'>

@@ -13,69 +13,50 @@ public class RandomNumUtil {
 
 	public  List<User> getRandom(List<User> list,int length){
 		if(list!=null&&list.size()>0&&length>0){
-			//int persizeRatio = 10;
+			int persizeRatio = 10;
+			double dataRatio = 0.3;
 			List<User> users = new ArrayList<User>(length);
-			//Set<Integer> set = new HashSet<Integer>(length);
+			Set<Integer> set = new HashSet<Integer>(length);
 			int listSize = list.size();
-			//double realDataRadio = length*1d/listSize;
-			//int persize = listSize%persizeRatio==0?listSize/persizeRatio:listSize/persizeRatio+1;
-			Set<Integer> set1 = getRandom1(listSize,length);
-			if(set1!=null){
-				Iterator<Integer> it = set1.iterator();
-				while(it.hasNext()){
-					int index = it.next();
-					users.add(list.get(index-1));
+			double realDataRadio = length*1d/listSize;
+			if(realDataRadio<=dataRatio){
+				int persize = listSize%persizeRatio==0?listSize/persizeRatio:listSize/persizeRatio+1;
+				for(int j=0;j<length;j++){
+					Set<Integer> set1 = getRandom1(listSize,persize);
+					Set<Integer> set2 = getRandom2(listSize,persize);
+					//Set<Integer> set3 = getRandom3(listSize,2,persize);
+					if(set1!=null&&set2!=null){
+						Iterator<Integer> it = set1.iterator();
+						boolean flag = true;
+						while(it.hasNext()){
+							int index = it.next();
+							if(set2.contains(index)&&!set.contains(index)){
+								set.add(index);
+								//index是1到list的长度之间的任意一个数，可以当作是长度，因为作为下标是要減1
+								users.add(list.get(index-1));
+								flag=false;
+								break;
+							}
+						}
+						if(flag){
+							j--;
+						}
+					}
 				}
 				return users;
+			}else{
+				Set<Integer> set1 = getRandom1(listSize,length);
+				if(set1!=null){
+					Iterator<Integer> it = set1.iterator();
+					while(it.hasNext()){
+						int index = it.next();
+						users.add(list.get(index-1));
+					}
+					return users;
+				}
 			}
-			return users;
 		}
 		return null;
-//		if(list!=null&&list.size()>0&&length>0){
-//			int persizeRatio = 10;
-//			double dataRatio = 0.1;
-//			List<User> users = new ArrayList<User>(length);
-//			Set<Integer> set = new HashSet<Integer>(length);
-//			int listSize = list.size();
-//			double realDataRadio = length*1d/listSize;
-//			if(realDataRadio<dataRatio){
-//				int persize = listSize%persizeRatio==0?listSize/persizeRatio:listSize/persizeRatio+1;
-//				for(int j=0;j<length;j++){
-//					Set<Integer> set1 = getRandom1(listSize,persize);
-//					Set<Integer> set2 = getRandom2(listSize,persize);
-//					Set<Integer> set3 = getRandom3(listSize,2,persize);
-//					if(set1!=null&&set2!=null&&set3!=null){
-//						Iterator<Integer> it = set1.iterator();
-//						boolean flag = true;
-//						while(it.hasNext()){
-//							int index = it.next();
-//							if(set2.contains(index)&&set3.contains(index)&&!set.contains(index)){
-//								set.add(index);
-//								//index是1到list的长度之间的任意一个数，可以当作是长度，因为作为下标是要減1
-//								users.add(list.get(index-1));
-//								flag=false;
-//								break;
-//							}
-//						}
-//						if(flag){
-//							j--;
-//						}
-//					}
-//				}
-//				return users;
-//			}else{
-//				Set<Integer> set1 = getRandom1(listSize,length);
-//				if(set1!=null){
-//					Iterator<Integer> it = set1.iterator();
-//					while(it.hasNext()){
-//						int index = it.next();
-//						users.add(list.get(index-1));
-//					}
-//					return users;
-//				}
-//			}
-//		}
-//		return null;
 	}
 	public  Set<Integer> getRandom1(int maxnum,int length){
 		if(maxnum>0&&length>0&&maxnum>=length){

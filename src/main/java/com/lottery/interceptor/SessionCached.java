@@ -1,4 +1,4 @@
-package com.lottery.filter;
+package com.lottery.interceptor;
 
 import java.util.HashSet;
 import java.util.Set;

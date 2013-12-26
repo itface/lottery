@@ -31,9 +31,11 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
+	<!-- 
 	<mvc:interceptors>
-	    <bean name="requestInterceptor" class="com.lottery.filter.RequestInterceptor"/>
+	    <bean name="requestInterceptor" class="com.lottery.interceptor.RequestInterceptor"/>
 	</mvc:interceptors>
+	 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 	    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
 	     <property name="prefix" value="/pages/"/>

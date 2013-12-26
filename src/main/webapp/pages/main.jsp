@@ -12,10 +12,15 @@
 <style>
 .top{
 	height:40px;
+	color:yellow;
 }
 .tbar{
 	text-align:right;
 }
+a {
+
+color:white;
+} 
 </style>
 </head>
 <body onload="$('#prizelist').trigger('change');" style='background-image:url(${ctx}/resources/bg/${bgname})'>
@@ -29,7 +34,7 @@
 			<embed　src="${ctx}/resources/music/bg.mp3"　autostart="true"　loop="true"　hidden="true"></embed>
 			-->
 		</div>
-		<div style="display:block" class="musicplayer">
+		<div style="display:block" id="musicplayer">
 			
 		</div>
 		<div class='tbar'>
@@ -93,18 +98,27 @@
 			         sound.loop=-1;
 				}
 			}else{
+				if(document.getElementById('sound')){
+					//document.getElementById('sound').loop=0;
+					document.getElementById('sound').src="${ctx}/resources/music/"+musicname;
+					//document.getElementById('sound').loop=-1;
+				}else{
+					var  sound=document.createElement("audio");
+			         sound.id="sound";
+			         document.getElementById('musicplayer').appendChild(sound); 
+			         sound.src="${ctx}/resources/music/"+musicname;
+			         sound.loop='loop';
+			         sound.autoplay='autoplay';
+				}
+				/*
 				var s = "<audio src='${ctx}/resources/music/"+musicname+"' loop  autoplay></audio>";
 				$('.musicplayer').empty();
 				 $('.musicplayer').show();
 				$('.musicplayer').append(s);
-				if (typeof(Worker) !== "undefined") {
-		 			if ( $.browser.msie||$.browser.mozilla)
+				if ( $.browser.mozilla)
 		 				audiojs.createAll();
-		 		}
-				 else {
-				 	audiojs.createAll();
-				 }
 				 $('.musicplayer').hide();
+				 */
 			}
 			//var audio = a[0];
 			 //audio.playPause();
@@ -125,6 +139,7 @@
 			    min:false,
 			    max:false,
 			    cancel:true,
+			    ok:false,
 			    background: '#FFF',
 			    opacity: 0.5,
 			    content: 'url:${ctx}/uploadify/uploadbgpage',
@@ -143,6 +158,7 @@
 			    min:false,
 			    max:false,
 			    cancel:true,
+			    ok:false,
 			    background: '#FFF',
 			    opacity: 0.5,
 			    content: 'url:${ctx}/uploadify/uploadmusicpage',
@@ -153,6 +169,10 @@
 			});
 		});
 		$('.endprize').bind('click',function(){
+			if(initflag==false||initflag=='false'){
+				alert('亲，您还没有开始一次抽奖!');
+				return false;
+			}
 			if(confirm('结束抽奖后，您将只能在“历史中奖记录”中查看历史中奖记录，本批次导入的人员和初始化设置都将失效，请确认是否结束抽奖？')){
 				$(window).blockUI();
 				$.ajax({
@@ -250,25 +270,39 @@
 		    	height: 550,
 			    min:false,
 			    max:false,
-			    cancel:false,
+			    cancel:true,
 			    background: '#FFF',
 			    opacity: 0.5,
 			    content: 'url:${ctx}/index/initpage',
 			    title:'',
 			    close:function(){
 			    	location=location;
-			    }
+			    },
+			    button:[{
+					name: '保存',
+					callback: function(){window.frames["dia"].saveData();return false;}
+				}
+				/*,{
+					name: '取消',
+					callback: function(){this.close();},
+				}*/]
 			});
 			$.dialog.data('dialog',dialog);
 		});
 		$('.initUser').bind('click',function(){
-			$.ajax({
-					url:'${ctx}/index/inituserstatus',
-					cache:false,
-					success:function(obj){
-						alert('抽奖人员状态重置完毕！');
-					}
-			});
+			if(initflag==false||initflag=='false'){
+				alert('亲，您还没有开始一次抽奖!');
+				return false;
+			}
+			if(confirm('是否确定要重置人员状态')){
+				$.ajax({
+						url:'${ctx}/index/inituserstatus',
+						cache:false,
+						success:function(obj){
+							alert('抽奖人员状态重置完毕！');
+						}
+				});
+			}
 		});
 		$('.actionstart').bind('click',function(){
 			if(initflag==false||initflag=='false'){

@@ -1,4 +1,4 @@
-package com.lottery.filter;
+package com.lottery.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +46,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 		*/
 		String context = request.getContextPath();
 		String sessionid = request.getSession().getId();
+		
 		//request.setAttribute("testaaab", "aaaaaaaaaaaa");
 		//request.getSession().setAttribute("testaaab", "aaaaaaaaaaaa");
 		//response.sendRedirect(context+"/pages/error.jsp");
@@ -54,8 +55,22 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 		return true;
 	}
 
+	/**
+	 * isAjaxRequest:判断请求是否为Ajax请求. <br/>
+	 *
+	 * @author chenzhou
+	 * @param request 请求对象
+	 * @return boolean
+	 * @since JDK 1.6
+	 */
+	public boolean isAjaxRequest(HttpServletRequest request){
+		String header = request.getHeader("X-Requested-With");
+		boolean isAjax = "XMLHttpRequest".equals(header) ? true:false;
+		return isAjax;
+	}
 	@Override
 	public void postHandle(HttpServletRequest request,HttpServletResponse response, Object handler,ModelAndView modelAndView) throws Exception {
+		
 		/*
 		log.debug("==========postHandle=========");
 

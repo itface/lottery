@@ -88,7 +88,7 @@ public class IndexController {
 		if(bg.exists()){
 			map.put("startmusic", "startmusic.mp3");
 		}else{
-			map.put("startmusic", "defaultbgmusic.mp3");
+			map.put("startmusic", "defaultstartmusic.mp3");
 		}
 		bg = new File(savePath +File.separator+ "stopmusic.mp3");
 		if(bg.exists()){
@@ -158,6 +158,7 @@ public class IndexController {
 		List<PrizeUser> list = prizeUserService.findPrizeUserBySerialnum(prizeSerials);
 		map.put("prizeSerials", prizeSerialsList==null?new ArrayList():prizeSerialsList);
 		map.put("prizelist", list);
+		map.put("prizeSerialid", prizeSerials);
 		return new ModelAndView("/prizeHistory",map);
 	}
 	@RequestMapping(value="/resultreportpage",method = RequestMethod.GET)

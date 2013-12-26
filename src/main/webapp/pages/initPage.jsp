@@ -32,15 +32,17 @@
 			<span style='font-size: 12px;color: red;'>注意：导入时系统将先清空全部抽奖人员，再导入新的抽奖人员。</span>
 		</form>
 	</div>
+	<!--  
 	<div>
 		<div style='bottom:5px;right:10px;position:absolute;'>
 			<input class='initBtn' type='button' value='保存'/>
 			<input class='cancelBtn' type='button' value='取消'/>
 		</div>
 	</div>
+	-->
 </body>
 <script>
-$(document).ready(function() {
+
 		 
 		 var pnum=${pnum};
 		 var uploadshow = ${uploadshow};
@@ -80,16 +82,7 @@ $(document).ready(function() {
 		  		$('.uploadform').hide();
 		  	}
 		  }
-		function closeWin(){
-			var api = frameElement.api;
-			var  W = api.opener; 
-			var dia = W.$.dialog.data('dialog');
-			dia.close();
-		}
-		$('.cancelBtn').bind('click',function(){
-			 closeWin();
-		});
-		$('.initBtn').bind('click',function(){
+		function saveData(){
 			var pname = $('#name').val();
 			if(pname!=null&&pname!=''&&pname!=undefined){
 				var dataLength =$('#list').jqGrid('getRowData').length;
@@ -105,6 +98,7 @@ $(document).ready(function() {
 					url:'${ctx}/index/saveprizeserial',
 					type:'POST',
 					cache:false,
+					async:false,
 					data:{name:pname,pnum:pnum},
 					success:function(){
 						parent.location=parent.location;
@@ -113,8 +107,7 @@ $(document).ready(function() {
 			}else{
 				alert('请输入抽奖活动名称。');
 			}
-			
-		});
+		}
 		function updateSelectOptions(){
 			var selectedValue = $('#indexorder').val();
 			var selectHtml = '';
@@ -177,6 +170,5 @@ $(document).ready(function() {
 		$("#search_list_top").remove();
 		$(".ui-jqgrid-titlebar-close").remove();
 		$(".ui-paging-info", topPagerDiv).remove();//
-});
 </script>
 </html>
