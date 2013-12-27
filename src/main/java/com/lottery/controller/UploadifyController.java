@@ -45,7 +45,7 @@ public class UploadifyController {
 	public @ResponseBody String uploadbg(HttpServletRequest request,HttpServletResponse response,@RequestParam MultipartFile[] uploadify) throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if(uploadify!=null){
 			String basePath = request.getSession().getServletContext().getRealPath("/");
-			String savePath = basePath+"resources"+File.separator+"bg";
+			String savePath = basePath+File.separator+"resources"+File.separator+"bg";
 			String realfilename = "bg.jpg";
 			File dir = new File(savePath);
 			if(!dir.exists()){
@@ -73,7 +73,7 @@ public class UploadifyController {
 	public @ResponseBody String uploadmusic1(HttpServletRequest request,HttpServletResponse response,@RequestParam MultipartFile[] uploadify1) throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if(uploadify1!=null){
 			String basePath = request.getSession().getServletContext().getRealPath("/");
-			String savePath = basePath+"resources"+File.separator+"music";
+			String savePath = basePath+File.separator+"resources"+File.separator+"music";
 			String realfilename = "bgmusic.mp3";
 			File dir = new File(savePath);
 			if(!dir.exists()){
@@ -97,7 +97,7 @@ public class UploadifyController {
 	public @ResponseBody String uploadmusic2(HttpServletRequest request,HttpServletResponse response,@RequestParam MultipartFile[] uploadify2) throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if(uploadify2!=null){
 			String basePath = request.getSession().getServletContext().getRealPath("/");
-			String savePath = basePath+"resources"+File.separator+"music";
+			String savePath = basePath+File.separator+"resources"+File.separator+"music";
 			String realfilename = "startmusic.mp3";
 			File dir = new File(savePath);
 			if(!dir.exists()){
@@ -121,7 +121,7 @@ public class UploadifyController {
 	public @ResponseBody String uploadmusic3(HttpServletRequest request,HttpServletResponse response,@RequestParam MultipartFile[] uploadify3) throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if(uploadify3!=null){
 			String basePath = request.getSession().getServletContext().getRealPath("/");
-			String savePath = basePath+"resources"+File.separator+"music";
+			String savePath = basePath+File.separator+"resources"+File.separator+"music";
 			String realfilename = "stopmusic.mp3";
 			File dir = new File(savePath);
 			if(!dir.exists()){

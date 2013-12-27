@@ -70,14 +70,14 @@ public class IndexController {
 		}
 		map.put("title", prizeSerial==null?"":prizeSerial.getName());
 		String basePath = request.getSession().getServletContext().getRealPath("/");
-		String savePath = basePath+"resources"+File.separator+"bg";
+		String savePath = basePath+File.separator+"resources"+File.separator+"bg";
 		File bg = new File(savePath +File.separator+ "bg.jpg");
 		if(bg.exists()){
 			map.put("bgname", "bg.jpg");
 		}else{
 			map.put("bgname", "defaultbg.jpg");
 		}
-		savePath = basePath+"resources"+File.separator+"music";
+		savePath = basePath+File.separator+"resources"+File.separator+"music";
 		bg = new File(savePath +File.separator+ "bgmusic.mp3");
 		if(bg.exists()){
 			map.put("bgmusic", "bgmusic.mp3");
@@ -96,6 +96,8 @@ public class IndexController {
 		}else{
 			map.put("stopmusic", "defaultstopmusic.mp3");
 		}
+		map.put("userlist", userService.findAllActiveUserame());
+		
 		return new ModelAndView("/main",map);
 	}
 	@RequestMapping(value="/action/{prizeid}")
@@ -226,5 +228,9 @@ public class IndexController {
 			return false;
 		}
 		return true;
+	}
+	@RequestMapping(value="/prizeuserlist",method = RequestMethod.GET)
+	public @ResponseBody Object prizeuserlist(){
+		return prizeUserService.getPrizeUserList();
 	}
 }

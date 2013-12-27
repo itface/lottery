@@ -5,9 +5,11 @@ import java.util.Map;
 
 import com.lottery.domain.Percentage;
 import com.lottery.domain.PrizeUser;
+import com.lottery.domain.TempPrizeUser;
 
 public interface PrizeUserService {
 
+	public List<PrizeUser> getPrizeUserList();
 	public void addPrizeUser(PrizeUser prizeUser);
 	public List<PrizeUser> findPrizeUser(String serialnum);
 	public List<PrizeUser> findCurrentPrizeUser();

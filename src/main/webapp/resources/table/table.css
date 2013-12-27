@@ -1,0 +1,79 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	font-size:12px;
+	font-family:微软雅黑;
+	padding:0px;
+	border:0px;
+	margin:0px;
+}
+/*审批表格样式*/
+.wr_table table {
+	border:1px solid #ebebeb;
+	color:#999999;
+	margin-top:10px;
+	border-collapse: collapse;
+	border-spacing: 0;
+	
+}
+.wr_table_header {
+	background:url(../images/table_tooltar_bg.png);
+	background-repeat:repeat-x;
+	background-position:top;
+	border-bottom:1px solid #ebebeb;
+}
+.wr-table-hd-inner {
+	text-align:center;
+	overflow:hidden;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color:#7e7e7e;
+	-moz-box-shadow:1px 1px 1px #fff;
+	text-align:center;
+	padding:1px 2px 1px 2px;
+	line-height:26px;
+	height:26px;
+	font-weight:bold;
+	font-size:12px;
+	font-family:微软雅黑;
+	background:url(../images/table_tooltar_bg.png);
+
+}
+.wr-table-hd-inner td {
+	padding:1px 6px 1px 6px;
+	border-left:1px solid;
+	border-right:1px solid;
+	border:1px solid #ebebeb;
+
+}
+.wr-table-td-inner {
+	word-break: break-all;
+	word-wrap: break-word;
+	text-align:left;
+	background-color:#fafafa;
+	line-height:18px;
+	border:1px solid #ebebeb;
+	color:#7e7e7e;
+	background: url(../aws_img/main/table_head_bg.jpg) #fafafa repeat-x;
+
+}
+.wr-table-td-inner td {
+	padding:5px 6px 5px 6px;
+	border-bottom:1px solid #ebebeb;
+
+	word-break: break-all;
+	word-wrap: break-word;
+
+}
+.wr-table-tr-row td {
+	background:#fff;
+	background-repeat:repeat-x;
+	border-top:1px solid #ebebeb;
+}
+.wr-table-td-selected td {
+	background-color: #fef9e0;
+	background-image: none;
+	padding:5px 6px 5px 6px;
+}

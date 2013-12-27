@@ -16,6 +16,7 @@ public interface UserService {
 	public void impUser(MultipartFile mf)throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 	public List<User> findAll();
 	public List<User> findAllActiveUser();
+	public List<User> findAllActiveUserame();
 	public void updateUserStatus(List<User> users);
 	public void updateAllUserStatus();
 	public long findActiveUserNum();

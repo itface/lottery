@@ -162,5 +162,10 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		dao.executeUpdate("delete from User t", null);
 	}
+	@Override
+	public List<User> findAllActiveUserame() {
+		// TODO Auto-generated method stub
+		return dao.find("select t.username from User t where t.status=0", null);
+	}
 
 }

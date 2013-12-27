@@ -5,70 +5,69 @@
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/blockUI/blockUI.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/zzsc/zzsc.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/table/table.css'/>">
 <script src="<c:url value='/resources/script/jquery-1.7.2.min.js'/>"  type="text/javascript"></script>
 <script src="<c:url value='/resources/script/lhgdialog/lhgdialog.js'/>" type="text/javascript"></script>
 <script type="text/javascript" src="<c:url value='/resources/script/blockUI/blockUI.js'/>" ></script>
 <script src="<c:url value='/resources/script/audiojs/audio.min.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/resources/script/zzsc/zzsc.js'/>" type="text/javascript"></script>
+<script src="<c:url value='/resources/script/zzsc/menu.js'/>" type="text/javascript"></script>
 <style>
-.top{
-	height:40px;
-	color:yellow;
-}
-.tbar{
-	text-align:right;
-}
-a {
 
-color:white;
-} 
 </style>
 </head>
-<body onload="$('#prizelist').trigger('change');" style='background-image:url(${ctx}/resources/bg/${bgname})'>
-	<div class="top">
-		<div style="text-align:center;height:50px;font-weight: bolder;font-size: 30px;" class='title'>
-			${title}
-			<!--  
-			<audio src="${ctx}/resources/music/bg.mp3" autoplay loop></audio>
-			<audio src="${ctx}/resources/music/bg.mp3" preload="auto" />
-			<bgsound src="${ctx}/resources/music/bg.mp3" loop="-1"> 
-			<embed　src="${ctx}/resources/music/bg.mp3"　autostart="true"　loop="true"　hidden="true"></embed>
-			-->
-		</div>
-		<div style="display:block" id="musicplayer">
-			
-		</div>
-		<div class='tbar'>
-			<!-- 
-			<div style="float:right;width:80px"><a class='prizeSetting' href='javascript:void(0);'>设置奖项</a></div>
-			<div style="float:right;width:80px"><a class='impExcel' href='javascript:void(0);'>导入excel</a></div>
-			<div style="float:right;width:80px"><a class='initAll' href='javascript:void(0);'>初始化</a></div>
-			-->
-			<div style="float:right;width:100px"><a class='setting' href='javascript:void(0);'>初始化设置</a></div>
-			<div style="float:right;width:140px"><a class='endprize' href='javascript:void(0);'>结束抽奖活动</a></div>
-			<div style="float:right;width:140px"><a class='initUser' href='javascript:void(0);'>重置人员状态</a></div>
-			
-			<div style="float:right;width:140px"><a class='currentprize' href='javascript:void(0);'>现场中奖记录</a></div>
-			<div style="float:right;width:140px"><a class='historyprize' href='javascript:void(0);'>历史中奖记录</a></div>
-			<div style="float:right;width:140px"><a class='bgsetting' href='javascript:void(0);'>设置背景图</a></div>
-			<div style="float:right;width:140px"><a class='musicsetting' href='javascript:void(0);'>设置音乐</a></div>
-			<div style="float:right;width:145px"><a class='resultreport' href='javascript:void(0);'>现场中奖分布图</a></div>
-		</div>
-		<div  style="clear:both;text-align:center;padding-top:30px;height:35px">
-			<span class='prizeselect'><form:select id="prizelist"  name="prizelist" path="prizelist"  items="${prizelist}" itemValue="id" itemLabel="prizelistlabel"/></span>
-			<span class='prizeclass'></span>
-			<span style='width:160px'><input class='actionstart' type='button' value='开始' style='width:150px;height:30px'/></span>
-			<span style='width:160px;margin-left:160px'><input class='actionend' type='button' value='停止' style='width:150px;height:30px;display:none'/></span>
-		</div>
-		<div style="text-align:center">		
-			<img class='img' style='width:900px;height:400px;display:none;'/>	
-		</div>
-		<div  class='userListTable' style='clear:both;padding-top:20px;display:none;'>
-			<table class='userList'  border="1px solid #ccc" style='border-collapse: collapse;margin:0 auto;width:650px;'>
-			</table>
-		</div>
-	</div>
+<body onload="$('#prizelist').trigger('change');" style='background:url(${ctx}/resources/bg/${bgname})'>
+<div style="display:block" id="musicplayer"></div>
+<div class="title">${title}</div>
+<ul id="jsddm">
+  <li><a href="javascript:void(0);" style="background:url(${ctx}/resources/images/cog.png) no-repeat">&nbsp;</a>
+    <ul>
+      <li><a href="javascript:void(0);" class='resultreport'>现场中奖分布图</a></li>
+      <li><a href="javascript:void(0);" class='musicsetting'>设置音乐</a></li>
+      <li><a href="javascript:void(0);" class='bgsetting'>设置背景图</a></li>
+      <li><a href="javascript:void(0);" class='historyprize'>历史中奖纪录</a></li>
+      <li><a href="javascript:void(0);" class='currentprize'>现场中奖纪录</a></li>
+      <li><a href="javascript:void(0);" class='initUser'>重置人员状态</a></li>
+      <li><a href="javascript:void(0);" class='endprize'>结束抽奖活动</a></li>
+      <li><a href="javascript:void(0);" class='setting'>初始化设置</a></li>
+      <li>&nbsp;</li>
+    </ul>
+</ul>
+<div class="div_left">
+		<!-- 
+		<c:set var="prizeindex" value="0"/> 
+		<c:forEach items="${prizeuserlist}" var="prizeuser" varStatus="status1">
+			<c:if test="${prizeindex!=prizeuser.indexorder}">  
+				<c:set var="prizeindex" value="${prizeuser.indexorder}"/>
+				<li><a href="javascript:void(0);" style="cursor: default;">&nbsp;</a></li>
+				<li><a href="javascript:void(0);" style="cursor: default;">${prizeuser.prizename}第${prizeuser.indexorder}次</a></li>
+			</c:if>
+			<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:20px;display:inline-block;width:60px">${prizeuser.username}</span> <span style="font-size:16px">&nbsp;${prizeuser.usernumber}</span><span style="font-size:16px">&nbsp;${prizeuser.region}</span></a></li>
+		</c:forEach>
+		 -->
+</div>
+
+
+<div class="div_right">
+  <div class="select">
+    <form:select id="prizelist" class="select1"  name="prizelist" path="prizelist"  items="${prizelist}" itemValue="id" itemLabel="prizelistlabel"/>
+  	<span class='prizeclass'> </span>
+  </div>
+
+  <div class="actionend" style="display:none;margin-left:147px"><div class="btn2"><a href="javascript:void(0);" ></a></div></div>
+  <div class="actionstart" style='margin-right:147px'><div class="btn1"><a href="javascript:void(0);" ></a></div></div>
+  <div id="tagscloud"> 
+  		<c:forEach items="${userlist}" var="user" varStatus="status">
+				<a href="javascript:void(0);" class="tagc${(status.index)%3+1}">${user}</a> 
+		</c:forEach>
+  </div>
+  <div class="wr_table userListTable" style="width:560px;margin: 20px 0px 0px 100px;  display:none">
+  	<table class='userList' border="0" cellspacing="0" cellpadding="0" width="100%">
+  	</table>
+  </div>
+</div>
 	<script>
-	
 	$(document).ready(function(){
 		var initflag = ${initflag};
 		var prizelistjson = ${prizelistjson};
@@ -82,7 +81,33 @@ color:white;
 			}else{
 				$('.prizeselect').hide();
 			}
+			//initLeft();
+			$('#jsddm').easymenu();
+			$(document).lottery();
+			setPrizeuser();
 			setMusic(bgmusic);
+		}
+		function setPrizeuser(){
+			$.ajax({
+				url:'${ctx}/index/prizeuserlist',
+				async:false,
+				cache:false,
+				success:function(obj){
+					if(obj!=null&&obj.length>0){
+						var tempindex = 0;
+						var s = "";
+						$(obj).each(function(i,v){
+							if(v.indexorder!=tempindex){
+								tempindex=v.indexorder;
+								s+='<li><a href="javascript:void(0);" style="cursor: default;">&nbsp;</a></li>';
+				                s+='<li><a href="javascript:void(0);" style="cursor: default;">'+v.prizename+'第'+v.indexorder+'次</a></li>';
+							}
+							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:20px;display:inline-block;width:60px">'+v.username+'</span> <span style="font-size:16px">&nbsp;'+v.usernumber+'</span><span style="font-size:16px">&nbsp;'+v.region+'</span></a></li>';
+						});
+						$('.div_left').html(s);
+					}
+				}
+			});
 		}
 		function setMusic(musicname){
 			if($.browser.msie){
@@ -130,6 +155,14 @@ color:white;
 			 */
 			
 		}
+		$(".btn2").click(function(){
+			 $('#tagscloud').hide(),
+			 $('.wr_table').slideDown()
+		}),
+		 $(".btn1").click(function(){
+			 $('#tagscloud').show(),
+			 $('.wr_table').hide()
+		})
 		$('.bgsetting').bind('click',function(){
 			var dialog = $.dialog({
 		 		id:'dia',
@@ -325,6 +358,7 @@ color:white;
 							alert("奖项的中奖名额多于抽奖的人员数。");
 							return;
 						}else{
+							$(document).lottery("start");
 							setMusic(startmusic);
 							$('.actionstart').hide();
 							$('.actionend').show();
@@ -349,11 +383,12 @@ color:white;
 				cache:false,
 				success:function(obj){
 					var s = '';
+					$(document).lottery("stop");
 					if(obj!=null&&obj.length>0){
 						$(obj).each(function(i,v){
 							if(i==0){
-									s = "<tr><td colspan='6'>"+v.indexordername+"</td></tr>";
-									s += '<tr>';
+									s = "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.indexordername+"</td></tr>";
+									s += '<tr class="wr-table-hd-inner">';
 									s += '<td width="50px">序号</td>';
 									s += '<td width="100px">员工编号</td>';
 									s += '<td width="100px">员工帐号</td>';
@@ -362,7 +397,7 @@ color:white;
 									s += '<td width="100px">地域</td>';
 									s += '</tr>';
 							}
-							s += '<tr>';
+							s += '<tr class="wr-table-td-inner wr-table-tr-row">';
 							s += '<td>'+(i+1)+'</td>';
 							s += '<td>'+(v['usernumber']==null?'':v['usernumber'])+'</td>';
 							s += '<td>'+(v['uid']==null?'':v['uid'])+'</td>';
@@ -375,6 +410,7 @@ color:white;
 					}else{
 						//alert("没有抽到。");
 					}
+					setPrizeuser();
 					setMusic(stopmusic);
 				}
 			});

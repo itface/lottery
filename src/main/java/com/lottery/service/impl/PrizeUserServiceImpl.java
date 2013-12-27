@@ -1,6 +1,8 @@
 package com.lottery.service.impl;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +16,7 @@ import com.lottery.dao.BaseDao;
 import com.lottery.domain.Percentage;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.PrizeUser;
-import com.lottery.domain.User;
+import com.lottery.domain.TempPrizeUser;
 import com.lottery.service.PrizeSerialService;
 import com.lottery.service.PrizeUserService;
 @Service
@@ -147,4 +149,35 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 		}
 	}
 
+	public List<PrizeUser> getPrizeUserList(){
+		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+		if(prizeSerial!=null){
+			String serialnum = prizeSerial.getNum();
+			return dao.find("from PrizeUser t where t.prizeserialnum=?1 order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum});
+		}
+		return null;
+//		List<PrizeUser> list = this.findCurrentPrizeUser();
+//		if(list!=null&&list.size()>0){
+//			List<TempPrizeUser> tempPrizeUserList = new ArrayList<TempPrizeUser>();
+//			Map<String,Integer> map = new HashMap<String,Integer>();
+//			for(PrizeUser prizeUser : list){
+//				String key = prizeUser.getPrizeid()+"@"+prizeUser.getIndexorder();
+//				
+//				if(map.containsKey(key)){
+//					int tempindex = map.get(key);
+//					map.put(key, tempindex+1);
+//				}else{
+//					map.put(key, 1);
+//				}
+//			}
+//			for(PrizeUser prizeUser : list){
+//				String key = prizeUser.getPrizeid()+"@"+prizeUser.getIndexorder();
+//				TempPrizeUser tempPrizeUser = new TempPrizeUser(prizeUser.getPrizename(),map.get(key),prizeUser);
+//				tempPrizeUserList.add(tempPrizeUser);
+//			}
+//			Collections.sort(tempPrizeUserList);
+//			return tempPrizeUserList;
+//		}
+//		return null;
+	}
 }

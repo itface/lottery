@@ -4,9 +4,8 @@
 <head>
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/uploadify3.2.1/uploadify.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/table/table.css'/>">
 <script type="text/javascript" src="<c:url value='/resources/script/jquery-1.7.2.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/resources/script/uploadify3.2.1/jquery.uploadify.min.js'/>"></script>
 <style>
 
 </style>
@@ -16,9 +15,10 @@
 		<div>
 			抽奖名称:<form:select id="prizeSerials" value="${prizeSerialid}"  name="prizeSerials" path="prizeSerials"  items="${prizeSerials}" itemValue="num" itemLabel="name"/><button/>查询</button>
 		</div>
-		<div>
-			<table class='prizeclass' border="1px solid #ccc" style='border-collapse: collapse;' width='1150px'>
-				<tr>
+		<div class="wr_table" style="width:1150px;">
+			<table style='border-collapse: collapse;' border="0" cellspacing="0" cellpadding="0" width="100%">
+				<thead class="wr_table_header">
+		          <tr class="wr-table-hd-inner">
 					<td width='5%'>序号</td>
 					<td width='11%'>抽奖活动批号</td>
 					<td width='6%'>抽奖次数</td>
@@ -30,10 +30,10 @@
 					<td width='10%'>业务单元</td>
 					<td width='10%'>业务单元2</td>
 					<td width='10%'>奖项名称</td>
-					<td width='5%'>奖品</td>
+					<td width='8%'>奖品</td>
 				</tr>
 				<c:forEach items="${prizelist}" var="prize" varStatus="status">
-					<tr>
+					<tr class="wr-table-td-inner wr-table-tr-row">
 						<td>${status.index+1}</td>
 						<td>${prize.prizeserialnum}</td>
 						<td>${prize.indexordername}</td>
