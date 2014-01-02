@@ -2,8 +2,8 @@
  * 滚动球
  */
 (function($){
-	 var radius = 232;
-	 var d = 90;
+	 var radius = 355;
+	 var d = 800;
 	 var dtr = Math.PI / 180;
 	 var mcList = [];
 	 var lasta = 1;
@@ -17,7 +17,7 @@
 	 var aA = null;
 	 var oDiv = null;
 	 function test(){
-	 	d=300;
+	 	d=700;
 	 	tspeed=300;
 	 }
 	 function test2(){
@@ -163,14 +163,30 @@
 			sineCosine( 0,0,0 );
 			positionAll();
 			(function () {
-		            update();
-		            setTimeout(arguments.callee, 40);
+					update();
+					setTimeout(arguments.callee, 40);
 		        })();
 	}
 	
 	$.fn.lottery.methods={
 			start:test,
-			stop:test2
+			stop:test2,
+			init:function(){
+				 radius = 232;
+				 d = 90;
+				 dtr = Math.PI / 180;
+				 mcList = [];
+				 lasta = 1;
+				 lastb = 1;
+				 distr = true;
+				 tspeed = 15;
+				 size = 200;
+				 mouseX = 0;
+				 mouseY = 10;
+				 howElliptical = 1;
+				 aA = null;
+				 oDiv = null;
+			}
 	};
 })($);
 /*

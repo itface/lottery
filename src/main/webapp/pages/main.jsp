@@ -17,7 +17,7 @@
 
 </style>
 </head>
-<body onload="$('#prizelist').trigger('change');" style='background:url(${ctx}/resources/bg/${bgname})'>
+<body  style='background:url(${ctx}/resources/bg/${bgname})'>
 <div style="display:block" id="musicplayer"></div>
 <div class="title">${title}</div>
 <ul id="jsddm">
@@ -52,25 +52,26 @@
 <div class="div_right">
   <div class="select">
     <form:select id="prizelist" class="select1"  name="prizelist" path="prizelist"  items="${prizelist}" itemValue="id" itemLabel="prizelistlabel"/>
-  	<span class='prizeclass'> </span>
+  	
   </div>
-
-  <div class="actionend" style="display:none;margin-left:147px"><div class="btn2"><a href="javascript:void(0);" ></a></div></div>
-  <div class="actionstart" style='margin-right:147px'><div class="btn1"><a href="javascript:void(0);" ></a></div></div>
+  <div class="prizeclass jingpin"></div>
+  <div class="actionend" style="visibility:hidden"><div class="btn2"><a href="javascript:void(0);" ></a></div></div>
+  <div class="actionstart" style=''><div class="btn1"><a href="javascript:void(0);" ></a></div></div>
   <div id="tagscloud"> 
-  		<c:forEach items="${userlist}" var="user" varStatus="status">
-				<a href="javascript:void(0);" class="tagc${(status.index)%3+1}">${user}</a> 
-		</c:forEach>
   </div>
-  <div class="wr_table userListTable" style="width:560px;margin: 20px 0px 0px 100px;  display:none">
+  <div class="wr_table userListTable" style="display:none">
   	<table class='userList' border="0" cellspacing="0" cellpadding="0" width="100%">
   	</table>
   </div>
 </div>
 	<script>
+	
 	$(document).ready(function(){
 		var initflag = ${initflag};
 		var prizelistjson = ${prizelistjson};
+		var userlist = "${userlist}";
+		var userlistpernum = 10;
+		
 		var bgmusic='${bgmusic}';
 		var startmusic='${startmusic}';
 		var stopmusic='${stopmusic}';
@@ -81,11 +82,34 @@
 			}else{
 				$('.prizeselect').hide();
 			}
+			window.onload=setPrizelist;
 			//initLeft();
 			$('#jsddm').easymenu();
-			$(document).lottery();
+			//$(document).lottery();
 			setPrizeuser();
+			setUserlist();
 			setMusic(bgmusic);
+		}
+		function setUserlist(){
+			if(userlist!=null&&userlist!=""&&userlist!="null"){
+				var arr = (userlist.replace("[","").replace("]","")).split(",");
+				var loopcount = arr.length%userlistpernum==0?arr.length/userlistpernum:arr.length/userlistpernum+1;
+				var userlistflag = 0;
+				for(var j=1;j<=1;j++){
+					var start = userlistflag*userlistpernum;
+					var end = start+userlistpernum;
+					setTagscloud(arr,start,end);
+					userlistflag++;
+				}
+			}
+		}
+		function setTagscloud(arr,start,end){
+			$("#tagscloud").empty();
+			for(var i=start;i<end;i++){
+				$("#tagscloud").append('<a href="javascript:void(0);" class="tagc'+(i%3+1)+'">'+arr[i]+'</a>');
+			}
+			$(document).lottery("init");
+			$(document).lottery();
 		}
 		function setPrizeuser(){
 			$.ajax({
@@ -102,7 +126,7 @@
 								s+='<li><a href="javascript:void(0);" style="cursor: default;">&nbsp;</a></li>';
 				                s+='<li><a href="javascript:void(0);" style="cursor: default;">'+v.prizename+'第'+v.indexorder+'次</a></li>';
 							}
-							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:20px;display:inline-block;width:60px">'+v.username+'</span> <span style="font-size:16px">&nbsp;'+v.usernumber+'</span><span style="font-size:16px">&nbsp;'+v.region+'</span></a></li>';
+							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:20px;display:inline-block;width:60px">'+v.username+'</span> <span style="font-size:16px">&nbsp;'+v.usernumber+'</span><span style="font-size:16px">&nbsp;'+v.ywdy+'</span><span style="font-size:16px">&nbsp;'+v.region+'</span></a></li>';
 						});
 						$('.div_left').html(s);
 					}
@@ -156,11 +180,11 @@
 			
 		}
 		$(".btn2").click(function(){
-			 $('#tagscloud').hide(),
-			 $('.wr_table').slideDown()
+			 //$('#tagscloud').hide(),
+			  $('.wr_table').fadeIn(1000);
 		}),
 		 $(".btn1").click(function(){
-			 $('#tagscloud').show(),
+			 //$('#tagscloud').show(),
 			 $('.wr_table').hide()
 		})
 		$('.bgsetting').bind('click',function(){
@@ -221,9 +245,12 @@
 			}
 		});
 		$('#prizelist').bind('change',function(){
+			setPrizelist();
+		});
+		function setPrizelist(){
 			$('.userList').empty();
 			$('.userListTable').hide();
-			var id = $(this).val();
+			var id = $("#prizelist").val();
 			if(prizelistjson!=null&&prizelistjson!=''&&prizelistjson!=[]){
 				$('.img').show();
 				$(prizelistjson).each(function(i,v){
@@ -238,7 +265,7 @@
 					}
 				});
 			}
-		});
+		}
 		$('.resultreport').bind('click',function(){
 			if(initflag==false||initflag=='false'){
 				alert("亲，请现场抽奖后再查看现场中奖分布图。");
@@ -333,6 +360,7 @@
 						cache:false,
 						success:function(obj){
 							alert('抽奖人员状态重置完毕！');
+							location=location;
 						}
 				});
 			}
@@ -360,8 +388,8 @@
 						}else{
 							$(document).lottery("start");
 							setMusic(startmusic);
-							$('.actionstart').hide();
-							$('.actionend').show();
+							$('.actionstart').css('visibility','hidden');
+							$('.actionend').css('visibility','visible');
 							$('.userList').empty();
 							$('.userListTable').hide();
 							$('.img').hide();
@@ -374,20 +402,20 @@
 			}
 		});
 		$('.actionend').bind('click',function(){
-			$('.actionstart').show();
-			$('.actionend').hide();
-			$('.userListTable').show();
+			$('.actionstart').css('visibility','visible');
+			$('.actionend').css('visibility','hidden');
+			//$('.userListTable').show();
 			$.ajax({
 				url:'${ctx}/index/action/'+$('#prizelist').val(),
 				async:false,
 				cache:false,
 				success:function(obj){
-					var s = '';
+					var s = "<div class='wr_table userListTable'><table class='userList' border='0' cellspacing='0' cellpadding='0' width='100%'>";
 					$(document).lottery("stop");
 					if(obj!=null&&obj.length>0){
 						$(obj).each(function(i,v){
 							if(i==0){
-									s = "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.indexordername+"</td></tr>";
+									s += "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.indexordername+"</td></tr>";
 									s += '<tr class="wr-table-hd-inner">';
 									s += '<td width="50px">序号</td>';
 									s += '<td width="100px">员工编号</td>';
@@ -406,11 +434,28 @@
 							s += '<td>'+(v['region']==null?'':v['region'])+'</td>';
 							s += '</tr>';
 						});
-						$('.userList').html(s);
+						s+="</table></div>";
+						//$('.userList').html(s);
+						var dialog = $.dialog({
+					 		id:'dia',
+						    lock: true,
+						    width: 700,
+					    	height: 500,
+						    min:false,
+						    max:false,
+						    cancel:true,
+						    background: '#FFF',
+						    opacity: 0.5,
+						    content: s,
+						    title:'获奖名单',
+						    close:function(){
+						    	location=location;
+						    }
+						});
 					}else{
 						//alert("没有抽到。");
 					}
-					setPrizeuser();
+					//setPrizeuser();
 					setMusic(stopmusic);
 				}
 			});

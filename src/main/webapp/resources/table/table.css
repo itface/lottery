@@ -17,6 +17,8 @@ body {
 	border-spacing: 0;
 	
 }
+.wr_table{
+	width:780px;margin:60px auto;margin-top:-150px;}
 .wr_table_header {
 	background:url(../images/table_tooltar_bg.png);
 	background-repeat:repeat-x;
