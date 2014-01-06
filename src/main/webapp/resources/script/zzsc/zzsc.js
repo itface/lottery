@@ -123,57 +123,99 @@
 			sc = Math.sin(c * dtr);
 			cc = Math.cos(c * dtr);
 		}
-		
-	$.fn.lottery = function(methodname,param){
-		if(methodname){
-			return $.fn.lottery.methods[methodname](param);
-		}
-		var i=0;
-			var oTag=null;
-			oDiv=document.getElementById('tagscloud');
-			aA=oDiv.getElementsByTagName('a');
-			for(i=0;i<aA.length;i++)
-			{
-				oTag={};		
-				aA[i].onmouseover = (function (obj) {
-					return function () {
-						obj.on = true;
-						this.style.zIndex = 9999;
-						this.style.color = '#fff';
-						this.style.padding = '5px 5px';
-						this.style.filter = "alpha(opacity=100)";
-						this.style.opacity = 1;
-					}
-				})(oTag)
-				aA[i].onmouseout = (function (obj) {
-					return function () {
-						obj.on = false;
-						this.style.zIndex = obj.zIndex;
-						this.style.color = '#fff';
-						this.style.padding = '5px';
-						this.style.filter = "alpha(opacity=" + 100 * obj.alpha + ")";
-						this.style.opacity = obj.alpha;
-						this.style.zIndex = obj.zIndex;
-					}
-				})(oTag)
-				oTag.offsetWidth = aA[i].offsetWidth;
-				oTag.offsetHeight = aA[i].offsetHeight;
-				mcList.push(oTag);
+		function createATag(arr,start,end){
+			if(arr!=null&&arr.length>0){
+				for(var i=start;i<end&&i<arr.length;i++){
+					$("#tagscloud").append('<a href="javascript:void(0);" class="tagc'+(i%3+1)+'">'+arr[i]+'</a>');
+				}
 			}
-			sineCosine( 0,0,0 );
-			positionAll();
+		}
+	$.fn.lottery = function(arr,param){
+		if(typeof arr =="string"){
+			return $.fn.lottery.methods[arr](param);
+		}
+		oDiv=document.getElementById('tagscloud');
+		//totalaA=oDiv.getElementsByTagName('a');
+		var userlistflag = 0;
+		var maxuser=700;
+		var userlistpernum = arr.length>maxuser?maxuser:arr.length;
+		var setTimeoutTime=40;
+		var perLoopTime=30000;
+		var looptimes=perLoopTime/setTimeoutTime;
+		(function(){
+			var count=0;
+			var start = userlistflag*userlistpernum;
+			if(aA==null){
+				createATag(arr,0,userlistpernum);
+				aA=oDiv.getElementsByTagName('a');
+				var oTag=null;
+				for(var i=0;i<aA.length;i++){
+					oTag={};		
+					aA[i].onmouseover = (function (obj) {
+						return function () {
+							obj.on = true;
+							this.style.zIndex = 9999;
+							this.style.color = '#fff';
+							this.style.padding = '5px 5px';
+							this.style.filter = "alpha(opacity=100)";
+							this.style.opacity = 1;
+						}
+					})(oTag);
+					aA[i].onmouseout = (function (obj) {
+						return function () {
+							obj.on = false;
+							this.style.zIndex = obj.zIndex;
+							this.style.color = '#fff';
+							this.style.padding = '5px';
+							this.style.filter = "alpha(opacity=" + 100 * obj.alpha + ")";
+							this.style.opacity = obj.alpha;
+							this.style.zIndex = obj.zIndex;
+						}
+					})(oTag);
+					oTag.offsetWidth = aA[i].offsetWidth;
+					oTag.offsetHeight = aA[i].offsetHeight;
+					mcList.push(oTag);
+				}
+				sineCosine( 0,0,0 );
+				positionAll();
+			}else if(arr.length>maxuser){
+				for(var i=0;i<aA.length;i++){
+					if(start+i<arr.length){
+						aA.item(i).innerHTML=arr[start+i];
+					}else{
+						start=0;
+						aA.item(i).innerHTML=arr[start];
+					}
+				}
+			}
+			if(start>=arr.length-1){
+				userlistflag=0;
+			}else{
+				userlistflag++;
+			}
+			var fun = arguments.callee;
 			(function () {
 					update();
-					setTimeout(arguments.callee, 40);
-		        })();
+					if(count<looptimes){
+						setTimeout(arguments.callee, setTimeoutTime);
+						count++;
+					}else{
+						if(arr!=null&&arr.length>0&&tspeed>0&&arr.length>maxuser){
+							setTimeout(fun, 100);
+						}
+						return;
+					}
+		    })();
+			
+		})();
 	}
 	
 	$.fn.lottery.methods={
 			start:test,
 			stop:test2,
 			init:function(){
-				 radius = 232;
-				 d = 90;
+				 radius = 355;
+				 d = 800;
 				 dtr = Math.PI / 180;
 				 mcList = [];
 				 lasta = 1;
@@ -186,6 +228,9 @@
 				 howElliptical = 1;
 				 aA = null;
 				 oDiv = null;
+			},
+			run:function(){
+				test();
 			}
 	};
 })($);

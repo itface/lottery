@@ -1583,7 +1583,7 @@ lhgdialog.setting =
 	init: null,					// 对话框初始化后执行的函数
 	close: null,				// 对话框关闭前执行的函数
 	okVal: '\u786E\u5B9A',		// 确定按钮文本,默认'确定'
-	cancelVal: '\u53D6\u6D88',	// 取消按钮文本,默认'取消'
+	cancelVal: '\u786E\u5B9A',	// 取消按钮文本,默认'取消'
 	skin: '',					// 多皮肤共存预留接口
 	esc: true,					// 是否支持Esc键关闭
 	show: true,					// 初始化后是否显示对话框

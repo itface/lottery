@@ -34,7 +34,7 @@ a:hover {
 
 	margin:0 auto;	margin-top:50px;
 }
-.jingpin{	top:100px;
+.jingpin{	top:87px;
 	right:60px;
 		position:absolute;
 	color:#fff;
@@ -89,7 +89,7 @@ a:hover {
 }
 .select {
 	top:28px;
-	right:60px;
+	right:52px;
 	position:absolute;
 	color:#fff;
 	filter: alpha(opacity=15);
@@ -97,7 +97,7 @@ a:hover {
 }
 .select1 {
 	padding:5px;
-	width:120px;
+	width:140px;
 }
 .btn1 {
 	background:url(../../images/start.png);
@@ -129,7 +129,8 @@ a:hover {
 }
 .div_left li {
 	color:#fff;
-	list-style:none
+	list-style:none;
+	width:300px;
 }
 .div_left li a{
 	
@@ -143,7 +144,7 @@ a:hover {
 	padding: 0;
 	position:absolute;
 	top:20px;
-	right:160px;
+	right:200px;
 	z-index:999999;
 }
 #jsddm li {

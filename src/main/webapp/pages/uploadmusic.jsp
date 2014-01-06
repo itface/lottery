@@ -5,8 +5,10 @@
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/uploadify3.2.1/uploadify.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/blockUI/blockUI.css'/>">
 <script type="text/javascript" src="<c:url value='/resources/script/jquery-1.7.2.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/script/uploadify3.2.1/jquery.uploadify.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/script/blockUI/blockUI.js'/>" ></script>
 <style>
 
 </style>
@@ -37,9 +39,19 @@ $(document).ready(function() {
 	    'fileObjName':'uploadify1',
 	    'buttonText' : '上传背景音乐...',
 	     'multi':false,
-	     'onUploadComplete' : function(file) {
-            alert('上传成功!');
-        }
+	     'onUploadStart':function(){
+	     	$(window).blockUI();
+	     },
+	     'onUploadSuccess' : function(file, data, response) {
+         	
+	     	if(response==true){
+				$(window).blockUI('remove');
+	     		alert('上传成功!');
+	        }else{
+	            	$(window).blockUI('remove');
+    				alert('上传失败请检查文件是否合法!');
+	         }
+         }
 	  		
 	  });
 	  $('#uploadify2').uploadify({
@@ -49,9 +61,19 @@ $(document).ready(function() {
 	    'fileObjName':'uploadify2',
 	    'buttonText' : '上传抽奖音乐...',
 	     'multi':false,
-	     'onUploadComplete' : function(file) {
-            alert('上传成功!');
-        }
+	     'onUploadStart':function(){
+	     	$(window).blockUI();
+	     },
+	     'onUploadSuccess' : function(file, data, response) {
+         	
+	     	if(response==true){
+				$(window).blockUI('remove');
+	     		alert('上传成功!');
+	        }else{
+	            	$(window).blockUI('remove');
+    				alert('上传失败请检查文件是否合法!');
+	         }
+         }
 	  		
 	  });
 	   $('#uploadify3').uploadify({
@@ -61,9 +83,19 @@ $(document).ready(function() {
 	    'fileObjName':'uploadify3',
 	    'buttonText' : '上传中奖音乐...',
 	     'multi':false,
-	     'onUploadComplete' : function(file) {
-            alert('上传成功!');
-        }
+	     'onUploadStart':function(){
+	     	$(window).blockUI();
+	     },
+	     'onUploadSuccess' : function(file, data, response) {
+         	
+	     	if(response==true){
+				$(window).blockUI('remove');
+	     		alert('上传成功!');
+	        }else{
+	            	$(window).blockUI('remove');
+    				alert('上传失败请检查文件是否合法!');
+	         }
+         }
 	  		
 	  });
 });

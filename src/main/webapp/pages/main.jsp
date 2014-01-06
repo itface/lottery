@@ -35,17 +35,7 @@
     </ul>
 </ul>
 <div class="div_left">
-		<!-- 
-		<c:set var="prizeindex" value="0"/> 
-		<c:forEach items="${prizeuserlist}" var="prizeuser" varStatus="status1">
-			<c:if test="${prizeindex!=prizeuser.indexorder}">  
-				<c:set var="prizeindex" value="${prizeuser.indexorder}"/>
-				<li><a href="javascript:void(0);" style="cursor: default;">&nbsp;</a></li>
-				<li><a href="javascript:void(0);" style="cursor: default;">${prizeuser.prizename}第${prizeuser.indexorder}次</a></li>
-			</c:if>
-			<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:20px;display:inline-block;width:60px">${prizeuser.username}</span> <span style="font-size:16px">&nbsp;${prizeuser.usernumber}</span><span style="font-size:16px">&nbsp;${prizeuser.region}</span></a></li>
-		</c:forEach>
-		 -->
+
 </div>
 
 
@@ -55,13 +45,10 @@
   	
   </div>
   <div class="prizeclass jingpin"></div>
-  <div class="actionend" style="visibility:hidden"><div class="btn2"><a href="javascript:void(0);" ></a></div></div>
-  <div class="actionstart" style=''><div class="btn1"><a href="javascript:void(0);" ></a></div></div>
+  <div class="actionend btn2" style="visibility:hidden"><a href="javascript:void(0);" ></a></div>
+  <div class="actionstart btn1" style=''><a href="javascript:void(0);" ></a></div>
   <div id="tagscloud"> 
-  </div>
-  <div class="wr_table userListTable" style="display:none">
-  	<table class='userList' border="0" cellspacing="0" cellpadding="0" width="100%">
-  	</table>
+  		
   </div>
 </div>
 	<script>
@@ -69,9 +56,9 @@
 	$(document).ready(function(){
 		var initflag = ${initflag};
 		var prizelistjson = ${prizelistjson};
-		var userlist = "${userlist}";
-		var userlistpernum = 10;
-		
+		var userlist = '${userlist}';
+		var userlistpernum = 30;
+		var setUserlistFlag = "init";
 		var bgmusic='${bgmusic}';
 		var startmusic='${startmusic}';
 		var stopmusic='${stopmusic}';
@@ -85,32 +72,65 @@
 			window.onload=setPrizelist;
 			//initLeft();
 			$('#jsddm').easymenu();
-			//$(document).lottery();
+			initLottery();
 			setPrizeuser();
-			setUserlist();
+			//setUserlist();
 			setMusic(bgmusic);
 		}
+		function initLottery(){
+			if(userlist!=null&&userlist!=""&&userlist!="null"){
+				var arr = (userlist.replace("[","").replace("]","")).split(",");
+				$(document).lottery(arr);
+			}
+		}
+		/*
 		function setUserlist(){
 			if(userlist!=null&&userlist!=""&&userlist!="null"){
 				var arr = (userlist.replace("[","").replace("]","")).split(",");
 				var loopcount = arr.length%userlistpernum==0?arr.length/userlistpernum:arr.length/userlistpernum+1;
 				var userlistflag = 0;
-				for(var j=1;j<=1;j++){
+				(function(v){
+					if((v=='init'&&setUserlistFlag!="init")||setUserlistFlag=="stop"){
+						$(document).lottery("stop");
+						return;
+					}
 					var start = userlistflag*userlistpernum;
-					var end = start+userlistpernum;
-					setTagscloud(arr,start,end);
-					userlistflag++;
-				}
+					var end = 0;
+					if(start+userlistpernum*2<arr.length){
+						end = start+userlistpernum;
+					}else{
+						end = arr.length;
+					}
+					$(document).lottery("stop");
+					$("#tagscloud").empty();
+					for(var i=start;i<end&&i<arr.length;i++){
+						$("#tagscloud").append('<a href="javascript:void(0);" class="tagc'+(i%3+1)+'">'+arr[i]+'</a>');
+					}
+					if(setUserlistFlag=="init"){
+						$(document).lottery("init");
+						$(document).lottery();
+						if(end==arr.length){
+							userlistflag=0;
+						}else{
+							userlistflag++;
+						}
+						var arg = arguments.callee;
+						setTimeout(function(){arg("init");}, 10000);
+					}else if(setUserlistFlag=="run"){
+						//$(document).lottery("run");
+						$(document).lottery();
+						if(end==arr.length){
+							userlistflag=0;
+						}else{
+							userlistflag++;
+						}
+						var arg = arguments.callee;
+						setTimeout(function(){arg("run");}, 2000);
+					}
+				})(1);
 			}
 		}
-		function setTagscloud(arr,start,end){
-			$("#tagscloud").empty();
-			for(var i=start;i<end;i++){
-				$("#tagscloud").append('<a href="javascript:void(0);" class="tagc'+(i%3+1)+'">'+arr[i]+'</a>');
-			}
-			$(document).lottery("init");
-			$(document).lottery();
-		}
+		*/
 		function setPrizeuser(){
 			$.ajax({
 				url:'${ctx}/index/prizeuserlist',
@@ -123,10 +143,10 @@
 						$(obj).each(function(i,v){
 							if(v.indexorder!=tempindex){
 								tempindex=v.indexorder;
-								s+='<li><a href="javascript:void(0);" style="cursor: default;">&nbsp;</a></li>';
-				                s+='<li><a href="javascript:void(0);" style="cursor: default;">'+v.prizename+'第'+v.indexorder+'次</a></li>';
+								//s+='<li><a href="javascript:void(0);" style="cursor: default;">&nbsp;</a></li>';
+				                s+='<li><a href="javascript:void(0);" style="cursor: default;font-size:20px;color:yellow;">'+v.prizename+'第'+v.indexorder+'次</a></li>';
 							}
-							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:20px;display:inline-block;width:60px">'+v.username+'</span> <span style="font-size:16px">&nbsp;'+v.usernumber+'</span><span style="font-size:16px">&nbsp;'+v.ywdy+'</span><span style="font-size:16px">&nbsp;'+v.region+'</span></a></li>';
+							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:20px;display:inline-block;width:60px">'+v.username+'</span> <span style="font-size:16px">&nbsp;'+v.usernumber+'</span><span style="font-size:16px">&nbsp;'+v.region+'</span><span style="font-size:16px;">&nbsp;'+v.ywdy+'</span></a></li>';
 						});
 						$('.div_left').html(s);
 					}
@@ -179,14 +199,18 @@
 			 */
 			
 		}
+		/*
 		$(".btn2").click(function(){
 			 //$('#tagscloud').hide(),
+			  setUserlistFlag="stop";
 			  $('.wr_table').fadeIn(1000);
 		}),
 		 $(".btn1").click(function(){
 			 //$('#tagscloud').show(),
+			 setUserlistFlag="run";
 			 $('.wr_table').hide()
 		})
+		*/
 		$('.bgsetting').bind('click',function(){
 			var dialog = $.dialog({
 		 		id:'dia',
@@ -248,8 +272,8 @@
 			setPrizelist();
 		});
 		function setPrizelist(){
-			$('.userList').empty();
-			$('.userListTable').hide();
+			//$('.userList').empty();
+			//$('.userListTable').hide();
 			var id = $("#prizelist").val();
 			if(prizelistjson!=null&&prizelistjson!=''&&prizelistjson!=[]){
 				$('.img').show();
@@ -261,7 +285,7 @@
 						}else{
 							$('.img').attr('src','${ctx}/resources/prizepic/default.png');
 						}
-						$('.prizeclass').html('中奖人数:<span id="prizenum">'+v['prizenum']+"</span>人  奖品："+v['jp']);
+						$('.prizeclass').html('中奖：<span id="prizenum">'+v['prizenum']+"</span>人<br>奖品："+v['jp']);
 					}
 				});
 			}
@@ -297,7 +321,7 @@
 			    width: 1200,
 		    	height: 550,
 			    min:false,
-			    max:false,
+			    max:true,
 			    cancel:true,
 			    background: '#FFF',
 			    opacity: 0.5,
@@ -387,11 +411,12 @@
 							return;
 						}else{
 							$(document).lottery("start");
+							setUserlistFlag="run";
 							setMusic(startmusic);
 							$('.actionstart').css('visibility','hidden');
 							$('.actionend').css('visibility','visible');
-							$('.userList').empty();
-							$('.userListTable').hide();
+							//$('.userList').empty();
+							//$('.userListTable').hide();
 							$('.img').hide();
 						}
 					}
@@ -405,6 +430,7 @@
 			$('.actionstart').css('visibility','visible');
 			$('.actionend').css('visibility','hidden');
 			//$('.userListTable').show();
+			setUserlistFlag="stop";
 			$.ajax({
 				url:'${ctx}/index/action/'+$('#prizelist').val(),
 				async:false,
@@ -415,23 +441,22 @@
 					if(obj!=null&&obj.length>0){
 						$(obj).each(function(i,v){
 							if(i==0){
-									s += "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.indexordername+"</td></tr>";
+									s += "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.prizename+"——"+v.indexordername+"，奖品："+v.jp+"</td></tr>";
 									s += '<tr class="wr-table-hd-inner">';
 									s += '<td width="50px">序号</td>';
+									s += '<td width="100px">姓名</td>';
 									s += '<td width="100px">员工编号</td>';
-									s += '<td width="100px">员工帐号</td>';
-									s += '<td width="100px">员工姓名</td>';
-									s += '<td width="150px">业务单元</td>';
 									s += '<td width="100px">地域</td>';
+									s += '<td width="150px">业务单元</td>';
+									
 									s += '</tr>';
 							}
 							s += '<tr class="wr-table-td-inner wr-table-tr-row">';
 							s += '<td>'+(i+1)+'</td>';
-							s += '<td>'+(v['usernumber']==null?'':v['usernumber'])+'</td>';
-							s += '<td>'+(v['uid']==null?'':v['uid'])+'</td>';
 							s += '<td>'+(v['username']==null?'':v['username'])+'</td>';
-							s += '<td>'+(v['ywdy2']==null?'':v['ywdy2'])+'</td>';
+							s += '<td>'+(v['usernumber']==null?'':v['usernumber'])+'</td>';
 							s += '<td>'+(v['region']==null?'':v['region'])+'</td>';
+							s += '<td>'+(v['ywdy2']==null?'':v['ywdy'])+'</td>';
 							s += '</tr>';
 						});
 						s+="</table></div>";
@@ -440,7 +465,7 @@
 					 		id:'dia',
 						    lock: true,
 						    width: 700,
-					    	height: 500,
+					    	height: 400,
 						    min:false,
 						    max:false,
 						    cancel:true,

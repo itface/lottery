@@ -45,7 +45,7 @@
 
 		 
 		 var pnum=${pnum};
-		 var uploadshow = ${uploadshow};
+		 var uploadshow = true;//${uploadshow};
 		 var uploadflag =false;
 		 init();
 		 function init(){
@@ -72,11 +72,16 @@
 				     'onUploadStart':function(){
 				     	$(window).blockUI();
 				     },
-				     'onUploadComplete' : function(file) {
-				     	uploadflag=true;
-			            alert('导入成功!');
-			            $(window).blockUI('remove');
-			        }
+			        'onUploadSuccess' : function(file, data, response) {
+			        	if(response==true){
+				           uploadflag=true;
+				            alert('导入成功!');
+				            $(window).blockUI('remove');
+			           }else{
+			           		alert('导入失败，请检查excel内容格式！');
+				            $(window).blockUI('remove');
+			           }
+			         }
 				  });
 		  	}else{
 		  		$('.uploadform').hide();

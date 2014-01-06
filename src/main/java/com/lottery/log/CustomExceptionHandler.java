@@ -3,10 +3,12 @@ package com.lottery.log;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 /**
  * 每个Controller内加上一个异常处理方法，并用\@ExceptionHandler标注。但此法要每个Controller写，太分散太累了。
@@ -33,7 +35,7 @@ public class CustomExceptionHandler {
 	    }  
 	  */
 	    @ExceptionHandler(Exception.class)  
-	    //@ResponseStatus(HttpStatus.UNAUTHORIZED)  
+	    //@ResponseStatus(HttpStatus.)  
 	    public String processUnauthenticatedException(NativeWebRequest request, Exception e) {
 	        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			 String now = sd.format(Calendar.getInstance().getTime());

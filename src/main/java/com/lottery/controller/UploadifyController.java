@@ -35,7 +35,7 @@ public class UploadifyController {
 				impUserService.impUser(mf);
 			}
 		}
-		return "上传成功";
+		return "true";
 	}
 	@RequestMapping(value="/uploadbgpage",method = RequestMethod.GET)
 	public ModelAndView uploadbgpage(){
@@ -63,7 +63,7 @@ public class UploadifyController {
 				FileCopyUtils.copy(mf.getBytes(), uploadFile);
 			}
 		}
-		return "上传成功";
+		return "true";
 	}
 	@RequestMapping(value="/uploadmusicpage",method = RequestMethod.GET)
 	public ModelAndView uploadmusicpage(){
@@ -91,7 +91,7 @@ public class UploadifyController {
 				FileCopyUtils.copy(mf.getBytes(), uploadFile);
 			}
 		}
-		return "上传成功";
+		return "true";
 	}
 	@RequestMapping(value="/uploadmusic2")
 	public @ResponseBody String uploadmusic2(HttpServletRequest request,HttpServletResponse response,@RequestParam MultipartFile[] uploadify2) throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -115,7 +115,7 @@ public class UploadifyController {
 				FileCopyUtils.copy(mf.getBytes(), uploadFile);
 			}
 		}
-		return "上传成功";
+		return "true";
 	}
 	@RequestMapping(value="/uploadmusic3")
 	public @ResponseBody String uploadmusic3(HttpServletRequest request,HttpServletResponse response,@RequestParam MultipartFile[] uploadify3) throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -139,6 +139,6 @@ public class UploadifyController {
 				FileCopyUtils.copy(mf.getBytes(), uploadFile);
 			}
 		}
-		return "上传成功";
+		return "true";
 	}
 }
