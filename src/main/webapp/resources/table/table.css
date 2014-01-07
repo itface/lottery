@@ -34,10 +34,10 @@ body {
 	-moz-box-shadow:1px 1px 1px #fff;
 	text-align:center;
 	padding:1px 2px 1px 2px;
-	line-height:40px;
-	height:40px;
+	line-height:60px;
+	height:60px;
 	font-weight:bold;
-	font-size:20px;
+	font-size:30px;
 	font-family:微软雅黑;
 
 }
@@ -53,18 +53,18 @@ body {
 	word-wrap: break-word;
 	text-align:center;
 	background-color:#fafafa;
-	line-height:40px;
+	line-height:50px;
 	border:1px solid #ebebeb;
 	color:#7e7e7e;
 	background: url(../aws_img/main/table_head_bg.jpg) #fafafa repeat-x;
 	font-family: 微软雅黑;
 	color: red;
-	font-size:20px;
+	font-size:30px;
 
 }
 .wr-table-td-inner td {
 	padding:5px 6px 5px 6px;
-	border-bottom:1px solid #ebebeb;
+	border:1px solid #ebebeb;
 
 	word-break: break-all;
 	word-wrap: break-word;

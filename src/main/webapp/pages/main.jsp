@@ -19,9 +19,9 @@
 </head>
 <body  style='background:url(${ctx}/resources/bg/${bgname})'>
 <div style="display:block" id="musicplayer"></div>
-<div class="title">${title}</div>
+<div class="title" style="display:none">${title}</div>
 <ul id="jsddm">
-  <li><a href="javascript:void(0);" style="background:url(${ctx}/resources/images/cog.png) no-repeat">&nbsp;</a>
+  <li><a href="javascript:void(0);" style="background:url(${ctx}/resources/images/cog.png) no-repeat" >&nbsp;</a>
     <ul>
       <li><a href="javascript:void(0);" class='resultreport'>现场中奖分布图</a></li>
       <li><a href="javascript:void(0);" class='musicsetting'>设置音乐</a></li>
@@ -44,7 +44,7 @@
     <form:select id="prizelist" class="select1"  name="prizelist" path="prizelist"  items="${prizelist}" itemValue="id" itemLabel="prizelistlabel"/>
   	
   </div>
-  <div class="prizeclass jingpin"></div>
+  <div class="prizeclass jingpin" style=""></div>
   <div class="actionend btn2" style="visibility:hidden"><a href="javascript:void(0);" ></a></div>
   <div class="actionstart btn1" style=''><a href="javascript:void(0);" ></a></div>
   <div id="tagscloud"> 
@@ -78,9 +78,11 @@
 			setMusic(bgmusic);
 		}
 		function initLottery(){
-			if(userlist!=null&&userlist!=""&&userlist!="null"){
+			if(userlist!=null&&userlist!=""&&userlist!="null"&&userlist!="[]"){
 				var arr = (userlist.replace("[","").replace("]","")).split(",");
 				$(document).lottery(arr);
+			}else{
+				$(document).lottery(new Array());
 			}
 		}
 		/*
@@ -144,9 +146,12 @@
 							if(v.indexorder!=tempindex){
 								tempindex=v.indexorder;
 								//s+='<li><a href="javascript:void(0);" style="cursor: default;">&nbsp;</a></li>';
-				                s+='<li><a href="javascript:void(0);" style="cursor: default;font-size:20px;color:yellow;">'+v.prizename+'第'+v.indexorder+'次</a></li>';
+								if(i!=1){
+									s+='<li>&nbsp;</li>';
+								}
+				                s+='<li><a href="javascript:void(0);" class="prizeindex" style="cursor: default;font-size:20px;color:yellow;">'+v.prizename+'第'+v.indexorder+'次</a></li>';
 							}
-							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:20px;display:inline-block;width:60px">'+v.username+'</span> <span style="font-size:16px">&nbsp;'+v.usernumber+'</span><span style="font-size:16px">&nbsp;'+v.region+'</span><span style="font-size:16px;">&nbsp;'+v.ywdy+'</span></a></li>';
+							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:30px;">'+v.username+'</span><span style="font-size:20px">&nbsp;'+v.usernumber+'</span><span style="font-size:20px">&nbsp;'+v.region+'</span><span style="font-size:20px;">&nbsp;'+v.ywdy+'</span></a></li>';
 						});
 						$('.div_left').html(s);
 					}
@@ -285,7 +290,8 @@
 						}else{
 							$('.img').attr('src','${ctx}/resources/prizepic/default.png');
 						}
-						$('.prizeclass').html('中奖：<span id="prizenum">'+v['prizenum']+"</span>人<br>奖品："+v['jp']);
+						$('.prizeclass').html(v['prizename']);
+						//$('.prizeclass').html(v['prizename']+'中奖：<span id="prizenum">'+v['prizenum']+"</span>人<br>奖品："+v['jp']);
 					}
 				});
 			}
@@ -371,6 +377,7 @@
 					callback: function(){this.close();},
 				}*/]
 			});
+			$("input:button[value='确定']").val("取消");
 			$.dialog.data('dialog',dialog);
 		});
 		$('.initUser').bind('click',function(){
@@ -399,13 +406,14 @@
 				alert('请选择要抽的奖项。');
 				return false;
 			}
-			var prizenum = $('#prizenum').html();
+			var prizenum = 10;//$('#prizenum').html();
 			if(prizenum!=null&&prizenum!=''&&parseInt(prizenum)>0){
 				$.ajax({
 					url:'${ctx}/index/checkuser?prizelength='+prizenum,
 					async:false,
 					cache:false,
 					success:function(obj){
+						/*
 						if(obj==false||obj=='false'){
 							alert("奖项的中奖名额多于抽奖的人员数。");
 							return;
@@ -418,7 +426,15 @@
 							//$('.userList').empty();
 							//$('.userListTable').hide();
 							$('.img').hide();
-						}
+						}*/
+						$(document).lottery("start");
+						setUserlistFlag="run";
+						setMusic(startmusic);
+						$('.actionstart').css('visibility','hidden');
+						$('.actionend').css('visibility','visible');
+						//$('.userList').empty();
+						//$('.userListTable').hide();
+						$('.img').hide();
 					}
 				});
 			}else{
@@ -441,7 +457,7 @@
 					if(obj!=null&&obj.length>0){
 						$(obj).each(function(i,v){
 							if(i==0){
-									s += "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.prizename+"——"+v.indexordername+"，奖品："+v.jp+"</td></tr>";
+									s += "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.prizename+"——"+v.indexordername+"</td></tr>";
 									s += '<tr class="wr-table-hd-inner">';
 									s += '<td width="50px">序号</td>';
 									s += '<td width="100px">姓名</td>';
@@ -464,7 +480,7 @@
 						var dialog = $.dialog({
 					 		id:'dia',
 						    lock: true,
-						    width: 700,
+						    width: 900,
 					    	height: 400,
 						    min:false,
 						    max:false,

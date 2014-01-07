@@ -2,14 +2,14 @@
  * 滚动球
  */
 (function($){
-	 var radius = 355;
+	 var radius = 410;
 	 var d = 800;
 	 var dtr = Math.PI / 180;
 	 var mcList = [];
 	 var lasta = 1;
 	 var lastb = 1;
 	 var distr = true;
-	 var tspeed = 15;
+	 var tspeed = 20;
 	 var size = 200;
 	 var mouseX = 0;
 	 var mouseY = 10;
@@ -137,77 +137,67 @@
 		oDiv=document.getElementById('tagscloud');
 		//totalaA=oDiv.getElementsByTagName('a');
 		var userlistflag = 0;
-		var maxuser=700;
+		var maxuser=600;
 		var userlistpernum = arr.length>maxuser?maxuser:arr.length;
 		var setTimeoutTime=40;
 		var perLoopTime=30000;
 		var looptimes=perLoopTime/setTimeoutTime;
-		(function(){
-			var count=0;
-			var start = userlistflag*userlistpernum;
-			if(aA==null){
-				createATag(arr,0,userlistpernum);
-				aA=oDiv.getElementsByTagName('a');
-				var oTag=null;
-				for(var i=0;i<aA.length;i++){
-					oTag={};		
-					aA[i].onmouseover = (function (obj) {
-						return function () {
-							obj.on = true;
-							this.style.zIndex = 9999;
-							this.style.color = '#fff';
-							this.style.padding = '5px 5px';
-							this.style.filter = "alpha(opacity=100)";
-							this.style.opacity = 1;
-						}
-					})(oTag);
-					aA[i].onmouseout = (function (obj) {
-						return function () {
-							obj.on = false;
-							this.style.zIndex = obj.zIndex;
-							this.style.color = '#fff';
-							this.style.padding = '5px';
-							this.style.filter = "alpha(opacity=" + 100 * obj.alpha + ")";
-							this.style.opacity = obj.alpha;
-							this.style.zIndex = obj.zIndex;
-						}
-					})(oTag);
-					oTag.offsetWidth = aA[i].offsetWidth;
-					oTag.offsetHeight = aA[i].offsetHeight;
-					mcList.push(oTag);
+		var count=0;
+		
+		createATag(arr,0,userlistpernum);
+		aA=oDiv.getElementsByTagName('a');
+		var oTag=null;
+		for(var i=0;i<aA.length;i++){
+			oTag={};		
+			aA[i].onmouseover = (function (obj) {
+				return function () {
+					obj.on = true;
+					this.style.zIndex = 9999;
+					this.style.color = '#fff';
+					this.style.padding = '5px 5px';
+					this.style.filter = "alpha(opacity=100)";
+					this.style.opacity = 1;
 				}
-				sineCosine( 0,0,0 );
-				positionAll();
-			}else if(arr.length>maxuser){
-				for(var i=0;i<aA.length;i++){
-					if(start+i<arr.length){
-						aA.item(i).innerHTML=arr[start+i];
-					}else{
-						start=0;
-						aA.item(i).innerHTML=arr[start];
-					}
+			})(oTag);
+			aA[i].onmouseout = (function (obj) {
+				return function () {
+					obj.on = false;
+					this.style.zIndex = obj.zIndex;
+					this.style.color = '#fff';
+					this.style.padding = '5px';
+					this.style.filter = "alpha(opacity=" + 100 * obj.alpha + ")";
+					this.style.opacity = obj.alpha;
+					this.style.zIndex = obj.zIndex;
 				}
-			}
-			if(start>=arr.length-1){
-				userlistflag=0;
-			}else{
-				userlistflag++;
-			}
-			var fun = arguments.callee;
-			(function () {
-					update();
-					if(count<looptimes){
-						setTimeout(arguments.callee, setTimeoutTime);
-						count++;
-					}else{
-						if(arr!=null&&arr.length>0&&tspeed>0&&arr.length>maxuser){
-							setTimeout(fun, 100);
+			})(oTag);
+			oTag.offsetWidth = aA[i].offsetWidth;
+			oTag.offsetHeight = aA[i].offsetHeight;
+			mcList.push(oTag);
+		}
+		sineCosine( 0,0,0 );
+		positionAll();
+		(function () {
+				update();
+				if(count>=looptimes){
+					var start = userlistflag*userlistpernum;
+					for(var i=0;i<aA.length;i++){
+						if(start+i<arr.length){
+							aA.item(i).innerHTML=arr[start+i];
+						}else{
+							start=0;
+							aA.item(i).innerHTML=arr[start];
 						}
-						return;
 					}
-		    })();
-			
-		})();
+					if(start>=arr.length-1){
+						userlistflag=0;
+					}else{
+						userlistflag++;
+					}
+					count=0;
+				}
+				setTimeout(arguments.callee, setTimeoutTime);
+				count++;
+	    })();
 	}
 	
 	$.fn.lottery.methods={

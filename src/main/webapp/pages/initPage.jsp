@@ -45,7 +45,7 @@
 
 		 
 		 var pnum=${pnum};
-		 var uploadshow = true;//${uploadshow};
+		 var uploadshow = ${uploadshow};
 		 var uploadflag =false;
 		 init();
 		 function init(){
@@ -68,6 +68,7 @@
 				    'fileTypeExts'	: '*.xls',
 				    'buttonText' : '上传抽奖人员名单...',
 				    'fileObjName':'uploadify',
+				    'removeCompleted' : false,
 				     'multi':false,
 				     'onUploadStart':function(){
 				     	$(window).blockUI();
@@ -83,6 +84,9 @@
 			           }
 			         }
 				  });
+				  $('#uploadify').css('float','left');
+				  $('#uploadify').after("<div style='padding: 10px 10px 10px 150px;'>共导入4120人</div>");
+				  $('#uploadify-queue').css('clear','both');
 		  	}else{
 		  		$('.uploadform').hide();
 		  	}
