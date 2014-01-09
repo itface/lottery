@@ -1,8 +1,10 @@
 package com.lottery.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -38,9 +40,24 @@ public class PrizeSerial implements Serializable{
 	private Date enddate;
 	private int status;
 	private int prizecount;
+	private int suffixnumfrom;
+	private int suffixnumto;
+	private String suffixnumexclude;
+	private int numberpoolfrom;
+	private int numberpoolto;
+	private String numberpoolexclude;
 	@JsonIgnore
 	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.PERSIST},mappedBy="prizeSerial")
 	private Set<Prize> prizes = new HashSet<Prize>();
+	@JsonIgnore
+	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.PERSIST},mappedBy="prizeSerial")
+	private Set<SuffixNum> suffixnums = new HashSet<SuffixNum>();
+	@JsonIgnore
+	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.PERSIST},mappedBy="prizeSerial")
+	private Set<NumberPool> numberpools = new HashSet<NumberPool>();
+	@JsonIgnore
+	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.PERSIST},mappedBy="prizeSerial")
+	private Set<BalanceRule> balancerules = new HashSet<BalanceRule>();
 	
 	public long getId() {
 		return id;
@@ -90,4 +107,80 @@ public class PrizeSerial implements Serializable{
 	public void setPrizecount(int prizecount) {
 		this.prizecount = prizecount;
 	}
+	public Set<SuffixNum> getSuffixnums() {
+		return suffixnums;
+	}
+	public void setSuffixnums(Set<SuffixNum> suffixnums) {
+		this.suffixnums = suffixnums;
+	}
+	public Set<NumberPool> getNumberpools() {
+		return numberpools;
+	}
+	public void setNumberpools(Set<NumberPool> numberpools) {
+		this.numberpools = numberpools;
+	}
+	public int getSuffixnumfrom() {
+		return suffixnumfrom;
+	}
+	public void setSuffixnumfrom(int suffixnumfrom) {
+		this.suffixnumfrom = suffixnumfrom;
+	}
+	public int getSuffixnumto() {
+		return suffixnumto;
+	}
+	public void setSuffixnumto(int suffixnumto) {
+		this.suffixnumto = suffixnumto;
+	}
+	public int getNumberpoolfrom() {
+		return numberpoolfrom;
+	}
+	public void setNumberpoolfrom(int numberpoolfrom) {
+		this.numberpoolfrom = numberpoolfrom;
+	}
+	public int getNumberpoolto() {
+		return numberpoolto;
+	}
+	public void setNumberpoolto(int numberpoolto) {
+		this.numberpoolto = numberpoolto;
+	}
+	public String getSuffixnumexclude() {
+		return suffixnumexclude;
+	}
+	public void setSuffixnumexclude(String suffixnumexclude) {
+		this.suffixnumexclude = suffixnumexclude;
+	}
+	public String getNumberpoolexclude() {
+		return numberpoolexclude;
+	}
+	public void setNumberpoolexclude(String numberpoolexclude) {
+		this.numberpoolexclude = numberpoolexclude;
+	}
+	public Set<BalanceRule> getBalancerules() {
+		return balancerules;
+	}
+	public void setBalancerules(Set<BalanceRule> balancerules) {
+		this.balancerules = balancerules;
+	}
+	public List<Prize> getPrizes(String type) {
+		List<Prize> list = new ArrayList<Prize>();
+		if(Prize.PRIZETYPE_URL_USER.equals(type)){
+			if(prizes!=null&&prizes.size()>0){
+				for(Prize prize : prizes){
+					if(Prize.PRIZETYPE_USER.equals(prize.getPrizetype())){
+						list.add(prize);
+					}
+				}
+			}
+		}else if(Prize.PRIZETYPE_URL_NOT_USER.equals(type)){
+			if(prizes!=null&&prizes.size()>0){
+				for(Prize prize : prizes){
+					if(Prize.PRIZETYPE_NUMBER.equals(prize.getPrizetype())||Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())){
+						list.add(prize);
+					}
+				}
+			}
+		}
+		return list;
+	}
+	
 }

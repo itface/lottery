@@ -167,5 +167,32 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return dao.find("select t.username from User t where t.status=0", null);
 	}
+	@Override
+	public String getYwdySelecctString() {
+		// TODO Auto-generated method stub
+		List list = dao.find("select distinct(t.ywdy) as ywdy from User t", null);
+		if(list!=null&&list.size()>0){
+			StringBuffer sb = new StringBuffer();
+			for(int i=0;i<list.size();i++){
+				sb.append(list.get(i)).append(":").append(list.get(i)).append(";");
+			}
+			return sb.substring(0, sb.lastIndexOf(";"));
+		}
+		return "";
+	}
+	@Override
+	public String getRegionSelectString() {
+		// TODO Auto-generated method stub
+		List<User> list = dao.find("select distinct(t.region) as region from User t", null);
+		if(list!=null&&list.size()>0){
+			StringBuffer sb = new StringBuffer();
+			for(int i=0;i<list.size();i++){
+				sb.append(list.get(i)).append(":").append(list.get(i)).append(";");
+			}
+			return sb.substring(0, sb.lastIndexOf(";"));
+		}
+		return "";
+	}
 
+	
 }

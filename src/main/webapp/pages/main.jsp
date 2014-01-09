@@ -70,12 +70,10 @@
 				$('.prizeselect').hide();
 			}
 			window.onload=setPrizelist;
-			//initLeft();
 			$('#jsddm').easymenu();
 			initLottery();
 			setPrizeuser();
-			//setUserlist();
-			setMusic(bgmusic);
+			//setMusic(bgmusic);
 		}
 		function initLottery(){
 			if(userlist!=null&&userlist!=""&&userlist!="null"&&userlist!="[]"){
@@ -356,8 +354,9 @@
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 800,
-		    	height: 550,
+			    width: 950,
+		    	height: 900,
+		    	top: '1%',
 			    min:false,
 			    max:false,
 			    cancel:true,

@@ -19,8 +19,8 @@ public class PrizeController {
 	private PrizeService prizeSettingService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public @ResponseBody Object getJqgridData() {
-		JSONObject jsonObject = prizeSettingService.findAllJson();
+	public @ResponseBody Object getJqgridData(String type) {
+		JSONObject jsonObject = prizeSettingService.findAllJson(type);
 		return jsonObject==null?"{}":jsonObject;
 	}
 	@RequestMapping(method = RequestMethod.POST)

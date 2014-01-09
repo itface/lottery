@@ -18,7 +18,14 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 public class Prize implements Serializable,Comparable<Prize>{
 
 	
-	private static final long serialVersionUID = -1108604706063040536L;
+	public static final long serialVersionUID = -1108604706063040536L;
+	public final static String PRIZETYPE_SUFFIXNUM = "尾号";
+	public final static String PRIZETYPE_NUMBER = "号码";
+	public final static String PRIZETYPE_USER = "用户";
+	public final static String PRIZETYPE_URL_USER = "user";
+	public final static String PRIZETYPE_URL_NOT_USER = "num";
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -26,6 +33,8 @@ public class Prize implements Serializable,Comparable<Prize>{
 	private String prizename;
 	private int prizenum;
 	private int indexorder;
+	private String prizetype;
+	private int totalprizenum;
 	//private int status;
 	private String sm;
 	private String jp;
@@ -56,6 +65,9 @@ public class Prize implements Serializable,Comparable<Prize>{
 			this.sm=prize.getSm();
 			this.jp=prize.getJp();
 			this.jppic=prize.getJppic();
+			
+			this.prizetype=prize.getPrizetype();
+			this.totalprizenum=prize.getTotalprizenum();
 		}
 	}
 	public long getId() {
@@ -114,6 +126,18 @@ public class Prize implements Serializable,Comparable<Prize>{
 		this.jppic = jppic;
 	}
 	
+	public String getPrizetype() {
+		return prizetype;
+	}
+	public void setPrizetype(String prizetype) {
+		this.prizetype = prizetype;
+	}
+	public int getTotalprizenum() {
+		return totalprizenum;
+	}
+	public void setTotalprizenum(int totalprizenum) {
+		this.totalprizenum = totalprizenum;
+	}
 	public String getPrizelistlabel() {
 		return prizename+"_"+prizenum;
 	}

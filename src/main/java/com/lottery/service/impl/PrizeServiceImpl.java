@@ -3,9 +3,9 @@ package com.lottery.service.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,9 +60,9 @@ public class PrizeServiceImpl implements PrizeService{
 			int oldOrder = old.getIndexorder();
 			int newOrder = prize.getIndexorder();
 			if(oldOrder>newOrder){
-				dao.executeUpdate("update Prize t set t.indexorder=t.indexorder+1 where t.indexorder>=?1 and t.id!=?2",new Object[]{newOrder,prize.getId()});
+				dao.executeUpdate("update Prize t set t.indexorder=t.indexorder+1 where t.indexorder>=?1 and t.indexorder<?3 and t.id!=?2",new Object[]{newOrder,prize.getId(),oldOrder});
 			}else if(oldOrder<newOrder){
-				dao.executeUpdate("update Prize t set t.indexorder=t.indexorder-1 where t.indexorder<=?1 and t.id!=?2",new Object[]{newOrder,prize.getId()});
+				dao.executeUpdate("update Prize t set t.indexorder=t.indexorder-1 where t.indexorder<=?1 and t.indexorder>?3 and t.id!=?2",new Object[]{newOrder,prize.getId(),oldOrder});
 			}
 			//dao.update(prize);
 			old.update(prize);
@@ -92,13 +92,13 @@ public class PrizeServiceImpl implements PrizeService{
 	}
 
 	@Override
-	public List<Prize> findAll() {
+	public List<Prize> findAll(String type) {
 		// TODO Auto-generated method stub
 		//return dao.find("from Prize t", null);
 		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
 		if(prizeSerial!=null){
 			List<Prize> list = new ArrayList<Prize>();
-			list.addAll(prizeSerial.getPrizes());
+			list.addAll(prizeSerial.getPrizes(type));
 			Collections.sort(list);
 			return list;
 		}
@@ -106,9 +106,9 @@ public class PrizeServiceImpl implements PrizeService{
 	}
 
 	@Override
-	public JSONObject findAllJson() {
+	public JSONObject findAllJson(String type) {
 		// TODO Auto-generated method stub
-		List<Prize> list  = this.findAll();
+		List<Prize> list  = this.findAll(type);
 		if(list!=null&&list.size()>0){
 			Jqgrid_DataJson jsonData = new Jqgrid_DataJson(0,0,0,list);
 			JSONObject jsonObject = JsonUtils.objectToJSONObject(jsonData,new String[]{"prizeSerial","prizeUsers"});
@@ -120,7 +120,7 @@ public class PrizeServiceImpl implements PrizeService{
 	@Override
 	public String getOrderSelection(String indexorder) {
 		// TODO Auto-generated method stub
-		long num = this.getPrizeNum();
+		long num = this.getPrizeNum(null);
 		StringBuffer sb = new StringBuffer("");
 		if(num>0){
 			if("".equals(indexorder)){
@@ -139,13 +139,32 @@ public class PrizeServiceImpl implements PrizeService{
 	}
 
 	@Override
-	public long getPrizeNum() {
+	public long getPrizeNum(String type) {
 		// TODO Auto-generated method stub
 		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
 		if(prizeSerial!=null){
-			return (prizeSerial.getPrizes()==null?0:prizeSerial.getPrizes().size());
+			if(type!=null){
+				List list = prizeSerial.getPrizes(type);
+				return (list==null?0:list.size());
+			}else{
+				Set set = prizeSerial.getPrizes();
+				return (set==null?0:set.size());
+			}
 		}
 		return 0;
+	}
+
+	@Override
+	public List<Prize> findAll() {
+		// TODO Auto-generated method stub
+		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+		if(prizeSerial!=null){
+			List<Prize> list = new ArrayList<Prize>();
+			list.addAll(prizeSerial.getPrizes());
+			Collections.sort(list);
+			return list;
+		}
+		return null;
 	}
 
 }

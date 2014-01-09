@@ -11,6 +11,7 @@ public interface PrizeSerialService {
 	public List<PrizeSerial> getInActivePrizeSerial();
 	public void stopActivePrizeSerial();
 	public PrizeSerial addActivePrizeSerial(PrizeSerial prizeSerial);
-	public void updatePrizeSerialName(long id,String name);
+	//public void updatePrizeSerialName(long id,String name);
 	public void updatePrizeCount(long id);
+	public void update(long id, String name,int suffixnumfrom,int suffixnumto,String suffixnumexclude,int numberpoolfrom,int numberpoolto,String numberpoolexclude);
 }

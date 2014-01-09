@@ -11,6 +11,7 @@ import com.lottery.dao.BaseDao;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.User;
 import com.lottery.service.BackupUserService;
+import com.lottery.service.NumberPoolService;
 import com.lottery.service.PrizeSerialService;
 import com.lottery.service.UserService;
 @Service
@@ -22,7 +23,8 @@ public  class PrizeSerialServiceImpl implements PrizeSerialService{
 	private BackupUserService backupUserService;
 	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	private NumberPoolService numberPoolService;
 	@Override
 	public PrizeSerial getActivePrizeSerial() {
 		// TODO Auto-generated method stub
@@ -61,9 +63,23 @@ public  class PrizeSerialServiceImpl implements PrizeSerialService{
 
 	@Override
 	@Transactional
-	public void updatePrizeSerialName(long id, String name) {
+	public void update(long id, String name,int suffixnumfrom,int suffixnumto,String suffixnumexclude,int numberpoolfrom,int numberpoolto,String numberpoolexclude) {
 		// TODO Auto-generated method stub
-		dao.executeUpdate("update PrizeSerial t set t.name=?1 where t.id=?2", new Object[]{name,id});
+		PrizeSerial prizeSerial = this.getActivePrizeSerial();
+		if(!(prizeSerial.getNumberpoolfrom()==numberpoolfrom&&prizeSerial.getNumberpoolto()==numberpoolto&&(prizeSerial.getNumberpoolexclude()==null?"":prizeSerial.getNumberpoolexclude()).equals(numberpoolexclude))){
+			prizeSerial.getNumberpools().clear();
+			if(numberpoolfrom!=-1&&numberpoolto!=-1){
+				numberPoolService.saveList(numberpoolfrom, numberpoolto, numberpoolexclude);
+			}
+		}
+		prizeSerial.setName(name);
+		prizeSerial.setSuffixnumfrom(suffixnumfrom);
+		prizeSerial.setSuffixnumto(suffixnumto);
+		prizeSerial.setSuffixnumexclude(suffixnumexclude);
+		prizeSerial.setNumberpoolfrom(numberpoolfrom);
+		prizeSerial.setNumberpoolto(numberpoolto);
+		prizeSerial.setNumberpoolexclude(numberpoolexclude);
+		//dao.executeUpdate("update PrizeSerial t set t.name=?1,t.suffixnumfrom=?3,t.suffixnumto=?4,t.suffixnumexclude=?5,t.numberpoolfrom=?6,t.numberpoolto=?7,t.numberpoolexclude=?8 where t.id=?2", new Object[]{name,id,suffixnumfrom,suffixnumto,suffixnumexclude,numberpoolfrom,numberpoolto,numberpoolexclude});
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lottery.domain.BalanceRule;
 import com.lottery.domain.Percentage;
 import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.PrizeUser;
 import com.lottery.service.ActionService;
+import com.lottery.service.BalanceRuleService;
 import com.lottery.service.PrizeSerialService;
 import com.lottery.service.PrizeService;
 import com.lottery.service.PrizeUserService;
@@ -47,6 +50,8 @@ public class IndexController {
 	private PrizeSerialService prizeSerialService;
 	@Autowired
 	private PrizeUserService prizeUserService;
+	@Autowired
+	private BalanceRuleService balanceRuleService;
 	
 	@RequestMapping
 	public ModelAndView index(HttpServletRequest request){
@@ -117,6 +122,13 @@ public class IndexController {
 		if(currentPrizeSerial!=null){
 			map.put("pnum", currentPrizeSerial.getId());
 			map.put("name", currentPrizeSerial.getName());
+			
+			map.put("suffixnumfrom", currentPrizeSerial.getSuffixnumfrom()==-1?"":currentPrizeSerial.getSuffixnumfrom());
+			map.put("suffixnumto", currentPrizeSerial.getSuffixnumto()==-1?"":currentPrizeSerial.getSuffixnumto());
+			map.put("suffixnumexclude", currentPrizeSerial.getSuffixnumexclude());
+			map.put("numberpoolfrom", currentPrizeSerial.getNumberpoolfrom()==-1?"":currentPrizeSerial.getNumberpoolfrom());
+			map.put("numberpoolto", currentPrizeSerial.getNumberpoolto()==-1?"":currentPrizeSerial.getNumberpoolto());
+			map.put("numberpoolexclude", currentPrizeSerial.getNumberpoolexclude());
 			List<PrizeUser> prizeUserlist = prizeUserService.findCurrentPrizeUser();
 			if(prizeUserlist!=null&&prizeUserlist.size()>0){
 				map.put("uploadshow", false);
@@ -127,6 +139,10 @@ public class IndexController {
 			PrizeSerial prizeSerial = new PrizeSerial();
 			prizeSerial.setNum(sd.format(date));
 			prizeSerial.setBegindate(date);
+			prizeSerial.setSuffixnumfrom(-1);
+			prizeSerial.setSuffixnumto(-1);
+			prizeSerial.setNumberpoolfrom(-1);
+			prizeSerial.setNumberpoolto(-1);
 			prizeSerialService.addActivePrizeSerial(prizeSerial);
 			map.put("pnum", prizeSerial.getId());
 			map.put("name", "");
@@ -135,8 +151,8 @@ public class IndexController {
 		return new ModelAndView("/initPage",map);
 	}
 	@RequestMapping(value="/saveprizeserial",method = RequestMethod.POST)
-	public @ResponseBody void savePrizeserial(String name,long pnum){
-		prizeSerialService.updatePrizeSerialName(pnum, name);
+	public @ResponseBody void savePrizeserial(String name,long pnum,int suffixnumfrom,int suffixnumto,String suffixnumexclude,int numberpoolfrom,int numberpoolto,String numberpoolexclude){
+		prizeSerialService.update(pnum, name,suffixnumfrom,suffixnumto,suffixnumexclude,numberpoolfrom,numberpoolto,numberpoolexclude);
 	}
 	@RequestMapping(value="/endprize")
 	public @ResponseBody void endprize(){
@@ -232,5 +248,36 @@ public class IndexController {
 	@RequestMapping(value="/prizeuserlist",method = RequestMethod.GET)
 	public @ResponseBody Object prizeuserlist(){
 		return prizeUserService.getPrizeUserList();
+	}
+	@RequestMapping(value="/getusernum",method = RequestMethod.GET)
+	public @ResponseBody long getusernum(){
+		return userService.countTotalUser();
+	}
+	@RequestMapping(value="/getYwdySelecctString",method = RequestMethod.GET)
+	public @ResponseBody String getYwdySelecctString(){
+		return userService.getYwdySelecctString();
+	}
+	@RequestMapping(value="/getRegionSelectString",method = RequestMethod.GET)
+	public @ResponseBody String getRegionSelectString(){
+		return userService.getRegionSelectString();
+	}
+	
+	
+	@RequestMapping(value="/balancerule",method = RequestMethod.GET)
+	public @ResponseBody Object getbalancerule() {
+		JSONObject jsonObject = balanceRuleService.findAllJson();
+		return jsonObject==null?"{}":jsonObject;
+	}
+	@RequestMapping(value="/balancerule",method = RequestMethod.POST)
+	public @ResponseBody void newbalancerule(BalanceRule balanceRule){
+		balanceRuleService.add(balanceRule);
+	}
+	@RequestMapping(value="/balancerule",method = RequestMethod.DELETE)
+	public @ResponseBody void deletebalancerule(String param){
+		balanceRuleService.delete(param);
+	}
+	@RequestMapping(value=("/balancerule/{prizeid}"),method = RequestMethod.PUT)
+	public @ResponseBody void updatebalancerule(BalanceRule balanceRule){
+		balanceRuleService.update(balanceRule);
 	}
 }
