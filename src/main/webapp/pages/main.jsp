@@ -73,7 +73,7 @@
 			$('#jsddm').easymenu();
 			initLottery();
 			setPrizeuser();
-			//setMusic(bgmusic);
+			setMusic(bgmusic);
 		}
 		function initLottery(){
 			if(userlist!=null&&userlist!=""&&userlist!="null"&&userlist!="[]"){
@@ -83,54 +83,6 @@
 				$(document).lottery(new Array());
 			}
 		}
-		/*
-		function setUserlist(){
-			if(userlist!=null&&userlist!=""&&userlist!="null"){
-				var arr = (userlist.replace("[","").replace("]","")).split(",");
-				var loopcount = arr.length%userlistpernum==0?arr.length/userlistpernum:arr.length/userlistpernum+1;
-				var userlistflag = 0;
-				(function(v){
-					if((v=='init'&&setUserlistFlag!="init")||setUserlistFlag=="stop"){
-						$(document).lottery("stop");
-						return;
-					}
-					var start = userlistflag*userlistpernum;
-					var end = 0;
-					if(start+userlistpernum*2<arr.length){
-						end = start+userlistpernum;
-					}else{
-						end = arr.length;
-					}
-					$(document).lottery("stop");
-					$("#tagscloud").empty();
-					for(var i=start;i<end&&i<arr.length;i++){
-						$("#tagscloud").append('<a href="javascript:void(0);" class="tagc'+(i%3+1)+'">'+arr[i]+'</a>');
-					}
-					if(setUserlistFlag=="init"){
-						$(document).lottery("init");
-						$(document).lottery();
-						if(end==arr.length){
-							userlistflag=0;
-						}else{
-							userlistflag++;
-						}
-						var arg = arguments.callee;
-						setTimeout(function(){arg("init");}, 10000);
-					}else if(setUserlistFlag=="run"){
-						//$(document).lottery("run");
-						$(document).lottery();
-						if(end==arr.length){
-							userlistflag=0;
-						}else{
-							userlistflag++;
-						}
-						var arg = arguments.callee;
-						setTimeout(function(){arg("run");}, 2000);
-					}
-				})(1);
-			}
-		}
-		*/
 		function setPrizeuser(){
 			$.ajax({
 				url:'${ctx}/index/prizeuserlist',

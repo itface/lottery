@@ -26,9 +26,9 @@
 	<div style="padding-top:25px">
 		<table id="list"></table>
 	</div>
-	<div style='padding-top: 10px;font-size: 12px;font-family: 宋体;'>
-		<div>尾号范围  从：<input id='suffixnumfrom' value='${suffixnumfrom}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'>&nbsp;到&nbsp;<input id='suffixnumto' value='${suffixnumto}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'> 不包含&nbsp;<input type='text' id='suffixnumexclude' value='${suffixnumexclude}' style='width: 220px;'>共<span class='totalsuffixnum' style='display: inline-block;width: 40px;'></span>个&nbsp;<span style='color:#ccc'>发给参与现场抽奖人员的号码的尾号</span></div>
-		<div>奖池范围 从：<input id='numberpoolfrom' value='${numberpoolfrom}' type='text' style='width: 60px;' onchange='setNumOfNumber()'>&nbsp;到&nbsp;<input id='numberpoolto' value='${numberpoolto}' type='text' style='width: 60px;' onchange='setNumOfNumber()'> 不包含&nbsp;<input type='text' id='numberpoolexclude' value='${numberpoolexclude}' style='width: 220px;'>共<span class='totalnum' style='display: inline-block;width: 40px;'></span>个&nbsp;<span style='color:#ccc'>发给参与现场奖奖人员的号码</span></div>
+	<div style='padding-top: 10px;font-size: 12px;font-family: 宋体;' class="numberpool">
+		<div>尾号范围  从：<input id='suffixnumfrom' value='${suffixnumfrom}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'>&nbsp;到&nbsp;<input id='suffixnumto' value='${suffixnumto}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'> 不包含&nbsp;<input type='text' id='suffixnumexclude' value='${suffixnumexclude}' style='width: 220px;' onchange='validateSuffixnumexclude()'>共<span class='totalsuffixnum' style='display: inline-block;width: 40px;'></span>个&nbsp;<span style='color:#ccc'>发给参与现场抽奖人员的号码的尾号</span></div>
+		<div>奖池范围 从：<input id='numberpoolfrom' value='${numberpoolfrom}' type='text' style='width: 60px;' onchange='setNumOfNumber()'>&nbsp;到&nbsp;<input id='numberpoolto' value='${numberpoolto}' type='text' style='width: 60px;' onchange='setNumOfNumber()'> 不包含&nbsp;<input type='text' id='numberpoolexclude' value='${numberpoolexclude}' style='width: 220px;' onchange='validateNumberpoolexclude()'>共<span class='totalnum' style='display: inline-block;width: 40px;'></span>个&nbsp;<span style='color:#ccc'>发给参与现场奖奖人员的号码</span></div>
 	</div>
 	<div style="padding-top:25px">
 		<table id="list2"></table>
@@ -38,6 +38,8 @@
 			<input id="uploadify" name="uploadify" type="file" />
 			<span style='font-size: 12px;color: red;font-family: 宋体;'>注意：导入时系统将先清空全部抽奖人员，再导入新的抽奖人员。</span>
 		</form>
+	</div>
+	<div class='usernumdiv'>
 	</div>
 	<div style="padding-top:5px">
 		<table id="list3"></table>
@@ -49,17 +51,26 @@
 		 var pnum=${pnum};//活动批次号
 		 var uploadshow = ${uploadshow};
 		 var usernum=0;
+		 var prizeuserofnum=${prizeuserofnum};
 		 init();
 		 function init(){
 		 	initUplodify();
 		 	initNotice();
 		 	setUserNum();
+		 	setRangeReadonly();
 		 }
 		 function initNotice(){
 		 	if(uploadshow==true){
 		 		$('.titlenotice').hide();
 		 	}else{
 		 		$('.titlenotice').show();
+		 	}
+		 }
+		 function setRangeReadonly(){
+		 	if(prizeuserofnum==true){
+		 		$('.numberpool input').attr('readonly','readonly');
+		 	}else{
+		 		$('.numberpool input').removeAttr('readonly');
 		 	}
 		 }
 		  function initUplodify(){
@@ -107,11 +118,29 @@
 					  	$('#uploadify-queue').css('clear','both');
 					}else{
 						$('.usernum').remove();
-						$(document.body).append("<div class='usernum' style='padding:10px;font-size: 12px;font-family: 宋体;'>人员数 ："+num+"</div>");
+						$('.usernumdiv').append("<div class='usernum' style='padding:10px;font-size: 12px;font-family: 宋体;'>人员数 ："+num+"</div>");
 					
 					}
 				}
 			});
+		  }
+		  function validateNumberpoolexclude(){
+		  	var v = $('#numberpoolexclude').val();
+		  	var r=/^\d+(;\d+)*$/;
+		  	if(v!=''&&!r.test(v)){
+		  		alert('奖池范围的【不包含】必须是1个数字或者多个数字以;号分隔');
+		  		return false;
+		  	}
+		  	return true;
+		  }
+		  function validateSuffixnumexclude(){
+		  	var v = $('#suffixnumexclude').val();
+		  	var r=/^\d(;\d)*$/;
+		  	if(v!=''&&!r.test(v)){
+		  		alert('尾号范围的【不包含】必须是0到9之间的一个数字或者多个数字以;号分隔');
+		  		return false;
+		  	}
+		  	return true;
 		  }
 		  function setNumOfSuffixnum(){
 		  	var suffixnumfrom = $('#suffixnumfrom').val();
@@ -167,6 +196,21 @@
 			}
 			if((numberpoolto!=''&&numberpoolfrom=='')||(numberpoolto==''&&numberpoolfrom!='')){
 				alert('【尾号范围】设置不完整');
+				return false;
+			}
+			if(!validateNumberpoolexclude()){
+				return false;
+			}
+			if(!validateSuffixnumexclude()){
+				return false;
+			}
+			if((suffixnumfrom!=''&&suffixnumto!='')&&(numberpoolfrom==''&&numberpoolto=='')){
+				alert('设置了【尾号范围】时【奖池范围】不能为空');
+				return false;
+			}
+			var arr = $('#list').jqGrid('getRowData');
+			if(arr.length>0&&(numberpoolfrom==''||numberpoolto=='')){
+				alert('设置了现场奖项，【奖池范围】不能为空');
 				return false;
 			}
 			suffixnumfrom=suffixnumfrom==''?-1:suffixnumfrom;

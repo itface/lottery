@@ -58,6 +58,24 @@ public class SuffixNum implements Serializable{
 		this.prizeSerial = prizeSerial;
 	}
 	
-	
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		int result = 17;
+		result = 37*result+(int) (suffixnum ^ (suffixnum>>>32));
+		//result = 37*result+(uid==null?0:uid.hashCode());
+		//result = 37*result+displayOrder;
+		//result = 37*result+(this.url==null?0:url.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if(!(obj instanceof SuffixNum)){
+			return false;
+		}
+		SuffixNum obj2 = (SuffixNum)obj;
+		return this.suffixnum==obj2.getSuffixnum();
+	}
 	
 }

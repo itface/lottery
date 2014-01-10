@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lottery.dao.BaseDao;
 import com.lottery.domain.Percentage;
+import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.PrizeUser;
 import com.lottery.domain.TempPrizeUser;
@@ -179,5 +180,19 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 //			return tempPrizeUserList;
 //		}
 //		return null;
+	}
+
+	@Override
+	public boolean ifHavePrizeUserOfUser(String serialnum) {
+		// TODO Auto-generated method stub
+		long num =  dao.findTotalCount("select count(*) as num from PrizeUser t where t.prizeserialnum=?1 and t.prizetype='"+Prize.PRIZETYPE_USER+"'", new Object[]{serialnum});
+		return num>0?true:false;
+	}
+
+	@Override
+	public boolean ifHavePrizeUserOfNum(String serialnum) {
+		// TODO Auto-generated method stub
+		long num =  dao.findTotalCount("select count(*) as num from PrizeUser t where t.prizeserialnum=?1 and (t.prizetype='"+Prize.PRIZETYPE_NUMBER+"' or t.prizetype='"+Prize.PRIZETYPE_SUFFIXNUM+"')", new Object[]{serialnum});
+		return num>0?true:false;
 	}
 }

@@ -7,11 +7,46 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import com.lottery.domain.NumberPool;
+import com.lottery.domain.SuffixNum;
 import com.lottery.domain.User;
 
 public class RandomNumUtil {
 
-	public  List<User> getRandom(List<User> list,int length){
+	public long getRandomOfSuffixnum(Set<SuffixNum> set,int min,int max){
+		long num = Math.round(Math.random()*(max-min)+min);
+		if(set!=null&&set.size()>0){
+			if(set.size()==max-min+1){
+				return -1;
+			}else{
+				while(true){
+					num = Math.round(Math.random()*(max-min)+min);
+					SuffixNum s = new SuffixNum();
+					s.setSuffixnum((int)num);
+					if(set.contains(s)){
+						continue;
+					}else{
+						break;
+					}
+				}
+			}
+		}
+		return num;
+	}
+	public  List<NumberPool> getRandomOfNumber(List<NumberPool> list,int length){
+		if(list!=null&&list.size()>0&&length>0){
+			List<NumberPool> numberPoolas = new ArrayList<NumberPool>(length);
+			Set<Integer> set = getRandom3(0,list.size(),length,null);
+			Iterator<Integer> it = set.iterator();
+			while(it.hasNext()){
+				int n = it.next();
+				numberPoolas.add(list.get(n));
+			}
+			return numberPoolas;
+		}
+		return null;
+	}
+	public  List<User> getRandomOfUser(List<User> list,int length){
 		if(list!=null&&list.size()>0&&length>0){
 			int persizeRatio = 10;
 			double dataRatio = 0.3;
@@ -58,6 +93,12 @@ public class RandomNumUtil {
 		}
 		return null;
 	}
+	/**
+	 * 最大值每一位随机生成最终随机数
+	 * @param list
+	 * @param length
+	 * @return
+	 */
 	public  Set<Integer> getRandom1(int maxnum,int length){
 		if(maxnum>0&&length>0&&maxnum>=length){
 			Set<Integer> set = new HashSet<Integer>(length);
@@ -126,54 +167,62 @@ public class RandomNumUtil {
 		}
 		return null;
 	}
-	public  Set<Integer> getRandom3(int maxnum,int perlength,int length){
+	/**
+	 * 按每一位随机取出从minnum到maxnum之间的length个随机数
+	 * @param minnum
+	 * @param maxnum
+	 * @param perlength
+	 * @param length
+	 * @return
+	 */
+	public  Set<Integer> getRandom3(int minnum,int maxnum,int length,Set<Integer> exclude){
 		if(maxnum>0&&length>0&&maxnum>=length){
 			Set<Integer> set = new HashSet<Integer>(length);
 			String s = "";
 			Random random = new Random(); 
 			String num = maxnum+"";
+			String min = minnum+"";
+			//下限位数跟上限位数保持一致
+			if(min.length()!=num.length()){
+				while(num.length()>min.length()){
+					min="0"+min;
+				}
+			}
 			String tnum = num;
-			int arrlength = (num.length()/perlength)+(num.length()%perlength==0?0:1);
+			String tmin = min;
+			int arrlength = num.length();
 			String[]  arr = new String[arrlength];
+			String[]  minarr = new String[arrlength];
 			int arrindex =0;
-			while(num.length()>=perlength){
-				arr[arrindex++]=num.substring(0, perlength);
-				num = num.substring(perlength);
+			//把最大值以每perlength位，放进arr中
+			while(num.length()>0){
+				arr[arrindex]=num.substring(0, 1);
+				num = num.substring(1);
+				
+				minarr[arrindex]=min.substring(0, 1);
+				min = min.substring(1);
+				arrindex++;
 			}
-			if(num.length()>0){
-				arr[arrlength-1]=num;
-			}
+			//循环取length个随机数
 			for(int j=0;j<length;j++){
 				boolean loopFlag = true;
 				while(loopFlag){
 					loopFlag=false;
-					boolean zeroFlag = true;
+					//循环arr，分别随机
 					for(int i=0;i<arr.length;i++){
 						if(i==0){
 							//如果是第一位，则取0到第一位+1之间的随机数
-							int n = random.nextInt(Integer.parseInt(arr[i])+1);
+							int maxn = Integer.parseInt(arr[i]);
+							int minn = Integer.parseInt(minarr[i]);
+							long n = Math.round(Math.random()*(maxn-minn)+minn);
 							s=n+"";
-							//如果数字只是个位数，并且不为0，那么就不用重新计算
-							if(n!=0){
-								zeroFlag=false;
-							}
 						}else{
-							//如果不是第一位，取当前arr[i]的数值位数相同的9，比如arr[1]=44,那么此随机数就取0到99之间的数
-							int numlength = arr[i].length();
-							int maxrandomnum = 1;
-							for(int k=1;k<=numlength;k++){
-								maxrandomnum=maxrandomnum*10;
-							}
-							int n = random.nextInt(maxrandomnum);
+							//如果不是第一位，随机数取从0到9之间的数
+							int n = random.nextInt(10);
 							s=s+n;
-							//如果非第一个数字之后有任何一个数据不为0，说明随机数不是0，不用重新计算
-							if(n!=0){
-								zeroFlag=false;
-							}
 						}
-						//如果随机数是每一位都是0，或者随机数大于最大值，则重新计算。
-						if(i==(arr.length-1)&&(zeroFlag||s.compareTo(tnum)>0)){
-							//i=-1;
+						//如果随机数大于最大值,或者小于最小值，则重新计算。
+						if(i==(arr.length-1)&&(s.compareTo(tnum)>0||s.compareTo(tmin)<0)){
 							loopFlag=true;
 						}
 					}
@@ -182,8 +231,8 @@ public class RandomNumUtil {
 				while(s.indexOf("0")==0){
 					s=s.substring(1);
 				}
-				int n = Integer.parseInt(s);
-				if(set.contains(n)){
+				int n = Integer.parseInt(s.equals("")?"0":s);
+				if(set.contains(n)||(exclude==null?false:exclude.contains(n))){
 					j--;
 				}else{
 					set.add(n);
@@ -215,30 +264,12 @@ public class RandomNumUtil {
 		}
 		return list;
 	}  
-//	 public static List<User> getRandomNumber2(List<User> list,int length){ 
-//		Random random = new Random(); 
-//        Set<User> users = new HashSet<User>(length);
-//        List<User> all = new ArrayList<User>(length);
-//        int range = list.size();
-//        for(int i=0;i<length;i++){  
-//        	User user = list.get(random.nextInt(range));
-//        	if(users.contains(user)){
-//        		i--;
-//        	}else{
-//        		users.add(user);
-//        		all.add(user);
-//        	}
-//        }  
-//        return all;  
-//	}  
 	public static void main(String[] args){
 		RandomNumUtil util = new RandomNumUtil();
-		Set<Integer> set = util.getRandom3(4300,1,20);
-		if(set!=null&&set.size()>0){
-			Iterator<Integer> it = set.iterator();
-			while(it.hasNext()){
-				System.out.println(it.next());
-			}
+		Set<Integer> set = util.getRandom3(1, 2116, 10,null);
+		Iterator<Integer> it = set.iterator();
+		while(it.hasNext()){
+			System.out.println(it.next());
 		}
 	}
 }

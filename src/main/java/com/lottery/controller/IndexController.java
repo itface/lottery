@@ -130,7 +130,12 @@ public class IndexController {
 			map.put("numberpoolto", currentPrizeSerial.getNumberpoolto()==-1?"":currentPrizeSerial.getNumberpoolto());
 			map.put("numberpoolexclude", currentPrizeSerial.getNumberpoolexclude());
 			List<PrizeUser> prizeUserlist = prizeUserService.findCurrentPrizeUser();
-			if(prizeUserlist!=null&&prizeUserlist.size()>0){
+			if(prizeUserService.ifHavePrizeUserOfNum(currentPrizeSerial.getNum())){
+				map.put("prizeuserofnum", true);
+			}else{
+				map.put("prizeuserofnum", false);
+			}
+			if(prizeUserService.ifHavePrizeUserOfUser(currentPrizeSerial.getNum())){
 				map.put("uploadshow", false);
 			}else{
 				map.put("uploadshow", true);
@@ -147,6 +152,7 @@ public class IndexController {
 			map.put("pnum", prizeSerial.getId());
 			map.put("name", "");
 			map.put("uploadshow", true);
+			map.put("prizeuserofnum", false);
 		}
 		return new ModelAndView("/initPage",map);
 	}

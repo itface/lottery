@@ -32,6 +32,8 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	private String prizeserialnum;
 	private String prizeserialname;
 	private String prizename;
+	private String prizetype;
+	private int totalprizenum;
 	private int prizenum;
 	private String sm;
 	private String jp;
@@ -44,7 +46,7 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
     private String ywdy;
     private String ywdy2;
     
-    
+    //private int number;
 //	@JsonIgnore
 //	@ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -64,6 +66,8 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 			this.prizenum=prize.getPrizenum();
 			this.prizeserialnum=prize.getPrizeSerial().getNum();
 			this.prizeserialname=prize.getPrizeSerial().getName();
+			this.prizetype=prize.getPrizetype();
+			this.totalprizenum=prize.getTotalprizenum();
 			this.prizename=prize.getPrizename();
 			this.sm=prize.getSm();
 		}
@@ -75,6 +79,29 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 			this.usernumber=user.getUsernumber();
 			this.ywdy=user.getYwdy();
 			this.ywdy2=user.getYwdy2();
+		}
+		this.prizetime=new Date();
+		this.indexorder=indexorder;
+	}
+	public PrizeUser(Prize prize,NumberPool numberPool,int indexorder){
+		if(prize!=null){
+			this.jp=prize.getJp();
+			this.prizenum=prize.getPrizenum();
+			this.prizeserialnum=prize.getPrizeSerial().getNum();
+			this.prizeserialname=prize.getPrizeSerial().getName();
+			this.prizetype=prize.getPrizetype();
+			this.totalprizenum=prize.getTotalprizenum();
+			this.prizename=prize.getPrizename();
+			this.sm=prize.getSm();
+		}
+		if(numberPool!=null){
+			this.region=numberPool.getNumber()+"";
+			this.dept=numberPool.getNumber()+"";
+			this.uid=numberPool.getNumber()+"";
+			this.username=numberPool.getNumber()+"";
+			this.usernumber=numberPool.getNumber()+"";
+			this.ywdy=numberPool.getNumber()+"";
+			this.ywdy2=numberPool.getNumber()+"";
 		}
 		this.prizetime=new Date();
 		this.indexorder=indexorder;
@@ -180,6 +207,19 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	}
 	public void setIndexordername(String indexordername) {
 		this.indexordername = indexordername;
+	}
+	
+	public String getPrizetype() {
+		return prizetype;
+	}
+	public void setPrizetype(String prizetype) {
+		this.prizetype = prizetype;
+	}
+	public int getTotalprizenum() {
+		return totalprizenum;
+	}
+	public void setTotalprizenum(int totalprizenum) {
+		this.totalprizenum = totalprizenum;
 	}
 	@Override
 	public int compareTo(PrizeUser o) {
