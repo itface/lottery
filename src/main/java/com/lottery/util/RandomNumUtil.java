@@ -13,25 +13,26 @@ import com.lottery.domain.User;
 
 public class RandomNumUtil {
 
+	/**
+	 * 
+	 * @param set还未被抽过的尾号集，如果set为空说明都被抽过或尾号集为空
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public long getRandomOfSuffixnum(Set<SuffixNum> set,int min,int max){
-		long num = Math.round(Math.random()*(max-min)+min);
 		if(set!=null&&set.size()>0){
-			if(set.size()==max-min+1){
-				return -1;
-			}else{
-				while(true){
-					num = Math.round(Math.random()*(max-min)+min);
-					SuffixNum s = new SuffixNum();
-					s.setSuffixnum((int)num);
-					if(set.contains(s)){
-						continue;
-					}else{
-						break;
-					}
+			long num = Math.round(Math.random()*(max-min)+min);
+			while(true){
+				num = Math.round(Math.random()*(max-min)+min);
+				SuffixNum s = new SuffixNum();
+				s.setSuffixnum((int)num);
+				if(set.contains(s)){
+					return num;
 				}
 			}
 		}
-		return num;
+		return -1;
 	}
 	public  List<NumberPool> getRandomOfNumber(List<NumberPool> list,int length){
 		if(list!=null&&list.size()>0&&length>0){
@@ -68,7 +69,10 @@ public class RandomNumUtil {
 							if(set2.contains(index)&&!set.contains(index)){
 								set.add(index);
 								//index是1到list的长度之间的任意一个数，可以当作是长度，因为作为下标是要減1
-								users.add(list.get(index-1));
+								User u = list.get(index-1);
+								users.add(u);
+								//把u的状态设置为已抽过
+								u.setStatus(-1);
 								flag=false;
 								break;
 							}
@@ -85,7 +89,10 @@ public class RandomNumUtil {
 					Iterator<Integer> it = set1.iterator();
 					while(it.hasNext()){
 						int index = it.next();
-						users.add(list.get(index-1));
+						User u = list.get(index-1);
+						users.add(u);
+						//把u的状态设置为已抽过
+						u.setStatus(-1);
 					}
 					return users;
 				}

@@ -11,5 +11,5 @@ public interface NumberPoolService {
 	public void saveList(int numberpoolfrom,int numberpoolto,String exclude);
 	public List<NumberPool> findAllActiveNumberPool();
 	public void updateNumberPoolStatus(List<NumberPool> list);
-	public void updateNumberPoolStatus(int suffixnum);
+	public List<NumberPool>  updateNumberPoolStatus(int suffixnum);
 }

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lottery.dao.BaseDao;
+import com.lottery.domain.BalanceRule;
 import com.lottery.domain.Percentage;
 import com.lottery.domain.User;
 import com.lottery.service.TempUserService;
@@ -192,6 +193,24 @@ public class UserServiceImpl implements UserService{
 			return sb.substring(0, sb.lastIndexOf(";"));
 		}
 		return "";
+	}
+	@Override
+	public List<User> findActiveUserByBalanceRule(BalanceRule balanceRule) {
+		// TODO Auto-generated method stub
+		if(balanceRule!=null&&balanceRule.getMin()>balanceRule.getYcxx()){
+			StringBuffer sb = new StringBuffer();
+			String ywdy = balanceRule.getYwdy();
+			String region = balanceRule.getRegion();
+			if(ywdy!=null&&!"".equals(ywdy)){
+				sb.append(" and t.ywdy=").append(ywdy);
+			}
+			if(region!=null&&!"".equals(region)){
+				sb.append(" and t.region=").append(region);
+			}
+			List<User> list = dao.find("from User t where t.status=0 and t."+sb.toString(), null);
+			return list;
+		}
+		return null;
 	}
 
 	

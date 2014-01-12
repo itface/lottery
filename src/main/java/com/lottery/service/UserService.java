@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lottery.domain.BalanceRule;
 import com.lottery.domain.Percentage;
 import com.lottery.domain.User;
 
@@ -17,6 +18,7 @@ public interface UserService {
 	public List<User> findAll();
 	public List<User> findAllActiveUser();
 	public List<User> findAllActiveUserame();
+	public List<User> findActiveUserByBalanceRule(BalanceRule balanceRule);
 	public void updateUserStatus(List<User> users);
 	public void updateAllUserStatus();
 	public long findActiveUserNum();

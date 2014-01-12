@@ -21,6 +21,7 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 	private PrizeSerialService prizeSerialService;
 	
 	@Override
+	@Transactional
 	public void deleteAll() {
 		// TODO Auto-generated method stub
 		dao.executeUpdate("delete from NumberPool t", null);
@@ -38,7 +39,7 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 				emptyflag=true;
 				tempexclude=";"+exclude+";";
 			}
-			for(int i=numberpoolfrom;i<=numberpoolto&&((i+"").equals(exclude)||exclude.indexOf(i+";")==0||exclude.indexOf(";"+i+";")>0||exclude.indexOf(";"+i)==exclude.lastIndexOf(";"+i));i++){
+			for(int i=numberpoolfrom;i<=numberpoolto;i++){
 				if(emptyflag){
 					if(exclude.equals(i+"")||tempexclude.indexOf(";"+i+";")>=0){
 						continue;
@@ -71,9 +72,16 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 
 	@Override
 	@Transactional
-	public void updateNumberPoolStatus(int suffixnum) {
+	public List<NumberPool>  updateNumberPoolStatus(int suffixnum) {
 		// TODO Auto-generated method stub
-		 dao.executeUpdate("update NumberPool t set t.status=-1 where t.number like '%_"+suffixnum+"%'",null);
+		List<NumberPool> list = dao.find("from NumberPool t where  t.number like '%_"+suffixnum+"%'", null);
+		if(list!=null&&list.size()>0){
+			for(NumberPool numberPool : list){
+				numberPool.setStatus(-1);
+			}
+		}
+		return list;
+		 //dao.executeUpdate("update NumberPool t set t.status=-1 where t.number like '%_"+suffixnum+"%'",null);
 	}
 
 }

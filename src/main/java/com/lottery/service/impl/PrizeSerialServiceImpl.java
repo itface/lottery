@@ -13,6 +13,7 @@ import com.lottery.domain.User;
 import com.lottery.service.BackupUserService;
 import com.lottery.service.NumberPoolService;
 import com.lottery.service.PrizeSerialService;
+import com.lottery.service.SuffixNumService;
 import com.lottery.service.UserService;
 @Service
 public  class PrizeSerialServiceImpl implements PrizeSerialService{
@@ -25,6 +26,8 @@ public  class PrizeSerialServiceImpl implements PrizeSerialService{
 	private UserService userService;
 	@Autowired
 	private NumberPoolService numberPoolService;
+	@Autowired
+	private SuffixNumService suffixNumService;
 	@Override
 	public PrizeSerial getActivePrizeSerial() {
 		// TODO Auto-generated method stub
@@ -70,6 +73,12 @@ public  class PrizeSerialServiceImpl implements PrizeSerialService{
 			prizeSerial.getNumberpools().clear();
 			if(numberpoolfrom!=-1&&numberpoolto!=-1){
 				numberPoolService.saveList(numberpoolfrom, numberpoolto, numberpoolexclude);
+			}
+		}
+		if(!(prizeSerial.getSuffixnumfrom()==suffixnumfrom&&prizeSerial.getSuffixnumto()==suffixnumto&&(prizeSerial.getSuffixnumexclude()==null?"":prizeSerial.getSuffixnumexclude()).equals(numberpoolexclude))){
+			prizeSerial.getSuffixnums().clear();
+			if(suffixnumfrom!=-1&&suffixnumto!=-1){
+				suffixNumService.saveList(suffixnumfrom, suffixnumto, suffixnumexclude);
 			}
 		}
 		prizeSerial.setName(name);

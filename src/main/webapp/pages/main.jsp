@@ -445,7 +445,7 @@
 						    }
 						});
 					}else{
-						//alert("没有抽到。");
+						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确。");
 					}
 					//setPrizeuser();
 					setMusic(stopmusic);
