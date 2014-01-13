@@ -29,8 +29,11 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	@Transient
 	private String indexordername;
 	
+	
 	private String prizeserialnum;
 	private String prizeserialname;
+	
+	private long prizeid;
 	private String prizename;
 	private String prizetype;
 	private int totalprizenum;
@@ -62,6 +65,7 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	}
 	public PrizeUser(Prize prize,User user,int indexorder){
 		if(prize!=null){
+			this.prizeid=prize.getId();
 			this.jp=prize.getJp();
 			this.prizenum=prize.getPrizenum();
 			this.prizeserialnum=prize.getPrizeSerial().getNum();
@@ -85,6 +89,7 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	}
 	public PrizeUser(Prize prize,NumberPool numberPool,int indexorder){
 		if(prize!=null){
+			this.prizeid=prize.getId();
 			this.jp=prize.getJp();
 			this.prizenum=prize.getPrizenum();
 			this.prizeserialnum=prize.getPrizeSerial().getNum();
@@ -201,6 +206,13 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	}
 	public void setIndexorder(int indexorder) {
 		this.indexorder = indexorder;
+	}
+	
+	public long getPrizeid() {
+		return prizeid;
+	}
+	public void setPrizeid(long prizeid) {
+		this.prizeid = prizeid;
 	}
 	public String getIndexordername() {
 		return "第"+indexorder+"次";

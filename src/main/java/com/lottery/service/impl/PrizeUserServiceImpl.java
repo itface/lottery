@@ -1,8 +1,6 @@
 package com.lottery.service.impl;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +15,6 @@ import com.lottery.domain.Percentage;
 import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.PrizeUser;
-import com.lottery.domain.TempPrizeUser;
 import com.lottery.service.PrizeSerialService;
 import com.lottery.service.PrizeUserService;
 @Service
@@ -34,16 +31,16 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 		dao.persist(prizeUser);
 	}
 
-	@Override
-	public List<PrizeUser> findPrizeUser(String serialname) {
-		// TODO Auto-generated method stub
-		String sql = null;
-		if(serialname!=null&&!serialname.equals("")){
-			sql = "from PrizeUser t where t.prizeserialname = '"+serialname+"' order by t.prizetime desc";
-			return dao.find(sql, null);
-		}
-		return null;
-	}
+//	@Override
+//	public List<PrizeUser> findPrizeUser2(String serialname) {
+//		// TODO Auto-generated method stub
+//		String sql = null;
+//		if(serialname!=null&&!serialname.equals("")){
+//			sql = "from PrizeUser t where t.prizeserialname = '"+serialname+"' order by t.prizetime desc";
+//			return dao.find(sql, null);
+//		}
+//		return null;
+//	}
 
 	@Override
 	public List<PrizeUser> findCurrentPrizeUser() {
@@ -194,5 +191,11 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 		// TODO Auto-generated method stub
 		long num =  dao.findTotalCount("select count(*) as num from PrizeUser t where t.prizeserialnum=?1 and (t.prizetype='"+Prize.PRIZETYPE_NUMBER+"' or t.prizetype='"+Prize.PRIZETYPE_SUFFIXNUM+"')", new Object[]{serialnum});
 		return num>0?true:false;
+	}
+
+	@Override
+	public List<PrizeUser> findCurrentPrizeUserByType(long prizeid) {
+		// TODO Auto-generated method stub
+		return dao.find("from PrizeUser t where t.prizeid=?1", new Object[]{prizeid});
 	}
 }

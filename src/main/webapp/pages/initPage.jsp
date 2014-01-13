@@ -27,8 +27,8 @@
 		<table id="list"></table>
 	</div>
 	<div style='padding-top: 10px;font-size: 12px;font-family: 宋体;' class="numberpool">
-		<div>尾号范围  从：<input id='suffixnumfrom' value='${suffixnumfrom}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'>&nbsp;到&nbsp;<input id='suffixnumto' value='${suffixnumto}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'> 不包含&nbsp;<input type='text' id='suffixnumexclude' value='${suffixnumexclude}' style='width: 220px;' onchange='validateSuffixnumexclude()'>共<span class='totalsuffixnum' style='display: inline-block;width: 40px;'></span>个&nbsp;<span style='color:#ccc'>发给参与现场抽奖人员的号码的尾号</span></div>
-		<div>奖池范围 从：<input id='numberpoolfrom' value='${numberpoolfrom}' type='text' style='width: 60px;' onchange='setNumOfNumber()'>&nbsp;到&nbsp;<input id='numberpoolto' value='${numberpoolto}' type='text' style='width: 60px;' onchange='setNumOfNumber()'> 不包含&nbsp;<input type='text' id='numberpoolexclude' value='${numberpoolexclude}' style='width: 220px;' onchange='validateNumberpoolexclude()'>共<span class='totalnum' style='display: inline-block;width: 40px;'></span>个&nbsp;<span style='color:#ccc'>发给参与现场奖奖人员的号码</span></div>
+		<div>尾号范围  从：<input id='suffixnumfrom' value='${suffixnumfrom}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'>&nbsp;到&nbsp;<input id='suffixnumto' value='${suffixnumto}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'> 不包含&nbsp;<input type='text' id='suffixnumexclude' value='${suffixnumexclude}' style='width: 220px;' onchange='validateSuffixnumexclude()'>共<span class='totalsuffixnum' style='display: inline-block;width: 30px;text-align:center'></span>个&nbsp;<span style='color:#ccc'>发给参与现场抽奖人员的号码的尾号</span></div>
+		<div>奖池范围 从：<input id='numberpoolfrom' value='${numberpoolfrom}' type='text' style='width: 60px;' onchange='setNumOfNumber()'>&nbsp;到&nbsp;<input id='numberpoolto' value='${numberpoolto}' type='text' style='width: 60px;' onchange='setNumOfNumber()'> 不包含&nbsp;<input type='text' id='numberpoolexclude' value='${numberpoolexclude}' style='width: 220px;' onchange='validateNumberpoolexclude()'>共<span class='totalnum' style='display: inline-block;width: 30px;text-align:center'></span>个&nbsp;<span style='color:#ccc'>发给参与现场奖奖人员的号码</span></div>
 	</div>
 	<div style="padding-top:25px">
 		<table id="list2"></table>
@@ -58,6 +58,9 @@
 		 	initNotice();
 		 	setUserNum();
 		 	setRangeReadonly();
+		 	validateNumberpoolexclude();
+		 	validateSuffixnumexclude();
+		 	
 		 }
 		 function initNotice(){
 		 	if(uploadshow==true){
@@ -126,20 +129,42 @@
 		  }
 		  function validateNumberpoolexclude(){
 		  	var v = $('#numberpoolexclude').val();
+		  	var numberpoolfrom = $('#numberpoolfrom').val();
+			var numberpoolto = $('#numberpoolto').val();
 		  	var r=/^\d+(;\d+)*$/;
 		  	if(v!=''&&!r.test(v)){
 		  		alert('奖池范围的【不包含】必须是1个数字或者多个数字以;号分隔');
 		  		return false;
 		  	}
+		  	if(v!=''&&numberpoolfrom!=''&&numberpoolto!=''){
+		  		var arr = v.split(';');
+		  		var length = arr.length;
+		  		var num = parseInt(numberpoolto)-parseInt(numberpoolfrom)+1-length;
+				$('.totalnum').html(num);
+		  	}else if(numberpoolfrom!=''&&numberpoolto!=''){
+				var num = parseInt(numberpoolto)-parseInt(numberpoolfrom)+1;
+				$('.totalnum').html(num);
+		  	}
 		  	return true;
 		  }
 		  function validateSuffixnumexclude(){
 		  	var v = $('#suffixnumexclude').val();
+		  	var suffixnumfrom = $('#suffixnumfrom').val();
+			var suffixnumto = $('#suffixnumto').val();
 		  	var r=/^\d(;\d)*$/;
 		  	if(v!=''&&!r.test(v)){
 		  		alert('尾号范围的【不包含】必须是0到9之间的一个数字或者多个数字以;号分隔');
 		  		return false;
 		  	}
+		  	if(v!=''&&suffixnumfrom!=''&&suffixnumto!=''){
+		  		var arr = v.split(';');
+		  		var length = arr.length;
+		  		var num = parseInt(suffixnumto)-parseInt(suffixnumfrom)+1-length;
+				$('.totalsuffixnum').html(num);
+		  	}else if(suffixnumfrom!=''&&suffixnumto!=''){
+				var num = parseInt(suffixnumto)-parseInt(suffixnumfrom)+1;
+				$('.totalsuffixnum').html(num);
+			}
 		  	return true;
 		  }
 		  function setNumOfSuffixnum(){
@@ -148,8 +173,9 @@
 			var r = /^\d+$/;//非负整数
 			if(suffixnumfrom!=''&&suffixnumto!=''){
 				if(r.test(suffixnumfrom)&&r.test(suffixnumto)&&suffixnumfrom>=0&&suffixnumfrom<=9&&suffixnumto>=0&&suffixnumto<=9&&suffixnumfrom<=suffixnumto){
-					var num = parseInt(suffixnumto)-parseInt(suffixnumfrom)+1;
-					$('.totalsuffixnum').html(num);
+					//var num = parseInt(suffixnumto)-parseInt(suffixnumfrom)+1;
+					//$('.totalsuffixnum').html(num);
+					validateSuffixnumexclude();
 				}
 			}
 		  }
@@ -159,8 +185,9 @@
 			var r = /^\d+$/;//非负整数
 			if(numberpoolfrom!=''&&numberpoolto!=''){
 				if(r.test(numberpoolfrom)&&r.test(numberpoolto)&&numberpoolfrom<=numberpoolto){
-					var num = parseInt(numberpoolto)-parseInt(numberpoolfrom)+1;
-					$('.totalnum').html(num);
+					//var num = parseInt(numberpoolto)-parseInt(numberpoolfrom)+1;
+					//$('.totalnum').html(num);
+					validateNumberpoolexclude();
 				}
 			}
 		  }
@@ -218,6 +245,7 @@
 			numberpoolfrom=numberpoolfrom==''?-1:numberpoolfrom;
 			numberpoolto=numberpoolto==''?-1:numberpoolto;
 			if(pname!=null&&pname!=''&&pname!=undefined){
+				/*
 				var dataLength =$('#list').jqGrid('getRowData').length;
 				if(dataLength<1){
 					alert('请设置奖项。');
@@ -227,6 +255,7 @@
 					alert('请上传抽奖人员名单。');
 					return false;
 				}
+				*/
 				$.ajax({
 					url:'${ctx}/index/saveprizeserial',
 					type:'POST',
@@ -265,9 +294,26 @@
 				$('#tr_prizenum').show();
 				$('#tr_totalprizenum').show();
 			}else{
+				$('#prizenum').val(0);
+				$('#totalprizenum').val(0);
 				$('#tr_prizenum').hide();
 				$('#tr_totalprizenum').hide();
 			}
+		}
+		function validatePrizenum(){
+			var type = $('#prizetype').val();
+			var total = $('#totalprizenum').val();
+			var per = $('#prizenum').val();
+			if(type=='号码'&&(per==''||per<=0)){
+				return "每次中奖人数必须大于0";
+			}else if(total!=''&&total>0){
+				if(per==''||per<=0){
+					return "每次中奖人数必须大于0";
+				}else if(total%per!=0){
+					return "总中奖数必须是每次中奖数的倍数";
+				}
+			}
+			return "";
 		}
 		var basePath = '${ctx}/prizesetting';
 		jQuery("#list").jqGrid({
@@ -304,10 +350,10 @@
 			multiselect: true,
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
 		    	//editData为添加的参数，是为了让参数能正常的put到后台
-		    	$('#list').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath,viewPagerButtons:false,afterComplete:function(){jQuery("#list2").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptions();setTotalprizenumDis($('#prizetype').val());}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	$('#list').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath,viewPagerButtons:false,afterComplete:function(){jQuery("#list2").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptions();setTotalprizenumDis($('#prizetype').val());}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
 		    }
 		});
-		jQuery("#list").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:435,recreateForm:true,closeAfterAdd:true,afterComplete:function(){jQuery("#list2").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();setTotalprizenumDis($('#prizetype').val());},onclickSubmit:function(){return {list_id:0,id:0,pnum:pnum};}},{url:basePath,reloadAfterSubmit:true,jqModal:false});
+		jQuery("#list").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:435,recreateForm:true,closeAfterAdd:true,afterComplete:function(){jQuery("#list2").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();setTotalprizenumDis($('#prizetype').val());},onclickSubmit:function(){return {list_id:0,id:0,pnum:pnum};}},{url:basePath,reloadAfterSubmit:true,jqModal:false});
 		var topPagerDiv = $("#list_toppager")[0];
 		$("#edit_list_top", topPagerDiv).remove();
 		$("#list_toppager_center", topPagerDiv).remove();
@@ -351,10 +397,10 @@
 			multiselect: true,
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
 		    	//editData为添加的参数，是为了让参数能正常的put到后台
-		    	$('#list2').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST",afterComplete:function(){jQuery("#list").trigger("reloadGrid");}, url: basePath2,viewPagerButtons:false,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptions();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	$('#list2').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST",afterComplete:function(){jQuery("#list").trigger("reloadGrid");}, url: basePath2,viewPagerButtons:false,beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptions();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
 		    }
 		});
-		jQuery("#list2").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:435,recreateForm:true,closeAfterAdd:true,afterComplete:function(){jQuery("#list").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath2,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();},onclickSubmit:function(){return {list2_id:0,id:0,pnum:pnum};}},{url:basePath2,reloadAfterSubmit:true,jqModal:false});
+		jQuery("#list2").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:435,recreateForm:true,closeAfterAdd:true,afterComplete:function(){jQuery("#list").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath2,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();},onclickSubmit:function(){return {list2_id:0,id:0,pnum:pnum};}},{url:basePath2,reloadAfterSubmit:true,jqModal:false});
 		var topPagerDiv = $("#list2_toppager")[0];
 		$("#edit_list2_top", topPagerDiv).remove();
 		$("#list2_toppager_center", topPagerDiv).remove();
@@ -377,8 +423,8 @@
 		   colNames: ['ID','业务单元','地域','下限','已抽下限'],
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true, width:1,key:true},
-		   		{name:'ywdy',index:'ywdy',editable:true,edittype:'select',editoptions:{value:getYwdySelecctString()}},
-		   		{name:'region',index:'region',editable:true,edittype:'select',editoptions:{value:getRegionSelectString()}},
+		   		{name:'ywdy',index:'ywdy',editable:true,edittype:'custom',editoptions:{custom_element:my_inputOfList3,custom_value:my_valueOfList3}},
+		   		{name:'region',index:'region',editable:true,edittype:'custom',editoptions:{custom_element:my_inputOfList3,custom_value:my_valueOfList3}},
 		   		{name:'min',index:'min',editable:true,editrules:{integer:true}},
 		   		{name:'ycxx',index:'ycxx',hidden:true}
 		   	],
@@ -392,42 +438,42 @@
 			multiselect: true,
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
 		    	//editData为添加的参数，是为了让参数能正常的put到后台
-		    	$('#list3').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:350,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath3,viewPagerButtons:false,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptions();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	$('#list3').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:350,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath3,viewPagerButtons:false,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptionsOfList3();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
 		    }
 		});
-		jQuery("#list3").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:350,left:200,width:435,recreateForm:true,closeAfterAdd:true,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath3,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();},onclickSubmit:function(){return {list3_id:0,id:0,pnum:pnum};}},{url:basePath3,reloadAfterSubmit:true,jqModal:false});
+		jQuery("#list3").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:350,left:200,width:435,recreateForm:true,closeAfterAdd:true,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath3,viewPagerButtons:false,afterShowForm:function(){updateSelectOptionsOfList3();},onclickSubmit:function(){return {list3_id:0,id:0,pnum:pnum};}},{url:basePath3,reloadAfterSubmit:true,jqModal:false});
 		var topPagerDiv = $("#list3_toppager")[0];
 		$("#edit_list3_top", topPagerDiv).remove();
 		$("#list3_toppager_center", topPagerDiv).remove();
 		$("#search_list3_top").remove();
 		$(".ui-jqgrid-titlebar-close").remove();
 		$(".ui-paging-info", topPagerDiv).remove();
-		function getYwdySelecctString(){
-			var select ='';
-			$.ajax({
-				url:'${ctx}/index/getYwdySelecctString',
-				type:'GET',
-				async:false,
-				cache:false,
-				success:function(s){
-					select=s;
-				}
-			});
-			return select;
-		}
-		function getRegionSelectString(){
-			var select ='';
-			$.ajax({
-				url:'${ctx}/index/getRegionSelectString',
-				type:'GET',
-				async:false,
-				cache:false,
-				success:function(s){
-					select=s;
-				}
-			});
-			return select;
-		}
 		
+		function updateSelectOptionsOfList3(){
+			$.ajax({
+				url:'${ctx}/index/getYwdySelecctString?ywdy='+$('#ywdy').val(),
+				type:'GET',
+				async:false,
+				cache:false,
+				success:function(s){
+					$('#ywdy').html(s);
+				}
+			});
+			$.ajax({
+				url:'${ctx}/index/getRegionSelectString?region='+$('#region').val(),
+				type:'GET',
+				async:false,
+				cache:false,
+				success:function(s){
+					$('#region').html(s);
+				}
+			});
+		}
+		function my_inputOfList3(value, options) {
+			return $("<select><option value='"+value+"'>"+value+"</select>");
+		}
+		function my_valueOfList3(value) {
+			return value.val();
+		}
 </script>
 </html>

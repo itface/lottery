@@ -1,6 +1,7 @@
 package com.lottery.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -102,7 +103,6 @@ public class IndexController {
 			map.put("stopmusic", "defaultstopmusic.mp3");
 		}
 		map.put("userlist", userService.findAllActiveUserame());
-		
 		return new ModelAndView("/main",map);
 	}
 	@RequestMapping(value="/action/{prizeid}")
@@ -260,12 +260,18 @@ public class IndexController {
 		return userService.countTotalUser();
 	}
 	@RequestMapping(value="/getYwdySelecctString",method = RequestMethod.GET)
-	public @ResponseBody String getYwdySelecctString(){
-		return userService.getYwdySelecctString();
+	public @ResponseBody String getYwdySelecctString(String ywdy) throws UnsupportedEncodingException{
+		if(ywdy!=null){
+			ywdy = new String(ywdy.getBytes("ISO-8859-1"),"utf-8");
+		}
+		return userService.getYwdySelecctString(ywdy);
 	}
 	@RequestMapping(value="/getRegionSelectString",method = RequestMethod.GET)
-	public @ResponseBody String getRegionSelectString(){
-		return userService.getRegionSelectString();
+	public @ResponseBody String getRegionSelectString(String region) throws UnsupportedEncodingException{
+		if(region!=null){
+			region = new String(region.getBytes("ISO-8859-1"),"utf-8");
+		}
+		return userService.getRegionSelectString(region);
 	}
 	
 	

@@ -9,7 +9,7 @@ public interface NumberPoolService {
 
 	public void deleteAll();
 	public void saveList(int numberpoolfrom,int numberpoolto,String exclude);
-	public List<NumberPool> findAllActiveNumberPool();
+	public List<NumberPool> findAllActiveNumberPool(String serialnum);
 	public void updateNumberPoolStatus(List<NumberPool> list);
-	public List<NumberPool>  updateNumberPoolStatus(int suffixnum);
+	public List<NumberPool>  updateNumberPoolStatus(String serialnum,int suffixnum);
 }

@@ -169,28 +169,38 @@ public class UserServiceImpl implements UserService{
 		return dao.find("select t.username from User t where t.status=0", null);
 	}
 	@Override
-	public String getYwdySelecctString() {
+	public String getYwdySelecctString(String ywdy) {
 		// TODO Auto-generated method stub
 		List list = dao.find("select distinct(t.ywdy) as ywdy from User t", null);
 		if(list!=null&&list.size()>0){
-			StringBuffer sb = new StringBuffer();
+			StringBuffer sb = new StringBuffer("<option value=''>空</option>");
 			for(int i=0;i<list.size();i++){
-				sb.append(list.get(i)).append(":").append(list.get(i)).append(";");
+				String ywdy2 = (String)list.get(i);
+				if(ywdy2.equals(ywdy)){
+					sb.append("<option value='"+ywdy2+"' selected>"+ywdy2+"</option>");
+				}else{
+					sb.append("<option value='"+ywdy2+"'>"+ywdy2+"</option>");
+				}
 			}
-			return sb.substring(0, sb.lastIndexOf(";"));
+			return sb.toString();
 		}
 		return "";
 	}
 	@Override
-	public String getRegionSelectString() {
+	public String getRegionSelectString(String region) {
 		// TODO Auto-generated method stub
-		List<User> list = dao.find("select distinct(t.region) as region from User t", null);
+		List list = dao.find("select distinct(t.region) as region from User t", null);
 		if(list!=null&&list.size()>0){
-			StringBuffer sb = new StringBuffer();
+			StringBuffer sb = new StringBuffer("<option value=''>空</option>");
 			for(int i=0;i<list.size();i++){
-				sb.append(list.get(i)).append(":").append(list.get(i)).append(";");
+				String region2 = (String)list.get(i);
+				if(region2.equals(region)){
+					sb.append("<option value='"+region2+"' selected>"+region2+"</option>");
+				}else{
+					sb.append("<option value='"+region2+"'>"+region2+"</option>");
+				}
 			}
-			return sb.substring(0, sb.lastIndexOf(";"));
+			return sb.toString();
 		}
 		return "";
 	}
@@ -202,12 +212,12 @@ public class UserServiceImpl implements UserService{
 			String ywdy = balanceRule.getYwdy();
 			String region = balanceRule.getRegion();
 			if(ywdy!=null&&!"".equals(ywdy)){
-				sb.append(" and t.ywdy=").append(ywdy);
+				sb.append(" and t.ywdy='").append(ywdy).append("'");
 			}
 			if(region!=null&&!"".equals(region)){
-				sb.append(" and t.region=").append(region);
+				sb.append(" and t.region='").append(region).append("'");
 			}
-			List<User> list = dao.find("from User t where t.status=0 and t."+sb.toString(), null);
+			List<User> list = dao.find("from User t where t.status=0 "+sb.toString(), null);
 			return list;
 		}
 		return null;

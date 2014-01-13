@@ -96,8 +96,12 @@
 							if(v.indexorder!=tempindex){
 								tempindex=v.indexorder;
 								//s+='<li><a href="javascript:void(0);" style="cursor: default;">&nbsp;</a></li>';
-								if(i!=1){
+								if(i!=0){
 									s+='<li>&nbsp;</li>';
+								}else{
+									//设置奖项为上一次抽过的奖项
+									$('#prizelist').val(v.prizeid);
+									setPrizelist();
 								}
 				                s+='<li><a href="javascript:void(0);" class="prizeindex" style="cursor: default;font-size:20px;color:yellow;">'+v.prizename+'第'+v.indexorder+'次</a></li>';
 							}
@@ -332,10 +336,11 @@
 			$.dialog.data('dialog',dialog);
 		});
 		$('.initUser').bind('click',function(){
+			/*
 			if(initflag==false||initflag=='false'){
 				alert('亲，您还没有开始一次抽奖!');
 				return false;
-			}
+			}*/
 			if(confirm('是否确定要重置人员状态')){
 				$.ajax({
 						url:'${ctx}/index/inituserstatus',
@@ -348,36 +353,29 @@
 			}
 		});
 		$('.actionstart').bind('click',function(){
+			/*
 			if(initflag==false||initflag=='false'){
 				alert('亲，请到【初始化设置】里设置奖项和人员!');
 				return false;
-			}
+			}*/
 			var prize = $('#prizelist').val();
 			if(prize==null||prize==''||prize==undefined){
 				alert('请选择要抽的奖项。');
 				return false;
 			}
-			var prizenum = 10;//$('#prizenum').html();
+			$(document).lottery("start");
+			setUserlistFlag="run";
+			setMusic(startmusic);
+			$('.actionstart').css('visibility','hidden');
+			$('.actionend').css('visibility','visible');
+			/*
+			var prizenum = $('#prizenum').html();
 			if(prizenum!=null&&prizenum!=''&&parseInt(prizenum)>0){
 				$.ajax({
 					url:'${ctx}/index/checkuser?prizelength='+prizenum,
 					async:false,
 					cache:false,
 					success:function(obj){
-						/*
-						if(obj==false||obj=='false'){
-							alert("奖项的中奖名额多于抽奖的人员数。");
-							return;
-						}else{
-							$(document).lottery("start");
-							setUserlistFlag="run";
-							setMusic(startmusic);
-							$('.actionstart').css('visibility','hidden');
-							$('.actionend').css('visibility','visible');
-							//$('.userList').empty();
-							//$('.userListTable').hide();
-							$('.img').hide();
-						}*/
 						$(document).lottery("start");
 						setUserlistFlag="run";
 						setMusic(startmusic);
@@ -391,7 +389,7 @@
 			}else{
 				alert("奖项的中奖名额必须大于0。");
 				return;
-			}
+			}*/
 		});
 		$('.actionend').bind('click',function(){
 			$('.actionstart').css('visibility','visible');
@@ -404,7 +402,7 @@
 				cache:false,
 				success:function(obj){
 					var s = "<div class='wr_table userListTable'><table class='userList' border='0' cellspacing='0' cellpadding='0' width='100%'>";
-					$(document).lottery("stop");
+					$(document).lottery("init");
 					if(obj!=null&&obj.length>0){
 						$(obj).each(function(i,v){
 							if(i==0){
@@ -445,7 +443,7 @@
 						    }
 						});
 					}else{
-						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确。");
+						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确,或者所抽的奖项是否已经抽完。");
 					}
 					//setPrizeuser();
 					setMusic(stopmusic);

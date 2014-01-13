@@ -24,7 +24,10 @@ public class SuffixNumServiceServiceImpl implements SuffixNumService{
 	@Transactional
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		dao.executeUpdate("delete from SuffixNum t", null);
+		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+		if(prizeSerial!=null){
+			prizeSerial.getSuffixnums().clear();
+		}
 	}
 
 	@Override
@@ -52,21 +55,4 @@ public class SuffixNumServiceServiceImpl implements SuffixNumService{
 			}
 		}
 	}
-	@Override
-	public List<SuffixNum> findAllActiveSuffinxNum() {
-		// TODO Auto-generated method stub
-		return dao.find("from SuffixNum t where t.status=0", null);
-	}
-
-	@Override
-	@Transactional
-	public void updateSuffinxNumStatus(List<SuffixNum> list) {
-		// TODO Auto-generated method stub
-		if(list!=null&&list.size()>0){
-			for(SuffixNum suffixNum : list){
-				suffixNum.setStatus(-1);
-			}
-		}
-	}
-
 }

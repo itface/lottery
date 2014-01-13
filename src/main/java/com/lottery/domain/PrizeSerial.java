@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -155,11 +157,37 @@ public class PrizeSerial implements Serializable{
 	public void setNumberpoolexclude(String numberpoolexclude) {
 		this.numberpoolexclude = numberpoolexclude;
 	}
+	@OrderBy("id desc")
 	public Set<BalanceRule> getBalancerules() {
 		return balancerules;
 	}
 	public void setBalancerules(Set<BalanceRule> balancerules) {
 		this.balancerules = balancerules;
+	}
+	public Set<SuffixNum> getActiveSuffixNum(){
+		Set<SuffixNum> set = new HashSet<SuffixNum>();
+		if(suffixnums!=null&&suffixnums.size()>0){
+			Iterator<SuffixNum> it = suffixnums.iterator();
+			while(it.hasNext()){
+				SuffixNum suffixNum = it.next();
+				if(suffixNum.getStatus()==0){
+					set.add(suffixNum);
+				}
+			}
+		}
+		return set;
+	}
+	public void updateSuffixNum(int num){
+		Set<SuffixNum> set = new HashSet<SuffixNum>();
+		if(suffixnums!=null&&suffixnums.size()>0){
+			Iterator<SuffixNum> it = suffixnums.iterator();
+			while(it.hasNext()){
+				SuffixNum suffixNum = it.next();
+				if(suffixNum.getSuffixnum()==num){
+					suffixNum.setStatus(-1);
+				}
+			}
+		}
 	}
 	public List<Prize> getPrizes(String type) {
 		List<Prize> list = new ArrayList<Prize>();

@@ -24,6 +24,6 @@ public interface UserService {
 	public long findActiveUserNum();
 	public long countTotalUser();
 	public void getUserPercentage(Map<String,Percentage> dymap,Map<String,Percentage> ywdymap,Map<String,Percentage> usernumbermap);
-	public String getYwdySelecctString();
-	public String getRegionSelectString();
+	public String getYwdySelecctString(String ywdy);
+	public String getRegionSelectString(String region);
 }

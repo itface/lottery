@@ -15,7 +15,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name="balancerule")
-public class BalanceRule implements Serializable{
+public class BalanceRule implements Serializable,Comparable<BalanceRule>{
 
 	/**
 	 * 
@@ -80,6 +80,9 @@ public class BalanceRule implements Serializable{
 	public void setPrizeSerial(PrizeSerial prizeSerial) {
 		this.prizeSerial = prizeSerial;
 	}
-
-	
+	@Override
+	public int compareTo(BalanceRule o) {
+		// TODO Auto-generated method stub
+		return this.id-o.getId()>0?1:-1;
+	}
 }

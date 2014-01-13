@@ -24,7 +24,11 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 	@Transactional
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		dao.executeUpdate("delete from NumberPool t", null);
+		//dao.executeUpdate("delete from NumberPool t", null);
+		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+		if(prizeSerial!=null){
+			prizeSerial.getNumberpools().clear();
+		}
 	}
 
 	@Override
@@ -54,9 +58,9 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 	}
 
 	@Override
-	public List<NumberPool> findAllActiveNumberPool() {
+	public List<NumberPool> findAllActiveNumberPool(String serialnum) {
 		// TODO Auto-generated method stub
-		return dao.find("from NumberPool t where t.status=0", null);
+		return dao.find("from NumberPool t where t.status=0 and t.prizeSerial.num='"+serialnum+"'", null);
 	}
 
 	@Override
@@ -72,9 +76,9 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 
 	@Override
 	@Transactional
-	public List<NumberPool>  updateNumberPoolStatus(int suffixnum) {
+	public List<NumberPool>  updateNumberPoolStatus(String serialnum,int suffixnum) {
 		// TODO Auto-generated method stub
-		List<NumberPool> list = dao.find("from NumberPool t where  t.number like '%_"+suffixnum+"%'", null);
+		List<NumberPool> list = dao.find("from NumberPool t where  t.number like '%"+suffixnum+"' and t.status=0 and t.prizeSerial.num='"+serialnum+"'", null);
 		if(list!=null&&list.size()>0){
 			for(NumberPool numberPool : list){
 				numberPool.setStatus(-1);

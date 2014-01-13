@@ -204,20 +204,8 @@
 			start:test,
 			stop:test2,
 			init:function(){
-				 radius = 355;
-				 d = 800;
-				 dtr = Math.PI / 180;
-				 mcList = [];
-				 lasta = 1;
-				 lastb = 1;
-				 distr = true;
-				 tspeed = 15;
-				 size = 200;
-				 mouseX = 0;
-				 mouseY = 10;
-				 howElliptical = 1;
-				 aA = null;
-				 oDiv = null;
+				d=800;
+			 	tspeed=20;
 			},
 			run:function(){
 				test();

@@ -18,4 +18,5 @@ public interface PrizeService {
 	public JSONObject findAllJson(String type);
 	public String getOrderSelection(String order);
 	public long getPrizeNum(String type);
+	public boolean checkfinish(Prize prize);
 }

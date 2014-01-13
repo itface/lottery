@@ -1,5 +1,7 @@
 package com.lottery.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.sf.json.JSONObject;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lottery.dao.BaseDao;
 import com.lottery.domain.BalanceRule;
 import com.lottery.domain.Jqgrid_DataJson;
+import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.service.BalanceRuleService;
 import com.lottery.service.PrizeSerialService;
@@ -37,7 +40,14 @@ public class BalanceRuleServiceImpl implements BalanceRuleService{
 	@Override
 	public List<BalanceRule> findAll() {
 		// TODO Auto-generated method stub
-		return dao.find("from BalanceRule t", null);
+		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+		if(prizeSerial!=null){
+			List<BalanceRule> list = new ArrayList<BalanceRule>();
+			list.addAll(prizeSerial.getBalancerules());
+			Collections.sort(list);
+			return list;
+		}
+		return null;
 	}
 
 	@Override

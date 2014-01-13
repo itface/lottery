@@ -15,8 +15,10 @@ import com.lottery.dao.BaseDao;
 import com.lottery.domain.Jqgrid_DataJson;
 import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
+import com.lottery.domain.PrizeUser;
 import com.lottery.service.PrizeSerialService;
 import com.lottery.service.PrizeService;
+import com.lottery.service.PrizeUserService;
 import com.lottery.util.JsonUtils;
 @Service
 public class PrizeServiceImpl implements PrizeService{
@@ -25,6 +27,8 @@ public class PrizeServiceImpl implements PrizeService{
 	private BaseDao<Prize> dao;
 	@Autowired
 	private PrizeSerialService prizeSerialService;
+	@Autowired
+	private PrizeUserService prizeUserService;
 	
 	@Override
 	public int getPrizeOrder(long id) {
@@ -143,7 +147,7 @@ public class PrizeServiceImpl implements PrizeService{
 		// TODO Auto-generated method stub
 		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
 		if(prizeSerial!=null){
-			if(type!=null){
+			if(type!=null&&!"".equals(type)){
 				List list = prizeSerial.getPrizes(type);
 				return (list==null?0:list.size());
 			}else{
@@ -165,6 +169,25 @@ public class PrizeServiceImpl implements PrizeService{
 			return list;
 		}
 		return null;
+	}
+
+	@Override
+	public boolean checkfinish(Prize prize) {
+		// TODO Auto-generated method stub
+		if(prize!=null){
+			if(prize.getTotalprizenum()>0){
+				List<PrizeUser> list = prizeUserService.findCurrentPrizeUserByType(prize.getId());
+				if(list!=null&&list.size()>=prize.getTotalprizenum()){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+			
+		}
+		return true;
 	}
 
 }
