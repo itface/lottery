@@ -209,10 +209,11 @@
 			});
 		});
 		$('.endprize').bind('click',function(){
+			/*
 			if(initflag==false||initflag=='false'){
 				alert('亲，您还没有开始一次抽奖!');
 				return false;
-			}
+			}*/
 			if(confirm('结束抽奖后，您将只能在“历史中奖记录”中查看历史中奖记录，本批次导入的人员和初始化设置都将失效，请确认是否结束抽奖？')){
 				$(window).blockUI();
 				$.ajax({
