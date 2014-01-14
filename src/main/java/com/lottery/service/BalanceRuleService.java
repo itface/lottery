@@ -14,4 +14,7 @@ public interface BalanceRuleService {
 	public JSONObject findAllJson();
 	public void delete(String ids);
 	public void update(BalanceRule balanceRule);
+	public String getOrderSelection(String indexorder);
+	public int getBalanceRuleNum();
+	public String testBalanceRule(long id);
 }

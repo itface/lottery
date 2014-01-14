@@ -259,20 +259,11 @@ public class IndexController {
 	public @ResponseBody long getusernum(){
 		return userService.countTotalUser();
 	}
-	@RequestMapping(value="/getYwdySelecctString",method = RequestMethod.GET)
-	public @ResponseBody String getYwdySelecctString(String ywdy) throws UnsupportedEncodingException{
-		if(ywdy!=null){
-			ywdy = new String(ywdy.getBytes("ISO-8859-1"),"utf-8");
-		}
-		return userService.getYwdySelecctString(ywdy);
+	@RequestMapping(value="/getbanlanceruleSelecctString",method = RequestMethod.GET)
+	public @ResponseBody String getbanlanceruleSelecctString(String indexorder) throws UnsupportedEncodingException{
+		return balanceRuleService.getOrderSelection(indexorder);
 	}
-	@RequestMapping(value="/getRegionSelectString",method = RequestMethod.GET)
-	public @ResponseBody String getRegionSelectString(String region) throws UnsupportedEncodingException{
-		if(region!=null){
-			region = new String(region.getBytes("ISO-8859-1"),"utf-8");
-		}
-		return userService.getRegionSelectString(region);
-	}
+
 	
 	
 	@RequestMapping(value="/balancerule",method = RequestMethod.GET)
@@ -291,5 +282,9 @@ public class IndexController {
 	@RequestMapping(value=("/balancerule/{prizeid}"),method = RequestMethod.PUT)
 	public @ResponseBody void updatebalancerule(BalanceRule balanceRule){
 		balanceRuleService.update(balanceRule);
+	}
+	@RequestMapping(value="/testbalancerule",method = RequestMethod.GET)
+	public @ResponseBody String testbalancerule(long id) {
+		return balanceRuleService.testBalanceRule(id);
 	}
 }

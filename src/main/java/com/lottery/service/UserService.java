@@ -19,11 +19,10 @@ public interface UserService {
 	public List<User> findAllActiveUser();
 	public List<User> findAllActiveUserame();
 	public List<User> findActiveUserByBalanceRule(BalanceRule balanceRule);
+	public String testFindActiveUserByBalanceRule(BalanceRule balanceRule);
 	public void updateUserStatus(List<User> users);
 	public void updateAllUserStatus();
 	public long findActiveUserNum();
 	public long countTotalUser();
 	public void getUserPercentage(Map<String,Percentage> dymap,Map<String,Percentage> ywdymap,Map<String,Percentage> usernumbermap);
-	public String getYwdySelecctString(String ywdy);
-	public String getRegionSelectString(String region);
 }

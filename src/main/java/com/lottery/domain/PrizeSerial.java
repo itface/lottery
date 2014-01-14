@@ -2,6 +2,7 @@ package com.lottery.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -157,12 +158,19 @@ public class PrizeSerial implements Serializable{
 	public void setNumberpoolexclude(String numberpoolexclude) {
 		this.numberpoolexclude = numberpoolexclude;
 	}
-	@OrderBy("id desc")
 	public Set<BalanceRule> getBalancerules() {
 		return balancerules;
 	}
 	public void setBalancerules(Set<BalanceRule> balancerules) {
 		this.balancerules = balancerules;
+	}
+	public List<BalanceRule> getBalanceruleList() {
+		List<BalanceRule> list = new ArrayList<BalanceRule>();
+		if(balancerules!=null&&balancerules.size()>0){
+			list.addAll(balancerules);
+			Collections.sort(list);
+		}
+		return list;
 	}
 	public Set<SuffixNum> getActiveSuffixNum(){
 		Set<SuffixNum> set = new HashSet<SuffixNum>();

@@ -17,6 +17,7 @@ import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.service.BalanceRuleService;
 import com.lottery.service.PrizeSerialService;
+import com.lottery.service.UserService;
 import com.lottery.util.JsonUtils;
 @Service
 public class BalanceRuleServiceImpl implements BalanceRuleService{
@@ -25,6 +26,8 @@ public class BalanceRuleServiceImpl implements BalanceRuleService{
 	private BaseDao<BalanceRule> dao;
 	@Autowired
 	private PrizeSerialService prizeSerialService;
+	@Autowired
+	private UserService userService;
 	
 	@Override
 	@Transactional
@@ -32,6 +35,8 @@ public class BalanceRuleServiceImpl implements BalanceRuleService{
 		// TODO Auto-generated method stub
 		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
 		if(prizeSerial!=null){
+			int order  = balanceRule.getIndexorder();
+			dao.executeUpdate("update BalanceRule t set t.indexorder=t.indexorder+1 where t.indexorder>=?1",new Object[]{order});
 			balanceRule.setPrizeSerial(prizeSerial);
 			prizeSerial.getBalancerules().add(balanceRule);
 		}
@@ -70,7 +75,10 @@ public class BalanceRuleServiceImpl implements BalanceRuleService{
 			String[] arr = ids.split(",");
 			for(int i=0;i<arr.length;i++){
 				long id = Long.parseLong(arr[i]);
+				BalanceRule balanceRule = this.findById(id);
+				int order = balanceRule.getIndexorder();
 				dao.deleteById(BalanceRule.class, id);
+				dao.executeUpdate("update BalanceRule t set t.indexorder=t.indexorder-1 where t.indexorder>?1",new Object[]{order});
 			}
 		}
 	}
@@ -81,6 +89,14 @@ public class BalanceRuleServiceImpl implements BalanceRuleService{
 		// TODO Auto-generated method stub
 		BalanceRule b = this.findById(balanceRule.getId());
 		if(b!=null){
+			BalanceRule old = this.findById(balanceRule.getId());
+			int oldOrder = old.getIndexorder();
+			int newOrder = balanceRule.getIndexorder();
+			if(oldOrder>newOrder){
+				dao.executeUpdate("update BalanceRule t set t.indexorder=t.indexorder+1 where t.indexorder>=?1 and t.indexorder<?3 and t.id!=?2",new Object[]{newOrder,balanceRule.getId(),oldOrder});
+			}else if(oldOrder<newOrder){
+				dao.executeUpdate("update BalanceRule t set t.indexorder=t.indexorder-1 where t.indexorder<=?1 and t.indexorder>?3 and t.id!=?2",new Object[]{newOrder,balanceRule.getId(),oldOrder});
+			}
 			b.update(balanceRule);
 		}
 	}
@@ -89,6 +105,43 @@ public class BalanceRuleServiceImpl implements BalanceRuleService{
 	public BalanceRule findById(long id) {
 		// TODO Auto-generated method stub
 		return dao.findById(BalanceRule.class, id);
+	}
+
+	@Override
+	public String getOrderSelection(String indexorder) {
+		// TODO Auto-generated method stub
+		long num = this.getBalanceRuleNum();
+		StringBuffer sb = new StringBuffer("");
+		if(num>0){
+			if("".equals(indexorder)){
+				num=num+1;
+				indexorder=num+"";
+			}
+			for(int i=1;i<=num;i++){
+				String selected = (i+"").equals(indexorder)?"selected":"";
+				sb.append("<option value='"+i+"' "+selected+">"+i+"</option>");
+			}
+		}else{
+			sb.append("<option value='1'>1</option>");
+		}
+		sb.append("");
+		return sb.toString();
+	}
+
+	@Override
+	public int getBalanceRuleNum() {
+		// TODO Auto-generated method stub
+		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+		if(prizeSerial!=null){
+			return prizeSerial.getBalancerules().size();
+		}
+		return 0;
+	}
+
+	@Override
+	public String testBalanceRule(long id) {
+		// TODO Auto-generated method stub
+		return userService.testFindActiveUserByBalanceRule(this.findById(id));
 	}
 
 }

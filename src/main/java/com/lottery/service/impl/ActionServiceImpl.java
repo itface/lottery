@@ -84,19 +84,17 @@ public class ActionServiceImpl implements ActionService{
 					}
 				}
 			}else if(Prize.PRIZETYPE_USER.equals(prize.getPrizetype())){
-				Set<BalanceRule> set = prizeSerial.getBalancerules();
+				List<BalanceRule> balanceruleList = prizeSerial.getBalanceruleList();
 				//设置了分组均衡
-				if(set!=null&&set.size()>0){
-					Iterator<BalanceRule> it = set.iterator();
+				if(balanceruleList!=null&&balanceruleList.size()>0){
 					int count=0;
 					List<User> list = new ArrayList<User>();
 					//先把所有设置了分组均衡的奖先抽出来
-					while(it.hasNext()){
+					for(BalanceRule balanceRule : balanceruleList){
 						//当抽的奖多于奖项的中奖人数则抽奖完成
 						if(count>=pn){
 							break;
 						}
-						BalanceRule balanceRule = it.next();
 						int prizenum = (balanceRule.getMin()-balanceRule.getYcxx());
 						if(prizenum>0){
 							List<User> list2 = userService.findActiveUserByBalanceRule(balanceRule);

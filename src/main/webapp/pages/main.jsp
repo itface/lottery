@@ -45,8 +45,8 @@
   	
   </div>
   <div class="prizeclass jingpin" style=""></div>
-  <div class="actionend btn2" style="visibility:hidden"><a href="javascript:void(0);" ></a></div>
-  <div class="actionstart btn1" style=''><a href="javascript:void(0);" ></a></div>
+  <div class="actionend btn2" style="visibility:hidden;z-index:888;position: relative;"><a href="javascript:void(0);" ></a></div>
+  <div class="actionstart btn1" style='z-index:888;position: relative;'><a href="javascript:void(0);" ></a></div>
   <div id="tagscloud"> 
   		
   </div>

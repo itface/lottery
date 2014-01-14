@@ -25,10 +25,11 @@ public class BalanceRule implements Serializable,Comparable<BalanceRule>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	private String ywdy;
-	private String region;
+	private String rule;
 	private int min;
 	private int ycxx;
+	private int indexorder;
+	private String sm;
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "prizeserial_id", referencedColumnName = "id")
@@ -38,10 +39,11 @@ public class BalanceRule implements Serializable,Comparable<BalanceRule>{
 	public void update(BalanceRule balanceRule){
 		if(balanceRule!=null){
 			this.id=balanceRule.getId();
-			this.ywdy=balanceRule.getYwdy();
-			this.region=balanceRule.getRegion();
+			this.rule=balanceRule.getRule();
 			this.min=balanceRule.getMin();
 			this.ycxx=balanceRule.getYcxx();
+			this.indexorder=balanceRule.getIndexorder();
+			this.sm=balanceRule.getSm();
 		}
 	}
 	public long getId() {
@@ -50,17 +52,24 @@ public class BalanceRule implements Serializable,Comparable<BalanceRule>{
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getYwdy() {
-		return ywdy;
+	
+	public String getRule() {
+		return rule;
 	}
-	public void setYwdy(String ywdy) {
-		this.ywdy = ywdy;
+	public void setRule(String rule) {
+		this.rule = rule;
 	}
-	public String getRegion() {
-		return region;
+	public int getIndexorder() {
+		return indexorder;
 	}
-	public void setRegion(String region) {
-		this.region = region;
+	public void setIndexorder(int indexorder) {
+		this.indexorder = indexorder;
+	}
+	public String getSm() {
+		return sm;
+	}
+	public void setSm(String sm) {
+		this.sm = sm;
 	}
 	public int getMin() {
 		return min;
@@ -83,6 +92,6 @@ public class BalanceRule implements Serializable,Comparable<BalanceRule>{
 	@Override
 	public int compareTo(BalanceRule o) {
 		// TODO Auto-generated method stub
-		return this.id-o.getId()>0?1:-1;
+		return this.indexorder-o.getIndexorder();
 	}
 }

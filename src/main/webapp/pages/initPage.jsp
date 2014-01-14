@@ -27,8 +27,8 @@
 		<table id="list"></table>
 	</div>
 	<div style='padding-top: 10px;font-size: 12px;font-family: 宋体;' class="numberpool">
-		<div>尾号范围  从：<input id='suffixnumfrom' value='${suffixnumfrom}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'>&nbsp;到&nbsp;<input id='suffixnumto' value='${suffixnumto}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'> 不包含&nbsp;<input type='text' id='suffixnumexclude' value='${suffixnumexclude}' style='width: 220px;' onchange='validateSuffixnumexclude()'>共<span class='totalsuffixnum' style='display: inline-block;width: 30px;text-align:center'></span>个&nbsp;<span style='color:#ccc'>发给参与现场抽奖人员的号码的尾号</span></div>
-		<div>奖池范围 从：<input id='numberpoolfrom' value='${numberpoolfrom}' type='text' style='width: 60px;' onchange='setNumOfNumber()'>&nbsp;到&nbsp;<input id='numberpoolto' value='${numberpoolto}' type='text' style='width: 60px;' onchange='setNumOfNumber()'> 不包含&nbsp;<input type='text' id='numberpoolexclude' value='${numberpoolexclude}' style='width: 220px;' onchange='validateNumberpoolexclude()'>共<span class='totalnum' style='display: inline-block;width: 30px;text-align:center'></span>个&nbsp;<span style='color:#ccc'>发给参与现场奖奖人员的号码</span></div>
+		<div>尾号范围  从：<input id='suffixnumfrom' value='${suffixnumfrom}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'>&nbsp;到&nbsp;<input id='suffixnumto' value='${suffixnumto}' type='text' style='width: 60px;' onchange='setNumOfSuffixnum()'> 不包含&nbsp;<input type='text' id='suffixnumexclude' value='${suffixnumexclude}' style='width: 220px;' onchange='setNumOfSuffixnum()'>共<span class='totalsuffixnum' style='display: inline-block;width: 30px;text-align:center'></span>个&nbsp;<span style='color:#ccc'>发给参与现场抽奖人员的号码的尾号</span></div>
+		<div>奖池范围 从：<input id='numberpoolfrom' value='${numberpoolfrom}' type='text' style='width: 60px;' onchange='setNumOfNumber()'>&nbsp;到&nbsp;<input id='numberpoolto' value='${numberpoolto}' type='text' style='width: 60px;' onchange='setNumOfNumber()'> 不包含&nbsp;<input type='text' id='numberpoolexclude' value='${numberpoolexclude}' style='width: 220px;' onchange='setNumOfNumber()'>共<span class='totalnum' style='display: inline-block;width: 30px;text-align:center'></span>个&nbsp;<span style='color:#ccc'>发给参与现场奖奖人员的号码</span></div>
 	</div>
 	<div style="padding-top:25px">
 		<table id="list2"></table>
@@ -50,17 +50,16 @@
 		 
 		 var pnum=${pnum};//活动批次号
 		 var uploadshow = ${uploadshow};
-		 var usernum=0;
-		 var prizeuserofnum=${prizeuserofnum};
+		 var usernum=0;//人员池中的人数
+		 var prizeuserofnum=${prizeuserofnum};//已经抽过号码池的标识，用来标识是否允许修改尾号和号码池
 		 init();
 		 function init(){
 		 	initUplodify();
 		 	initNotice();
 		 	setUserNum();
 		 	setRangeReadonly();
-		 	validateNumberpoolexclude();
-		 	validateSuffixnumexclude();
-		 	
+		 	setNumOfSuffixnum();
+		 	setNumOfNumber();
 		 }
 		 function initNotice(){
 		 	if(uploadshow==true){
@@ -127,6 +126,7 @@
 				}
 			});
 		  }
+		  /*
 		  function validateNumberpoolexclude(){
 		  	var v = $('#numberpoolexclude').val();
 		  	var numberpoolfrom = $('#numberpoolfrom').val();
@@ -167,30 +167,87 @@
 			}
 		  	return true;
 		  }
+		  */
 		  function setNumOfSuffixnum(){
+		  	var vs = validateSuffixnum();
+			if(vs!=''){
+				return false;
+			}
+			var v = $('#suffixnumexclude').val();
 		  	var suffixnumfrom = $('#suffixnumfrom').val();
 			var suffixnumto = $('#suffixnumto').val();
-			var r = /^\d+$/;//非负整数
 			if(suffixnumfrom!=''&&suffixnumto!=''){
-				if(r.test(suffixnumfrom)&&r.test(suffixnumto)&&suffixnumfrom>=0&&suffixnumfrom<=9&&suffixnumto>=0&&suffixnumto<=9&&suffixnumfrom<=suffixnumto){
-					//var num = parseInt(suffixnumto)-parseInt(suffixnumfrom)+1;
-					//$('.totalsuffixnum').html(num);
-					validateSuffixnumexclude();
+				if(v!=''){
+			  		var arr = v.split(';');
+			  		var length = arr.length;
+			  		var num = parseInt(suffixnumto)-parseInt(suffixnumfrom)+1-length;
+					$('.totalsuffixnum').html(num);
+			  	}else{
+					var num = parseInt(suffixnumto)-parseInt(suffixnumfrom)+1;
+					$('.totalsuffixnum').html(num);
 				}
 			}
 		  }
 		  function setNumOfNumber(){
-		    var numberpoolfrom = $('#numberpoolfrom').val();
+		  	var vs = validateNumberpool();
+			if(vs!=''){
+				return false;
+			}
+		    var v = $('#numberpoolexclude').val();
+		  	var numberpoolfrom = $('#numberpoolfrom').val();
 			var numberpoolto = $('#numberpoolto').val();
-			var r = /^\d+$/;//非负整数
 			if(numberpoolfrom!=''&&numberpoolto!=''){
-				if(r.test(numberpoolfrom)&&r.test(numberpoolto)&&numberpoolfrom<=numberpoolto){
-					//var num = parseInt(numberpoolto)-parseInt(numberpoolfrom)+1;
-					//$('.totalnum').html(num);
-					validateNumberpoolexclude();
-				}
+				if(v!=''){
+			  		var arr = v.split(';');
+			  		var length = arr.length;
+			  		var num = parseInt(numberpoolto)-parseInt(numberpoolfrom)+1-length;
+					$('.totalnum').html(num);
+			  	}else{
+					var num = parseInt(numberpoolto)-parseInt(numberpoolfrom)+1;
+					$('.totalnum').html(num);
+			  	}
 			}
 		  }
+		 function validateSuffixnum(){
+		  	var suffixnumfrom = $('#suffixnumfrom').val();
+			var suffixnumto = $('#suffixnumto').val();
+			var suffixnumexclude = $('#suffixnumexclude').val();
+			var r = /^\d+$/;//非负整数
+			if(suffixnumfrom!=''&&suffixnumto!=''){
+				if(!r.test(suffixnumfrom)||!r.test(suffixnumto)||suffixnumfrom>9||suffixnumfrom<0||suffixnumto>9||suffixnumto<0){
+					return '尾号范围必须是0到9之间的整数';
+				}else if(suffixnumfrom>suffixnumto){
+					return '【尾号范围从】不能大于【尾号范围到】';
+				}
+			}else if((suffixnumfrom!=''&&suffixnumto=='')||(suffixnumfrom==''&&suffixnumto!='')||(suffixnumexclude!=''&&(suffixnumfrom==''||suffixnumto==''))){
+				return '【尾号范围】设置不完整';
+			}
+			r=/^\d(;\d)*$/;
+		  	if(suffixnumexclude!=''&&!r.test(suffixnumexclude)){
+		  		return '尾号范围的【不包含】必须是0到9之间的一个数字或者多个数字以;号分隔';
+		  	}
+			return "";
+		 }
+		 function validateNumberpool(){
+			var suffixnumfrom = $('#numberpoolfrom').val();
+			var suffixnumto = $('#numberpoolto').val();
+			var suffixnumexclude = $('#numberpoolexclude').val();
+			var r = /^\d+$/;//非负整数
+			if(suffixnumfrom!=''&&suffixnumto!=''){
+				if(!r.test(suffixnumfrom)||!r.test(suffixnumto)){
+					return '奖池范围必须是正整数';
+				}else if(suffixnumfrom>suffixnumto){
+					return '【奖池范围从】不能大于【奖池范围到】';
+				}
+			}else if((suffixnumfrom!=''&&suffixnumto=='')||(suffixnumfrom==''&&suffixnumto!='')||(suffixnumexclude!=''&&(suffixnumfrom==''||suffixnumto==''))){
+				return '【奖池范围】设置不完整';
+			}
+			r=/^\d+(;\d+)*$/;
+		  	if(suffixnumexclude!=''&&!r.test(suffixnumexclude)){
+		  		return '奖池范围的【不包含】必须是1个数字或者多个数字以;号分隔';
+		  	}
+			return "";
+		 }
 		function saveData(){
 			var pname = $('#name').val();
 			var suffixnumfrom = $('#suffixnumfrom').val();
@@ -199,36 +256,14 @@
 			var numberpoolfrom = $('#numberpoolfrom').val();
 			var numberpoolto = $('#numberpoolto').val();
 			var numberpoolexclude = $('#numberpoolexclude').val();
-			var r = /^\d+$/;//非负整数
-			if(suffixnumfrom!=''&&(!r.test(suffixnumfrom)||suffixnumfrom>9)){
-					alert('尾号范围必须是0到9之间的整数');
-					return false;
-			}
-			if(suffixnumto!=''&&(!r.test(suffixnumto)||(suffixnumto>9)||(suffixnumfrom>suffixnumto))){
-				alert('【尾号范围到】必须是大于等于【尾号范围从】的整数');
+			var vs = validateSuffixnum();
+			if(vs!=''){
+				alert(vs);
 				return false;
 			}
-			if((suffixnumfrom!=''&&suffixnumto=='')||(suffixnumfrom==''&&suffixnumto!='')){
-				alert('【尾号范围】设置不完整');
-				return false;
-			}
-			
-			if(numberpoolfrom!=''&&(!r.test(numberpoolfrom))){
-				alert('奖池范围必须是整数');
-				return false;
-			}
-			if(numberpoolto!=''&&(!r.test(numberpoolto)||(numberpoolfrom>numberpoolto))){
-				alert('【奖池范围到】必须是大于等于【奖池范围从】的整数');
-				return false;
-			}
-			if((numberpoolto!=''&&numberpoolfrom=='')||(numberpoolto==''&&numberpoolfrom!='')){
-				alert('【尾号范围】设置不完整');
-				return false;
-			}
-			if(!validateNumberpoolexclude()){
-				return false;
-			}
-			if(!validateSuffixnumexclude()){
+			vs = validateNumberpool();
+			if(vs!=''){
+				alert(vs);
 				return false;
 			}
 			if((suffixnumfrom!=''&&suffixnumto!='')&&(numberpoolfrom==''&&numberpoolto=='')){
@@ -380,7 +415,7 @@
 		   		{name:'status',index:'status',hidden:true},
 		   		{name:'prizetype',hidden:true,index:'prizetype',editable:true,editoptions:{value:"用户"}},
 		   		{name:'prizename',index:'prizename',editable:true,editrules:{required:true}},
-		   		{name:'totalprizenum',index:'totalprizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>为空，不限制抽奖次数</span>" }},
+		   		{name:'totalprizenum',index:'totalprizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>为0时不限制抽奖次数</span>" }},
 		   		{name:'prizenum',index:'prizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>总中奖数必须是每次中奖数的倍数</span>" }},
 		   		{name:'jp',index:'jp',editable:true,editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},
 		   		{name:'jppic',index:'jppic',width:200,editable:true},
@@ -420,13 +455,17 @@
 			autowidth: false,
 		    width:920,
 		   	height:110,
-		   colNames: ['ID','业务单元','地域','下限','已抽下限'],
+		   colNames: ['ID','测试','规则','下限','已抽数量','顺序','说明'],
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true, width:1,key:true},
-		   		{name:'ywdy',index:'ywdy',editable:true,edittype:'custom',editoptions:{custom_element:my_inputOfList3,custom_value:my_valueOfList3}},
-		   		{name:'region',index:'region',editable:true,edittype:'custom',editoptions:{custom_element:my_inputOfList3,custom_value:my_valueOfList3}},
-		   		{name:'min',index:'min',editable:true,editrules:{integer:true}},
-		   		{name:'ycxx',index:'ycxx',hidden:true}
+		   		//{name:'ywdy',index:'ywdy',editable:true,edittype:'custom',editoptions:{custom_element:my_inputOfList3,custom_value:my_valueOfList3}},
+		   		//{name:'region',index:'region',editable:true,edittype:'custom',editoptions:{custom_element:my_inputOfList3,custom_value:my_valueOfList3}},
+		   		{name:'act',index:'act',editable:false},
+		   		{name:'rule',index:'rule',editable:true,editoptions:{size:50},editrules:{required:true}},
+		   		{name:'min',index:'min',editable:true,editrules:{integer:true,required:true}},
+		   		{name:'ycxx',index:'ycxx',editable:true,editoptions:{readonly:true}},
+		   		{name:'indexorder',index:'indexorder',editable:true,edittype:'custom',editoptions:{custom_element:my_inputOfList3,custom_value:my_valueOfList3}},
+		   		{name:'sm',index:'sm',editable:true,editoptions:{size:50}}
 		   	],
 		   	pginput:false,
 		   	toppager: true,
@@ -436,36 +475,48 @@
 		    editurl:'',
 		    caption:'设置分组均衡规则(按条件分组并设置每组中奖人数下限)',
 			multiselect: true,
+			gridComplete: function(){
+				var ids = jQuery("#list3").jqGrid('getDataIDs');
+				for(var i=0;i < ids.length;i++){
+					var cl = ids[i];
+					var be = "<input type='button' value='测试' onclick='test("+cl+")'/>"; 
+					jQuery("#list3").jqGrid('setRowData',ids[i],{act:be});
+				}	
+				
+			},
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
-		    	//editData为添加的参数，是为了让参数能正常的put到后台
-		    	$('#list3').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:350,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath3,viewPagerButtons:false,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptionsOfList3();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	//只有允许修改人员的时候可以修改分组均衡
+		    	if(uploadshow==true){
+		    		$('#list3').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:350,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath3,viewPagerButtons:false,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptionsOfList3();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	}
 		    }
 		});
-		jQuery("#list3").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:350,left:200,width:435,recreateForm:true,closeAfterAdd:true,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath3,viewPagerButtons:false,afterShowForm:function(){updateSelectOptionsOfList3();},onclickSubmit:function(){return {list3_id:0,id:0,pnum:pnum};}},{url:basePath3,reloadAfterSubmit:true,jqModal:false});
+		jQuery("#list3").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:350,left:200,width:435,recreateForm:true,closeAfterAdd:true,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath3,viewPagerButtons:false,afterShowForm:function(){updateSelectOptionsOfList3();},onclickSubmit:function(){return {list3_id:0,id:0,ycxx:0,pnum:pnum};}},{url:basePath3,reloadAfterSubmit:true,jqModal:false});
 		var topPagerDiv = $("#list3_toppager")[0];
 		$("#edit_list3_top", topPagerDiv).remove();
 		$("#list3_toppager_center", topPagerDiv).remove();
 		$("#search_list3_top").remove();
 		$(".ui-jqgrid-titlebar-close").remove();
 		$(".ui-paging-info", topPagerDiv).remove();
-		
-		function updateSelectOptionsOfList3(){
+		function test(id){//testbalancerule
 			$.ajax({
-				url:'${ctx}/index/getYwdySelecctString?ywdy='+$('#ywdy').val(),
+				url:'${ctx}/index/testbalancerule?id='+id,
 				type:'GET',
 				async:false,
 				cache:false,
 				success:function(s){
-					$('#ywdy').html(s);
+					alert(s);
 				}
 			});
+		}
+		function updateSelectOptionsOfList3(){
 			$.ajax({
-				url:'${ctx}/index/getRegionSelectString?region='+$('#region').val(),
+				url:'${ctx}/index/getbanlanceruleSelecctString?indexorder='+$('#indexorder').val(),
 				type:'GET',
 				async:false,
 				cache:false,
 				success:function(s){
-					$('#region').html(s);
+					$('#indexorder').html(s);
 				}
 			});
 		}
