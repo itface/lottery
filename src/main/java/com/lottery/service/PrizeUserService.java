@@ -8,7 +8,7 @@ import com.lottery.domain.PrizeUser;
 
 public interface PrizeUserService {
 
-	public List<PrizeUser> getPrizeUserList();
+	public List<PrizeUser> getPrizeUserList(String type);
 	public void addPrizeUser(PrizeUser prizeUser);
 	//public List<PrizeUser> findPrizeUser2(String serialnum);
 	public List<PrizeUser> findCurrentPrizeUser();

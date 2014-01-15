@@ -271,9 +271,23 @@
 				return false;
 			}
 			var arr = $('#list').jqGrid('getRowData');
-			if(arr.length>0&&(numberpoolfrom==''||numberpoolto=='')){
-				alert('设置了现场奖项，【奖池范围】不能为空');
-				return false;
+			if(arr.length>0){
+				if(numberpoolfrom==''||numberpoolto==''){
+					alert('设置了现场奖项，【奖池范围】不能为空');
+					return false;
+				}else{
+					var f = false;
+					$(arr).each(function(i,v){
+						if(v.prizetype=="尾号"&&(suffixnumfrom==''||suffixnumto=='')){
+							alert('设置了类型为【尾号】的奖项，【尾号范围】不能为空');
+							f=true;
+							return false;
+						}
+					});
+					if(f){
+						return false;
+					}
+				}
 			}
 			suffixnumfrom=suffixnumfrom==''?-1:suffixnumfrom;
 			suffixnumto=suffixnumto==''?-1:suffixnumto;

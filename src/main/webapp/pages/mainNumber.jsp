@@ -14,12 +14,43 @@
 <script src="<c:url value='/resources/script/zzsc/zzsc.js'/>" type="text/javascript"></script>
 <script src="<c:url value='/resources/script/zzsc/menu.js'/>" type="text/javascript"></script>
 <style>
-
+/*basic reset*/
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+	background: black;
+}
+canvas {
+	display: block;
+}
+.logo{ background:url(${ctx}/resources/images/logo.png) no-repeat; width:181px; height:68px; position:absolute; top:20px; left:20px;}
+.left {
+	position:absolute;
+	top:120px;
+	left:20px;
+	width:470px;
+	background:#000;
+	font-size:30px;
+	line-height:34px;
+	color:#0F0;
+	padding:20px;
+}
+.left li {
+	list-style:none
+}
+.left li a {
+	color:#0f0;
+	text-decoration:none;
+	float:left;
+	padding:0px 10px
+}
 </style>
 </head>
-<body  style='background:url(${ctx}/resources/bg/${bgname})'>
+<body>
+<canvas id="c"></canvas>
 <div style="display:block" id="musicplayer"></div>
-<div class="title" style="display:none">${title}</div>
 <ul id="jsddm">
   <li><a href="javascript:void(0);" style="background:url(${ctx}/resources/images/cog.png) no-repeat" >&nbsp;</a>
     <ul>
@@ -34,22 +65,17 @@
       <li>&nbsp;</li>
     </ul>
 </ul>
-<div class="div_left">
-
+<div class="left">
 </div>
-
-
+<div style="position:absolute; top:100px; right:50px; ">
+  <div class="actionend btn2"  style="visibility:hidden;"><a href="javascript:void(0);"></a></div>
+  <div class="actionstart btn1" ><a href="javascript:void(0);"></a></div>
+</div>
 <div class="div_right">
   <div class="select">
     <form:select id="prizelist" class="select1"  name="prizelist" path="prizelist"  items="${prizelist}" itemValue="id" itemLabel="prizelistlabel"/>
-  	
   </div>
   <div class="prizeclass jingpin" style=""></div>
-  <div class="actionend btn2" style="visibility:hidden;z-index:888;position: relative;"><a href="javascript:void(0);" ></a></div>
-  <div class="actionstart btn1" style='z-index:888;position: relative;'><a href="javascript:void(0);" ></a></div>
-  <div id="tagscloud"> 
-  		
-  </div>
 </div>
 	<script>
 	
@@ -57,35 +83,61 @@
 		var initflag = ${initflag};
 		var prizelistjson = ${prizelistjson};
 		var prizeid = ${prizeid};
-		var userlist = '${userlist}';
 		var bgmusic='${bgmusic}';
 		var startmusic='${startmusic}';
 		var stopmusic='${stopmusic}';
+		//效果所用到的参数
+		var drops = [];
+		var font_size = 20;
+		var chinese = "348034823482304832048470147014714017428239452393274369147104734724237413470".split("");
 		init();
 		function init(){
-			window.onload=setPrizelist;
+			window.onload=setPrizelist;//设置当前奖项的名称
+			initdrawnum();
+			setInterval(dodrawnum, 90);
 			$('#jsddm').easymenu();
-			initLottery();
-			setPrizeuser();
+			setPrizeuser();//设置获奖名单
 			setMusic(bgmusic);
 		}
-		function initLottery(){
-			if(userlist!=null&&userlist!=""&&userlist!="null"&&userlist!="[]"){
-				var arr = (userlist.replace("[","").replace("]","")).split(",");
-				$(document).lottery(arr);
-			}else{
-				$(document).lottery(new Array());
+		function initdrawnum(){
+			var c = document.getElementById("c");
+			var ctx = c.getContext("2d");
+			c.height = window.innerHeight;
+			c.width = window.innerWidth;
+			
+			
+			var columns = c.width / font_size; //number of columns for the rain
+			for (var x = 0; x < columns; x++)
+				drops[x] = 1;
+		}
+		function dodrawnum() {
+			var c = document.getElementById("c");
+			var ctx = c.getContext("2d");
+			ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+			ctx.fillRect(0, 0, c.width, c.height);
+			ctx.fillStyle = "#0F0"; 
+			ctx.font = font_size + "px arial";
+			for (var i = 0; i < drops.length; i++) {	
+				var text = chinese[Math.floor(Math.random() * chinese.length)];		
+				ctx.fillText(text, i * font_size, drops[i] * font_size);
+				if (drops[i] * font_size > c.height && Math.random() > 0.975)
+					drops[i] = 0;
+				drops[i]++;
 			}
+		}
+		function speed1(){
+			setInterval(dodrawnum, 3);
 		}
 		function setPrizeuser(){
 			$.ajax({
-				url:'${ctx}/index/prizeuserlist?type=user',
+				url:'${ctx}/index/prizeuserlist?type=num',
 				async:false,
 				cache:false,
 				success:function(obj){
 					if(obj!=null&&obj.length>0){
 						var tempindex = 0;
 						var s = "";
+						var suffixnums={};
 						$(obj).each(function(i,v){
 							if(v.indexorder!=tempindex){
 								tempindex=v.indexorder;
@@ -97,11 +149,19 @@
 									//$('#prizelist').val(v.prizeid);
 									//setPrizelist();
 								}
-				                s+='<li><a href="javascript:void(0);" class="prizeindex" style="cursor: default;font-size:20px;color:yellow;">'+v.prizename+'第'+v.indexorder+'次</a></li>';
+				                s+='<li><a href="javascript:void(0);"  style="cursor: default;clear:both; width:400px;"><span style="display:inline-block; ">'+v.prizename+'第'+v.indexorder+'次</span></a></li>';
 							}
-							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:30px;">'+v.username+'</span><span style="font-size:20px">&nbsp;'+v.usernumber+'</span><span style="font-size:20px">&nbsp;'+v.region+'</span><span style="font-size:20px;">&nbsp;'+v.ywdy+'</span></a></li>';
+							if(v.prizetype=='尾号'){
+								var suffixnum = v.uid.substring(v.uid.length-1);
+								if(suffixnums[suffixnum]!=suffixnum){
+									suffixnums[suffixnum]=suffixnum;
+									s+='<li><a href="javascript:void(0);" style="cursor: default;">'+suffixnum+'</a></li>';
+								}
+							}else{
+								s+='<li><a href="javascript:void(0);" style="cursor: default;">'+v.username+'</a></li>';
+							}
 						});
-						$('.div_left').html(s);
+						$('.left').html(s);
 					}
 				}
 			});
@@ -132,38 +192,8 @@
 			         sound.loop='loop';
 			         sound.autoplay='autoplay';
 				}
-				/*
-				var s = "<audio src='${ctx}/resources/music/"+musicname+"' loop  autoplay></audio>";
-				$('.musicplayer').empty();
-				 $('.musicplayer').show();
-				$('.musicplayer').append(s);
-				if ( $.browser.mozilla)
-		 				audiojs.createAll();
-				 $('.musicplayer').hide();
-				 */
 			}
-			//var audio = a[0];
-			 //audio.playPause();
-			 
-			/*
-			var a = audiojs.createAll();
-			var audio = a[0];
-			 audio.playPause();
-			 */
-			
 		}
-		/*
-		$(".btn2").click(function(){
-			 //$('#tagscloud').hide(),
-			  setUserlistFlag="stop";
-			  $('.wr_table').fadeIn(1000);
-		}),
-		 $(".btn1").click(function(){
-			 //$('#tagscloud').show(),
-			 setUserlistFlag="run";
-			 $('.wr_table').hide()
-		})
-		*/
 		$('.bgsetting').bind('click',function(){
 			var dialog = $.dialog({
 		 		id:'dia',
@@ -233,9 +263,18 @@
 			var id = prizeid;
 			$("#prizelist").val(id);
 			if(prizelistjson!=null&&prizelistjson!=''&&prizelistjson!=[]){
+				$('.img').show();
 				$(prizelistjson).each(function(i,v){
 					if(v['id']==id){
+						/*
+						var jppic = v['jppic'];
+						if(jppic!=''){
+							$('.img').attr('src','${ctx}/resources/prizepic/'+jppic);
+						}else{
+							$('.img').attr('src','${ctx}/resources/prizepic/default.png');
+						}*/
 						$('.prizeclass').html(v['prizename']);
+						//$('.prizeclass').html(v['prizename']+'中奖：<span id="prizenum">'+v['prizenum']+"</span>人<br>奖品："+v['jp']);
 					}
 				});
 			}
@@ -351,44 +390,20 @@
 				alert('请选择要抽的奖项。');
 				return false;
 			}
-			$(document).lottery("start");
+			speed1();
 			setMusic(startmusic);
 			$('.actionstart').css('visibility','hidden');
 			$('.actionend').css('visibility','visible');
-			/*
-			var prizenum = $('#prizenum').html();
-			if(prizenum!=null&&prizenum!=''&&parseInt(prizenum)>0){
-				$.ajax({
-					url:'${ctx}/index/checkuser?prizelength='+prizenum,
-					async:false,
-					cache:false,
-					success:function(obj){
-						$(document).lottery("start");
-						setUserlistFlag="run";
-						setMusic(startmusic);
-						$('.actionstart').css('visibility','hidden');
-						$('.actionend').css('visibility','visible');
-						//$('.userList').empty();
-						//$('.userListTable').hide();
-						$('.img').hide();
-					}
-				});
-			}else{
-				alert("奖项的中奖名额必须大于0。");
-				return;
-			}*/
 		});
 		$('.actionend').bind('click',function(){
 			$('.actionstart').css('visibility','visible');
 			$('.actionend').css('visibility','hidden');
-			//$('.userListTable').show();
 			$.ajax({
 				url:'${ctx}/index/action/'+$('#prizelist').val(),
 				async:false,
 				cache:false,
 				success:function(obj){
 					var s = "<div class='wr_table userListTable'><table class='userList' border='0' cellspacing='0' cellpadding='0' width='100%'>";
-					$(document).lottery("init");
 					if(obj!=null&&obj.length>0){
 						$(obj).each(function(i,v){
 							if(i==0){

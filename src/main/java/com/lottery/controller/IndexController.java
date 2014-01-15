@@ -55,55 +55,85 @@ public class IndexController {
 	private BalanceRuleService balanceRuleService;
 	
 	@RequestMapping
-	public ModelAndView index(HttpServletRequest request){
+	public ModelAndView index(String id,HttpServletRequest request){
 		Map<String,Object> map = new HashMap<String,Object>();
-		List<Prize> list = prizeSettingService.findAll();
-		if(list!=null&&list.size()>0){
-			JsonConfig config = new JsonConfig();
-			config.setExcludes(new String[]{"prizeSerial","prizelistlabel"});
-			JSONArray jsonlist = JSONArray.fromObject(list,config);
-			map.put("prizelistjson", jsonlist);
-		}else{
-			map.put("prizelistjson", "[]");
-		}
-		map.put("prizelist", list==null?new ArrayList():list);
-		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
-		long usernum = userService.findActiveUserNum();
-		if(prizeSerial!=null&&prizeSerial.getName()!=null&&!"".equals(prizeSerial.getName())&&usernum>0){
-			map.put("initflag",true);
-		}else{
-			map.put("initflag",false);
-		}
-		map.put("title", prizeSerial==null?"":prizeSerial.getName());
 		String basePath = request.getSession().getServletContext().getRealPath("/");
-		String savePath = basePath+File.separator+"resources"+File.separator+"bg";
-		File bg = new File(savePath +File.separator+ "bg.jpg");
-		if(bg.exists()){
-			map.put("bgname", "bg.jpg");
-		}else{
-			map.put("bgname", "defaultbg.jpg");
+		{//检查是否初始化过
+			PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+			//long usernum = userService.findActiveUserNum();
+			if(prizeSerial!=null&&prizeSerial.getName()!=null&&!"".equals(prizeSerial.getName())){
+				map.put("initflag",true);
+				map.put("title", prizeSerial==null?"":prizeSerial.getName());
+			}else{
+				map.put("initflag",false);
+			}
 		}
-		savePath = basePath+File.separator+"resources"+File.separator+"music";
-		bg = new File(savePath +File.separator+ "bgmusic.mp3");
-		if(bg.exists()){
-			map.put("bgmusic", "bgmusic.mp3");
-		}else{
-			map.put("bgmusic", "defaultbgmusic.mp3");
+		{//奖项
+			List<Prize> list = prizeSettingService.findAll();
+			//增加空选项
+			Prize prize = new Prize();
+			prize.setId(0);
+			prize.setPrizetype("");
+			prize.setIndexorder(0);
+			prize.setPrizename("空");
+			if(list!=null&&list.size()>0){
+				list.add(prize);
+				Collections.sort(list);
+				JsonConfig config = new JsonConfig();
+				config.setExcludes(new String[]{"prizeSerial","prizelistlabel"});
+				JSONArray jsonlist = JSONArray.fromObject(list,config);
+				map.put("prizelistjson", jsonlist);
+				map.put("prizelist",list);
+			}else{
+				list = new ArrayList<Prize>();
+				list.add(prize);
+				map.put("prizelistjson", "[]");
+				map.put("prizelist",list);
+			}
 		}
-		bg = new File(savePath +File.separator+ "startmusic.mp3");
-		if(bg.exists()){
-			map.put("startmusic", "startmusic.mp3");
-		}else{
-			map.put("startmusic", "defaultstartmusic.mp3");
+		{//设置背景图
+			String savePath = basePath+File.separator+"resources"+File.separator+"bg";
+			File bg = new File(savePath +File.separator+ "bg.jpg");
+			if(bg.exists()){
+				map.put("bgname", "bg.jpg");
+			}else{
+				map.put("bgname", "defaultbg.jpg");
+			}
 		}
-		bg = new File(savePath +File.separator+ "stopmusic.mp3");
-		if(bg.exists()){
-			map.put("stopmusic", "stopmusic.mp3");
-		}else{
-			map.put("stopmusic", "defaultstopmusic.mp3");
+		{//设置音乐
+			String savePath = basePath+File.separator+"resources"+File.separator+"music";
+			File bg = new File(savePath +File.separator+ "bgmusic.mp3");
+			if(bg.exists()){
+				map.put("bgmusic", "bgmusic.mp3");
+			}else{
+				map.put("bgmusic", "defaultbgmusic.mp3");
+			}
+			bg = new File(savePath +File.separator+ "startmusic.mp3");
+			if(bg.exists()){
+				map.put("startmusic", "startmusic.mp3");
+			}else{
+				map.put("startmusic", "defaultstartmusic.mp3");
+			}
+			bg = new File(savePath +File.separator+ "stopmusic.mp3");
+			if(bg.exists()){
+				map.put("stopmusic", "stopmusic.mp3");
+			}else{
+				map.put("stopmusic", "defaultstopmusic.mp3");
+			}
 		}
-		map.put("userlist", userService.findAllActiveUserame());
-		return new ModelAndView("/main",map);
+		if(id!=null&&!"".equals(id)&&!"0".equals(id)){
+			Prize prize = prizeSettingService.findById(Long.parseLong(id));
+			if(prize!=null){
+				map.put("prizeid",id);
+				if(Prize.PRIZETYPE_USER.equals(prize.getPrizetype())){
+					map.put("userlist", userService.findAllActiveUserame());
+					return new ModelAndView("/mainUser",map);
+				}else if(Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())||Prize.PRIZETYPE_NUMBER.equals(prize.getPrizetype())){
+					return new ModelAndView("/mainNumber",map);
+				}
+			}
+		}
+		return new ModelAndView("/mainBlank",map);
 	}
 	@RequestMapping(value="/action/{prizeid}")
 	public @ResponseBody Object action(@PathVariable long prizeid){
@@ -129,7 +159,7 @@ public class IndexController {
 			map.put("numberpoolfrom", currentPrizeSerial.getNumberpoolfrom()==-1?"":currentPrizeSerial.getNumberpoolfrom());
 			map.put("numberpoolto", currentPrizeSerial.getNumberpoolto()==-1?"":currentPrizeSerial.getNumberpoolto());
 			map.put("numberpoolexclude", currentPrizeSerial.getNumberpoolexclude());
-			List<PrizeUser> prizeUserlist = prizeUserService.findCurrentPrizeUser();
+			//List<PrizeUser> prizeUserlist = prizeUserService.findCurrentPrizeUser();
 			if(prizeUserService.ifHavePrizeUserOfNum(currentPrizeSerial.getNum())){
 				map.put("prizeuserofnum", true);
 			}else{
@@ -252,8 +282,8 @@ public class IndexController {
 		return true;
 	}
 	@RequestMapping(value="/prizeuserlist",method = RequestMethod.GET)
-	public @ResponseBody Object prizeuserlist(){
-		return prizeUserService.getPrizeUserList();
+	public @ResponseBody Object prizeuserlist(String type){
+		return prizeUserService.getPrizeUserList(type);
 	}
 	@RequestMapping(value="/getusernum",method = RequestMethod.GET)
 	public @ResponseBody long getusernum(){

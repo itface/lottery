@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import com.lottery.domain.Percentage;
 import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.PrizeUser;
+import com.lottery.domain.SuffixNum;
 import com.lottery.service.PrizeSerialService;
 import com.lottery.service.PrizeUserService;
 @Service
@@ -146,38 +148,15 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 			}
 		}
 	}
-
-	public List<PrizeUser> getPrizeUserList(){
-		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
-		if(prizeSerial!=null){
-			String serialnum = prizeSerial.getNum();
-			return dao.find("from PrizeUser t where t.prizeserialnum=?1 order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum});
-		}
-		return null;
-//		List<PrizeUser> list = this.findCurrentPrizeUser();
-//		if(list!=null&&list.size()>0){
-//			List<TempPrizeUser> tempPrizeUserList = new ArrayList<TempPrizeUser>();
-//			Map<String,Integer> map = new HashMap<String,Integer>();
-//			for(PrizeUser prizeUser : list){
-//				String key = prizeUser.getPrizeid()+"@"+prizeUser.getIndexorder();
-//				
-//				if(map.containsKey(key)){
-//					int tempindex = map.get(key);
-//					map.put(key, tempindex+1);
-//				}else{
-//					map.put(key, 1);
-//				}
-//			}
-//			for(PrizeUser prizeUser : list){
-//				String key = prizeUser.getPrizeid()+"@"+prizeUser.getIndexorder();
-//				TempPrizeUser tempPrizeUser = new TempPrizeUser(prizeUser.getPrizename(),map.get(key),prizeUser);
-//				tempPrizeUserList.add(tempPrizeUser);
-//			}
-//			Collections.sort(tempPrizeUserList);
-//			return tempPrizeUserList;
+//
+//	public List<PrizeUser> getPrizeUserList(){
+//		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+//		if(prizeSerial!=null){
+//			String serialnum = prizeSerial.getNum();
+//			return dao.find("from PrizeUser t where t.prizeserialnum=?1 order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum});
 //		}
 //		return null;
-	}
+//	}
 
 	@Override
 	public boolean ifHavePrizeUserOfUser(String serialnum) {
@@ -197,5 +176,22 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 	public List<PrizeUser> findCurrentPrizeUserByType(long prizeid) {
 		// TODO Auto-generated method stub
 		return dao.find("from PrizeUser t where t.prizeid=?1", new Object[]{prizeid});
+	}
+
+	@Override
+	public List<PrizeUser> getPrizeUserList(String type) {
+		// TODO Auto-generated method stub
+		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+		if(prizeSerial!=null){
+			String serialnum = prizeSerial.getNum();
+			if(Prize.PRIZETYPE_URL_USER.equals(type)){
+				return dao.find("from PrizeUser t where t.prizeserialnum=?1 and t.prizetype=?2 order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum,Prize.PRIZETYPE_USER});
+			}else if(Prize.PRIZETYPE_URL_NOT_USER.equals(type)){
+				return dao.find("from PrizeUser t where t.prizeserialnum=?1 and (t.prizetype=?2 or t.prizetype=?3) order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum,Prize.PRIZETYPE_SUFFIXNUM,Prize.PRIZETYPE_NUMBER});
+			}else{
+				return dao.find("from PrizeUser t where t.prizeserialnum=?1 order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum});
+			}
+		}
+		return null;
 	}
 }

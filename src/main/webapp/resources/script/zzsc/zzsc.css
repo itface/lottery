@@ -104,6 +104,10 @@ a:hover {
 	padding:5px;
 	width:140px;
 }
+.select1>option {
+	background-color:#000; 
+	color:#fff;
+}
 .btn1 {
 	background:url(../../images/start.png);
 	width:147px;
