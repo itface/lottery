@@ -79,7 +79,7 @@ public class ActionServiceImpl implements ActionService{
 							prizeUsers.add(prizeUser);
 						}
 						numberPoolService.updateNumberPoolStatus(list2);
-						Collections.sort(prizeUsers);
+						//Collections.sort(prizeUsers);
 						return prizeUsers;
 					}
 				}
@@ -137,7 +137,7 @@ public class ActionServiceImpl implements ActionService{
 							prizeUsers.add(prizeUser);
 						}
 						userService.updateUserStatus(list);
-						Collections.sort(prizeUsers);
+						//Collections.sort(prizeUsers);
 						return prizeUsers;
 					}
 				}else{
@@ -153,7 +153,7 @@ public class ActionServiceImpl implements ActionService{
 								prizeUsers.add(prizeUser);
 							}
 							userService.updateUserStatus(users);
-							Collections.sort(prizeUsers);
+							//Collections.sort(prizeUsers);
 							return prizeUsers;
 						}
 					}

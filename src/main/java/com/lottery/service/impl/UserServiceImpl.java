@@ -192,7 +192,7 @@ public class UserServiceImpl implements UserService{
 				sb.append(" and ").append(rule).append(" ");
 			}
 			long num = dao.findTotalCount("select count(*) as num from User t where t.status=0 "+sb.toString(), null);
-			return num+"";
+			return "符合该条件的人员数："+num;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
