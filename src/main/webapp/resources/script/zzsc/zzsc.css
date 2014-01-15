@@ -93,12 +93,12 @@ a:hover {
 	background:#0099ff;
 }
 .select {
-	bottom: 30px;
+	top: 200px;
 	right: 60px;
 	position:absolute;
 	color:#fff;
 	filter: alpha(opacity=15);
-	opacity:0.15;
+	opacity:0.10;
 }
 .select1 {
 	padding:5px;
@@ -124,7 +124,7 @@ a:hover {
 }
 .div_left {
 	width:450px;
-	height:730px;
+	height:710px;
 	position:absolute;
 	top:0px;
 	left:0px;
@@ -151,8 +151,8 @@ a:hover {
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	bottom: 180px;
-	right: 130px;
+	top: 40px;
+	right: 200px;
 	z-index: 999999;
 }
 #jsddm li {
@@ -185,8 +185,8 @@ a:hover {
 }
 #jsddm li ul li a {
 	width: auto;
-	height:15px;
-	line-height:15px;
+	height:25px;
+	line-height:25px;
 	background: #76818b;
 	color: #fff;
 	width:120px;

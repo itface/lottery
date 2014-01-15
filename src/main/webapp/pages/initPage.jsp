@@ -486,7 +486,7 @@
 			},
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
 		    	//只有允许修改人员的时候可以修改分组均衡
-		    	if(uploadshow==true){
+		    	if(uploadshow==false){
 		    		$('#list3').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:350,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath3,viewPagerButtons:false,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptionsOfList3();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
 		    	}
 		    }
@@ -510,6 +510,7 @@
 			});
 		}
 		function updateSelectOptionsOfList3(){
+			
 			$.ajax({
 				url:'${ctx}/index/getbanlanceruleSelecctString?indexorder='+$('#indexorder').val(),
 				type:'GET',
@@ -519,6 +520,7 @@
 					$('#indexorder').html(s);
 				}
 			});
+			$('#tr_ycxx').hide();
 		}
 		function my_inputOfList3(value, options) {
 			return $("<select><option value='"+value+"'>"+value+"</select>");

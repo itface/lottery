@@ -316,7 +316,7 @@
 		    	top: '1%',
 			    min:false,
 			    max:false,
-			    cancel:true,
+			    cancel:false,
 			    background: '#FFF',
 			    opacity: 0.5,
 			    content: 'url:${ctx}/index/initpage',
@@ -327,13 +327,11 @@
 			    button:[{
 					name: '保存',
 					callback: function(){window.frames["dia"].saveData();return false;}
-				}
-				/*,{
+				},{
 					name: '取消',
 					callback: function(){this.close();},
-				}*/]
+				}]
 			});
-			$("input:button[value='确定']").val("取消");
 			$.dialog.data('dialog',dialog);
 		});
 		$('.initUser').bind('click',function(){
