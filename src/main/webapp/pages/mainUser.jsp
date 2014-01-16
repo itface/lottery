@@ -46,7 +46,7 @@
   </div>
   <div class="prizeclass jingpin" style=""></div>
   <div class="actionend btn2" style="visibility:hidden;z-index:888;position: relative;"><a href="javascript:void(0);" ></a></div>
-  <div class="actionstart btn1" style='z-index:888;position: relative;'><a href="javascript:void(0);" ></a></div>
+  <div class="actionstart btn1" style='z-index:888;position: relative;visibility:${actionstartbtnshow}'><a href="javascript:void(0);" ></a></div>
   <div id="tagscloud"> 
   		
   </div>
@@ -97,9 +97,9 @@
 									//$('#prizelist').val(v.prizeid);
 									//setPrizelist();
 								}
-				                s+='<li><a href="javascript:void(0);" class="prizeindex" style="cursor: default;font-size:20px;color:yellow;">'+v.prizename+'第'+v.indexorder+'次</a></li>';
+				                s+='<li><a href="javascript:void(0);" class="prizeindex" style="cursor: default;font-size:20px;font-size: 29px;">'+v.prizename+'&nbsp;第'+v.sameprizeindexorder+'次</a></li>';
 							}
-							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:30px;">'+v.username+'</span><span style="font-size:20px">&nbsp;'+v.usernumber+'</span><span style="font-size:20px">&nbsp;'+v.region+'</span><span style="font-size:20px;">&nbsp;'+v.ywdy+'</span></a></li>';
+							s+='<li><a href="javascript:void(0);" style="cursor: default;color:yellow;"><span style="font-size:29px;">'+v.username+'</span><span style="font-size:20px">&nbsp;'+v.usernumber+'</span><span style="font-size:20px">&nbsp;'+v.region+'</span><span style="font-size:20px;">&nbsp;'+v.ywdy+'</span></a></li>';
 						});
 						$('.div_left').html(s);
 					}

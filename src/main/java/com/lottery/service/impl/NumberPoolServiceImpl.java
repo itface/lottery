@@ -88,4 +88,10 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 		 //dao.executeUpdate("update NumberPool t set t.status=-1 where t.number like '%_"+suffixnum+"%'",null);
 	}
 
+	@Override
+	public long findAllActiveNumberPoolNum(String serialnum) {
+		// TODO Auto-generated method stub
+		return dao.findTotalCount("select count(*) as num from NumberPool t where t.status=0 and t.prizeSerial.num='"+serialnum+"'", null);
+	}
+
 }

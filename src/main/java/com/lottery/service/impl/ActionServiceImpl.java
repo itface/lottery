@@ -1,8 +1,6 @@
 package com.lottery.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +19,6 @@ import com.lottery.service.ActionService;
 import com.lottery.service.NumberPoolService;
 import com.lottery.service.PrizeService;
 import com.lottery.service.PrizeUserService;
-import com.lottery.service.SuffixNumService;
 import com.lottery.service.UserService;
 import com.lottery.util.RandomNumUtil;
 @Service
@@ -48,6 +45,7 @@ public class ActionServiceImpl implements ActionService{
 			int prizecount = prizeSerial.getPrizecount();
 			int pn = prize.getPrizenum();
 			List<PrizeUser> prizeUsers = new ArrayList<PrizeUser>();
+			int sameprizecount = (int)prizeUserService.countPrizeUserByType(prizeId, prizeSerial.getNum());
 			RandomNumUtil util = new RandomNumUtil();
 			if(Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())){
 				Set<SuffixNum> set = prizeSerial.getActiveSuffixNum();
@@ -58,10 +56,15 @@ public class ActionServiceImpl implements ActionService{
 						prizeSerial.updateSuffixNum((int)n);
 						List<NumberPool> list = numberPoolService.updateNumberPoolStatus(prizeSerial.getNum(),(int)n);
 						if(list!=null&&list.size()>0){
+							boolean tempflag = true;
 							for(NumberPool numberPool : list){
-								PrizeUser prizeUser = new PrizeUser(prize,numberPool,prizecount+1);
+								PrizeUser prizeUser = new PrizeUser(prize,numberPool,prizecount+1,sameprizecount+1);
 								prizeUserService.addPrizeUser(prizeUser);
-								prizeUsers.add(prizeUser);
+								if(tempflag){
+									//抽尾号时，只返回第一个中奖对象
+									prizeUsers.add(prizeUser);
+									tempflag=false;
+								}
 							}
 							return prizeUsers;
 						}
@@ -74,7 +77,7 @@ public class ActionServiceImpl implements ActionService{
 					if(list2!=null&&list2.size()>0){
 						prizeSerial.setPrizecount(prizecount+1);
 						for(NumberPool numberPool : list2){
-							PrizeUser prizeUser = new PrizeUser(prize,numberPool,prizecount+1);
+							PrizeUser prizeUser = new PrizeUser(prize,numberPool,prizecount+1,sameprizecount+1);
 							prizeUserService.addPrizeUser(prizeUser);
 							prizeUsers.add(prizeUser);
 						}
@@ -132,7 +135,7 @@ public class ActionServiceImpl implements ActionService{
 					if(list!=null&&list.size()>0){
 						prizeSerial.setPrizecount(prizecount+1);
 						for(User user:list){
-							PrizeUser prizeUser = new PrizeUser(prize,user,prizecount+1);
+							PrizeUser prizeUser = new PrizeUser(prize,user,prizecount+1,sameprizecount+1);
 							prizeUserService.addPrizeUser(prizeUser);
 							prizeUsers.add(prizeUser);
 						}
@@ -148,7 +151,7 @@ public class ActionServiceImpl implements ActionService{
 						if(users!=null&&users.size()>0){
 							prizeSerial.setPrizecount(prizecount+1);
 							for(User user:users){
-								PrizeUser prizeUser = new PrizeUser(prize,user,prizecount+1);
+								PrizeUser prizeUser = new PrizeUser(prize,user,prizecount+1,sameprizecount+1);
 								prizeUserService.addPrizeUser(prizeUser);
 								prizeUsers.add(prizeUser);
 							}
@@ -161,6 +164,34 @@ public class ActionServiceImpl implements ActionService{
 			}
 		}
 		return null;
+	}
+
+
+	@Override
+	public boolean checkActionFlag(long prizeId) {
+		// TODO Auto-generated method stub
+		Prize prize = prizeService.findById(prizeId);
+		if(prize!=null&&!prizeService.checkfinish(prize)){
+			int pn = prize.getPrizenum();
+			PrizeSerial prizeSerial = prize.getPrizeSerial();
+			if(Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())){
+				Set<SuffixNum> set = prizeSerial.getActiveSuffixNum();
+				if(set!=null&&set.size()>0){
+					return true;
+				}
+			}else if(Prize.PRIZETYPE_NUMBER.equals(prize.getPrizetype())){
+				long num = numberPoolService.findAllActiveNumberPoolNum(prizeSerial.getNum());
+				if(num>0&&num>=pn){
+					return true;
+				}
+			}else if(Prize.PRIZETYPE_USER.equals(prize.getPrizetype())){
+				long num = userService.findActiveUserNum();
+				if(num>0&&num>=pn){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

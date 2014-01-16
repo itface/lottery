@@ -26,6 +26,7 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date prizetime;
 	private int indexorder;
+	private int sameprizeindexorder;
 	@Transient
 	private String indexordername;
 	
@@ -63,7 +64,7 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	public PrizeUser(){
 		
 	}
-	public PrizeUser(Prize prize,User user,int indexorder){
+	public PrizeUser(Prize prize,User user,int indexorder,int sameprizeindexorder){
 		if(prize!=null){
 			this.prizeid=prize.getId();
 			this.jp=prize.getJp();
@@ -86,8 +87,9 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 		}
 		this.prizetime=new Date();
 		this.indexorder=indexorder;
+		this.sameprizeindexorder=sameprizeindexorder;
 	}
-	public PrizeUser(Prize prize,NumberPool numberPool,int indexorder){
+	public PrizeUser(Prize prize,NumberPool numberPool,int indexorder,int sameprizeindexorder){
 		if(prize!=null){
 			this.prizeid=prize.getId();
 			this.jp=prize.getJp();
@@ -110,6 +112,7 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 		}
 		this.prizetime=new Date();
 		this.indexorder=indexorder;
+		this.sameprizeindexorder=sameprizeindexorder;
 	}
 	public long getId() {
 		return id;
@@ -233,6 +236,14 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	public void setTotalprizenum(int totalprizenum) {
 		this.totalprizenum = totalprizenum;
 	}
+	
+	public int getSameprizeindexorder() {
+		return sameprizeindexorder;
+	}
+	public void setSameprizeindexorder(int sameprizeindexorder) {
+		this.sameprizeindexorder = sameprizeindexorder;
+	}
+	
 	@Override
 	public int compareTo(PrizeUser o) {
 		// TODO Auto-generated method stub

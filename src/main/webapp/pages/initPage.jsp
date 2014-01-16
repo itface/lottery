@@ -234,7 +234,7 @@
 			var suffixnumexclude = $('#numberpoolexclude').val();
 			var r = /^\d+$/;//非负整数
 			if(suffixnumfrom!=''&&suffixnumto!=''){
-				if(!r.test(suffixnumfrom)||!r.test(suffixnumto)){
+				if(!r.test(suffixnumfrom)||!r.test(suffixnumto)||suffixnumfrom<=0){
 					return '奖池范围必须是正整数';
 				}else if(suffixnumfrom>suffixnumto){
 					return '【奖池范围从】不能大于【奖池范围到】';
@@ -500,7 +500,7 @@
 			},
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
 		    	//只有允许修改人员的时候可以修改分组均衡
-		    	if(uploadshow==false){
+		    	if(uploadshow==true){
 		    		$('#list3').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:350,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath3,viewPagerButtons:false,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptionsOfList3();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
 		    	}
 		    }

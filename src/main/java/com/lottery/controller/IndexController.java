@@ -75,7 +75,7 @@ public class IndexController {
 			prize.setId(0);
 			prize.setPrizetype("");
 			prize.setIndexorder(0);
-			prize.setPrizename("空");
+			prize.setPrizename("空闲");
 			if(list!=null&&list.size()>0){
 				list.add(prize);
 				Collections.sort(list);
@@ -124,7 +124,9 @@ public class IndexController {
 		if(id!=null&&!"".equals(id)&&!"0".equals(id)){
 			Prize prize = prizeSettingService.findById(Long.parseLong(id));
 			if(prize!=null){
+				boolean flag = actionService.checkActionFlag(prize.getId());
 				map.put("prizeid",id);
+				map.put("actionstartbtnshow",flag?"visible":"hidden");
 				if(Prize.PRIZETYPE_USER.equals(prize.getPrizetype())){
 					map.put("userlist", userService.findAllActiveUserame());
 					return new ModelAndView("/mainUser",map);

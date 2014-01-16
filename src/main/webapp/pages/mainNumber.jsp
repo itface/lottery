@@ -35,7 +35,7 @@ canvas {
 	font-size:30px;
 	line-height:34px;
 	color:#0F0;
-	padding:20px;
+	padding-bottom:10px;
 }
 .left li {
 	list-style:none
@@ -46,10 +46,28 @@ canvas {
 	float:left;
 	padding:0px 10px
 }
+.resultmsgheader{
+	text-align:center;
+	line-height: 60px;
+	height: 60px;
+	font-weight: bold;
+	font-size: 30px;
+	font-family: 微软雅黑;
+	margin-top: -140px;
+}
+.resultmsgbody{
+	font-family: 微软雅黑;
+	color: red;
+	font-size: 30px;
+	line-height: 50px;
+	width:120px;
+	float:left;
+}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
+<div class="suffixnum" style="font-size:800px; position:absolute; color:#0f0; top:20px; left:50%;display:none;margin-left:-400px;  z-index:99999"></div>
 <div style="display:block" id="musicplayer"></div>
 <ul id="jsddm">
   <li><a href="javascript:void(0);" style="background:url(${ctx}/resources/images/cog.png) no-repeat" >&nbsp;</a>
@@ -65,11 +83,13 @@ canvas {
       <li>&nbsp;</li>
     </ul>
 </ul>
-<div class="left">
+<div class="logo"></div>
+<div class="left" >
+<!-- height: 860px;overflow: hidden; -->
 </div>
 <div style="position:absolute; top:100px; right:50px; ">
   <div class="actionend btn2"  style="visibility:hidden;"><a href="javascript:void(0);"></a></div>
-  <div class="actionstart btn1" ><a href="javascript:void(0);"></a></div>
+  <div class="actionstart btn1" style="visibility:${actionstartbtnshow}"><a href="javascript:void(0);"></a></div>
 </div>
 <div class="div_right">
   <div class="select">
@@ -138,30 +158,33 @@ canvas {
 						var tempindex = 0;
 						var s = "";
 						var suffixnums={};
+						var prizecount={};
 						$(obj).each(function(i,v){
-							if(v.indexorder!=tempindex){
-								tempindex=v.indexorder;
-								//s+='<li><a href="javascript:void(0);" style="cursor: default;">&nbsp;</a></li>';
-								if(i!=0){
-									s+='<li>&nbsp;</li>';
-								}else{
-									//设置奖项为上一次抽过的奖项
-									//$('#prizelist').val(v.prizeid);
-									//setPrizelist();
-								}
-				                s+='<li><a href="javascript:void(0);"  style="cursor: default;clear:both; width:400px;"><span style="display:inline-block; ">'+v.prizename+'第'+v.indexorder+'次</span></a></li>';
-							}
 							if(v.prizetype=='尾号'){
 								var suffixnum = v.uid.substring(v.uid.length-1);
 								if(suffixnums[suffixnum]!=suffixnum){
 									suffixnums[suffixnum]=suffixnum;
-									s+='<li><a href="javascript:void(0);" style="cursor: default;">'+suffixnum+'</a></li>';
+									//s+='<li>&nbsp;</li>';
+									//s+='<li><a href="javascript:void(0);" style="cursor: default;">尾号：'+suffixnum+'</a></li>';
+									s+='<li><a href="javascript:void(0);"  style="cursor: default;clear:both; width:400px; padding-top: 20px;"><span style="display:inline-block;color:white">'+v.prizename+'&nbsp;第'+v.sameprizeindexorder+'次&nbsp;&nbsp;</span>尾号：'+suffixnum+'</a></li>';
 								}
 							}else{
-								s+='<li><a href="javascript:void(0);" style="cursor: default;">'+v.username+'</a></li>';
+								if(v.indexorder!=tempindex){
+									tempindex=v.indexorder;
+									if(i!=0){
+										s+='<li>&nbsp;</li>';
+									}
+									s+='<li><a href="javascript:void(0);"  style="cursor: default;clear:both; width:400px; padding-top: 20px;padding-bottom: 10px;"><span style="display:inline-block;color:white ">'+v.prizename+'&nbsp;第'+v.sameprizeindexorder+'次</span></a></li>';
+								}
+								s+='<li><a href="javascript:void(0);" style="cursor: default;padding-bottom: 10px;inline-block;width:72px">'+v.username+'</a></li>';
 							}
 						});
 						$('.left').html(s);
+						var height = $('.left').height();
+						if(height>=860){
+							$('.left').height(860);
+							$('.left').css('overflow','hidden');
+						}
 					}
 				}
 			});
@@ -379,6 +402,10 @@ canvas {
 				});
 			}
 		});
+		$('.suffixnum').bind('dblclick',function(){
+			$('.suffixnum').hide();
+			location=location;
+		});
 		$('.actionstart').bind('click',function(){
 			/*
 			if(initflag==false||initflag=='false'){
@@ -403,46 +430,47 @@ canvas {
 				async:false,
 				cache:false,
 				success:function(obj){
-					var s = "<div class='wr_table userListTable'><table class='userList' border='0' cellspacing='0' cellpadding='0' width='100%'>";
+					var s = "<div style='width:600px'>";
+					var numberflag=false;
 					if(obj!=null&&obj.length>0){
 						$(obj).each(function(i,v){
-							if(i==0){
-									s += "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.prizename+"——"+v.indexordername+"</td></tr>";
-									s += '<tr class="wr-table-hd-inner">';
-									s += '<td width="50px">序号</td>';
-									s += '<td width="100px">姓名</td>';
-									s += '<td width="100px">员工编号</td>';
-									s += '<td width="100px">地域</td>';
-									s += '<td width="150px">业务单元</td>';
-									
-									s += '</tr>';
+							if(v.prizetype=='尾号'){
+								var suffixnum = v.uid.substring(v.uid.length-1);
+								$('.suffixnum').html(suffixnum);
+								$('.suffixnum').show();
+							}else{
+								numberflag=true;
+								if(i==0){
+									s+="<div class='resultmsgheader'>"+v.prizename+" 等"+v.sameprizeindexorder+"次，中奖号码：</div>";
+									s+="<div>";
+									s+="<div class='resultmsgbody'>"+v.uid+"</div>";
+								}else if(i%4==0){
+									s+="<div class='resultmsgbody'>"+v.uid+"</div>";
+									s+="</div>";
+								}else{
+									s+="<div class='resultmsgbody'>"+v.uid+"</div>";
+								}
 							}
-							s += '<tr class="wr-table-td-inner wr-table-tr-row">';
-							s += '<td>'+(i+1)+'</td>';
-							s += '<td>'+(v['username']==null?'':v['username'])+'</td>';
-							s += '<td>'+(v['usernumber']==null?'':v['usernumber'])+'</td>';
-							s += '<td>'+(v['region']==null?'':v['region'])+'</td>';
-							s += '<td>'+(v['ywdy2']==null?'':v['ywdy'])+'</td>';
-							s += '</tr>';
 						});
-						s+="</table></div>";
-						//$('.userList').html(s);
-						var dialog = $.dialog({
-					 		id:'dia',
-						    lock: true,
-						    width: 900,
-					    	height: 400,
-						    min:false,
-						    max:false,
-						    cancel:true,
-						    background: '#FFF',
-						    opacity: 0.5,
-						    content: s,
-						    title:'获奖名单',
-						    close:function(){
-						    	location=location;
-						    }
-						});
+						s+="</div>";
+						if(numberflag){
+							var dialog = $.dialog({
+						 		id:'dia',
+							    lock: true,
+							    width: 700,
+						    	height: 400,
+							    min:false,
+							    max:false,
+							    cancel:true,
+							    background: '#FFF',
+							    opacity: 0.5,
+							    content: s,
+							    title:'',
+							    close:function(){
+							    	location=location;
+							    }
+							});
+						}
 					}else{
 						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确,或者所抽的奖项是否已经抽完。");
 					}

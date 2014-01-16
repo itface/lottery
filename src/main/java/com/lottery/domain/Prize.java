@@ -139,7 +139,7 @@ public class Prize implements Serializable,Comparable<Prize>{
 		this.totalprizenum = totalprizenum;
 	}
 	public String getPrizelistlabel() {
-		return prizename+"_"+prizenum;
+		return totalprizenum+"_"+prizename+"_"+prizenum;
 	}
 	public void setPrizelistlabel(String prizelistlabel) {
 		this.prizelistlabel = prizelistlabel;

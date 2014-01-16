@@ -194,4 +194,10 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 		}
 		return null;
 	}
+
+	@Override
+	public long countPrizeUserByType(long prizeid,String serialnum) {
+		// TODO Auto-generated method stub
+		return dao.findTotalCount("select count(distinct t.indexorder) as num from PrizeUser t where t.prizeid=?1 and t.prizeserialnum=?2", new Object[]{prizeid,serialnum});
+	}
 }

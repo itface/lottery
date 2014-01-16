@@ -39,7 +39,7 @@ a:hover {
 	right: 75px;
 	position: absolute;
 	color: #fff;
-	font-size: 40px;
+	font-size: 50px;
 	font-weight: bold;
 }
 #tagscloud {
@@ -128,14 +128,14 @@ a:hover {
 }
 .div_left {
 	width:450px;
-	height:710px;
+	height:860px;
 	position:absolute;
 	top:0px;
 	left:0px;
 	font-size:14px;
 	padding:10px;
 	color:#fff;
-	padding-top: 200px;
+	padding-top: 130px;
 	padding-left: 20px;
 	overflow:hidden;
 }

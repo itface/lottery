@@ -10,7 +10,7 @@ public interface PrizeUserService {
 
 	public List<PrizeUser> getPrizeUserList(String type);
 	public void addPrizeUser(PrizeUser prizeUser);
-	//public List<PrizeUser> findPrizeUser2(String serialnum);
+	public long countPrizeUserByType(long prizeid,String serialnum);
 	public List<PrizeUser> findCurrentPrizeUser();
 	public List<PrizeUser> findPrizeUserBySerialnum(String serialnum);
 	public void getUserPercentage(Map<String,Percentage> dymap,Map<String,Percentage> ywdymap,Map<String,Percentage> usernumbermap);
