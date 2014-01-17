@@ -1,13 +1,13 @@
 package com.lottery.service.impl;
 
-import java.util.List;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lottery.dao.BaseDao;
-import com.lottery.domain.NumberPool;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.SuffixNum;
 import com.lottery.service.PrizeSerialService;
@@ -54,5 +54,12 @@ public class SuffixNumServiceServiceImpl implements SuffixNumService{
 				prizeSerial.getSuffixnums().add(suffixNum);
 			}
 		}
+	}
+
+	@Override
+	public long getYcNum(String serialnum) {
+		// TODO Auto-generated method stub
+		
+		return dao.findTotalCount("select count(*) as num from SuffixNum t where t.status=-1 and t.prizeSerial.num=?1", new Object[]{serialnum});
 	}
 }

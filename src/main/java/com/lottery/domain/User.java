@@ -29,18 +29,12 @@ public class User implements Serializable,Comparable<User>{
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
  
-	@NotEmpty(message = "帐号不可以为空")
-	@Pattern(regexp = "[^'<>=\\\\]*", message = "帐号不能包含特殊字符")
-	@Length(max=100,message="帐号长度不能超过100")
-	@Column(name="uid",length = 100, unique = true)
+//	@NotEmpty(message = "帐号不可以为空")
+//	@Pattern(regexp = "[^'<>=\\\\]*", message = "帐号不能包含特殊字符")
+//	@Length(max=100,message="帐号长度不能超过100")
+//	@Column(name="uid",length = 100, unique = true)
 	private String uid;
-
 	private String usernumber;
-	
-    @NotEmpty(message = "姓名不可以为空")
-    @Pattern(regexp = "[^'<>=\\\\]*", message = "姓名不能包含特殊字符")
-    @Length(max=100,message="姓名长度不能超过100")
-    @Column(name="username",length = 100)
     private String username;
     private String dept;
     private String region;

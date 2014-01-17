@@ -9,7 +9,7 @@
 	 var lasta = 1;
 	 var lastb = 1;
 	 var distr = true;
-	 var tspeed = 20;
+	 var tspeed = 30;
 	 var size = 200;
 	 var mouseX = 0;
 	 var mouseY = 10;
@@ -18,7 +18,7 @@
 	 var oDiv = null;
 	 function test(){
 	 	d=700;
-	 	tspeed=300;
+	 	tspeed=700;
 	 }
 	 function test2(){
 	 	tspeed=0;

@@ -11,6 +11,20 @@
 </style>
 </head>
 <body>
+	<div>
+		抽奖活动：2014金山年会（批号）
+	</div>
+	<div>
+		三等奖 第一次 尾号：9
+	</div>
+	<div>
+		三等奖 第一次 尾号：7
+	</div>
+	<div>
+		二等奖 第一次 
+		1234  5678  8970  6767  5443
+		1234  5678  8970  6767  5443
+	</div>
 	<div class="wr_table" style="width:1150px;">
 		<table style='border-collapse: collapse;' border="0" cellspacing="0" cellpadding="0" width="100%">
 			<thead class="wr_table_header">

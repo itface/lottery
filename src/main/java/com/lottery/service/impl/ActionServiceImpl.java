@@ -19,6 +19,7 @@ import com.lottery.service.ActionService;
 import com.lottery.service.NumberPoolService;
 import com.lottery.service.PrizeService;
 import com.lottery.service.PrizeUserService;
+import com.lottery.service.SuffixNumService;
 import com.lottery.service.UserService;
 import com.lottery.util.RandomNumUtil;
 @Service
@@ -32,6 +33,8 @@ public class ActionServiceImpl implements ActionService{
 	private PrizeUserService prizeUserService;
 	@Autowired
 	private NumberPoolService numberPoolService;
+	@Autowired
+	private SuffixNumService suffixNumService;
 
 
 	@Override
@@ -48,25 +51,28 @@ public class ActionServiceImpl implements ActionService{
 			int sameprizecount = (int)prizeUserService.countPrizeUserByType(prizeId, prizeSerial.getNum());
 			RandomNumUtil util = new RandomNumUtil();
 			if(Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())){
-				Set<SuffixNum> set = prizeSerial.getActiveSuffixNum();
-				if(set!=null&&set.size()>0){
-					long n = util.getRandomOfSuffixnum(set, prizeSerial.getSuffixnumfrom(), prizeSerial.getSuffixnumto());
-					if(n!=-1){
-						prizeSerial.setPrizecount(prizecount+1);
-						prizeSerial.updateSuffixNum((int)n);
-						List<NumberPool> list = numberPoolService.updateNumberPoolStatus(prizeSerial.getNum(),(int)n);
-						if(list!=null&&list.size()>0){
-							boolean tempflag = true;
-							for(NumberPool numberPool : list){
-								PrizeUser prizeUser = new PrizeUser(prize,numberPool,prizecount+1,sameprizecount+1);
-								prizeUserService.addPrizeUser(prizeUser);
-								if(tempflag){
-									//抽尾号时，只返回第一个中奖对象
-									prizeUsers.add(prizeUser);
-									tempflag=false;
+				long num = suffixNumService.getYcNum(prizeSerial.getNum());
+				if(prize.getTotalprizenum()==0||num<prize.getTotalprizenum()){
+					Set<SuffixNum> set = prizeSerial.getActiveSuffixNum();
+					if(set!=null&&set.size()>0){
+						long n = util.getRandomOfSuffixnum(set, prizeSerial.getSuffixnumfrom(), prizeSerial.getSuffixnumto());
+						if(n!=-1){
+							prizeSerial.setPrizecount(prizecount+1);
+							prizeSerial.updateSuffixNum((int)n);
+							List<NumberPool> list = numberPoolService.updateNumberPoolStatus(prizeSerial.getNum(),(int)n);
+							if(list!=null&&list.size()>0){
+								boolean tempflag = true;
+								for(NumberPool numberPool : list){
+									PrizeUser prizeUser = new PrizeUser(prize,numberPool,prizecount+1,sameprizecount+1);
+									prizeUserService.addPrizeUser(prizeUser);
+									if(tempflag){
+										//抽尾号时，只返回第一个中奖对象
+										prizeUsers.add(prizeUser);
+										tempflag=false;
+									}
 								}
+								return prizeUsers;
 							}
-							return prizeUsers;
 						}
 					}
 				}
@@ -175,9 +181,12 @@ public class ActionServiceImpl implements ActionService{
 			int pn = prize.getPrizenum();
 			PrizeSerial prizeSerial = prize.getPrizeSerial();
 			if(Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())){
-				Set<SuffixNum> set = prizeSerial.getActiveSuffixNum();
-				if(set!=null&&set.size()>0){
-					return true;
+				long num = suffixNumService.getYcNum(prizeSerial.getNum());
+				if(prize.getTotalprizenum()==0||num<prize.getTotalprizenum()){
+					Set<SuffixNum> set = prizeSerial.getActiveSuffixNum();
+					if(set!=null&&set.size()>0){
+						return true;
+					}
 				}
 			}else if(Prize.PRIZETYPE_NUMBER.equals(prize.getPrizetype())){
 				long num = numberPoolService.findAllActiveNumberPoolNum(prizeSerial.getNum());

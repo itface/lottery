@@ -59,9 +59,12 @@ public class UserServiceImpl implements UserService{
 	public void updateUserStatus(List<User> users) {
 		// TODO Auto-generated method stub
 		if(users!=null&&users.size()>0){
+			StringBuffer sb = new StringBuffer(" and t.uid in ('-1'");
 			for(User user : users){
-				user.setStatus(-1);
+				sb.append(",'").append(user.getUid()).append("'");
 			}
+			sb.append(")");
+			dao.executeUpdate("update User t set t.status=-1 where 1=1 "+sb.toString(), null);
 		}
 	}
 	@Override

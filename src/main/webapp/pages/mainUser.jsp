@@ -34,7 +34,7 @@
       <li>&nbsp;</li>
     </ul>
 </ul>
-<div class="div_left">
+<div class="div_left" style="">
 
 </div>
 
@@ -97,9 +97,9 @@
 									//$('#prizelist').val(v.prizeid);
 									//setPrizelist();
 								}
-				                s+='<li><a href="javascript:void(0);" class="prizeindex" style="cursor: default;font-size:20px;font-size: 29px;">'+v.prizename+'&nbsp;第'+v.sameprizeindexorder+'次</a></li>';
+				                s+='<li><a href="javascript:void(0);" class="prizeindex" style="cursor: default;font-size:20px;font-size: 30px;color:yellow;">'+v.prizename+'&nbsp;第'+v.sameprizeindexorder+'次</a></li>';
 							}
-							s+='<li><a href="javascript:void(0);" style="cursor: default;color:yellow;"><span style="font-size:29px;">'+v.username+'</span><span style="font-size:20px">&nbsp;'+v.usernumber+'</span><span style="font-size:20px">&nbsp;'+v.region+'</span><span style="font-size:20px;">&nbsp;'+v.ywdy+'</span></a></li>';
+							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:30px;">'+v.username+'</span><span style="font-size:20px">&nbsp;'+v.usernumber+'</span><span style="font-size:20px">&nbsp;'+v.region+'</span><span style="font-size:20px;">&nbsp;'+v.ywdy+'</span></a></li>';
 						});
 						$('.div_left').html(s);
 					}
@@ -428,6 +428,7 @@
 						    	location=location;
 						    }
 						});
+						 $('.ui_title_bar').hide();
 					}else{
 						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确,或者所抽的奖项是否已经抽完。");
 					}

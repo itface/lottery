@@ -65,9 +65,9 @@ canvas {
 }
 </style>
 </head>
-<body>
+<body style="overflow:hidden">
 <canvas id="c"></canvas>
-<div class="suffixnum" style="font-size:800px; position:absolute; color:#0f0; top:20px; left:50%;display:none;margin-left:-400px;  z-index:99999"></div>
+<div class="suffixnum" style="font-size:1000px; position:absolute; color:#0f0; top:-140px; left:50%;display:none;margin-left:-300px;  z-index:99999"></div>
 <div style="display:block" id="musicplayer"></div>
 <ul id="jsddm">
   <li><a href="javascript:void(0);" style="background:url(${ctx}/resources/images/cog.png) no-repeat" >&nbsp;</a>
@@ -438,6 +438,7 @@ canvas {
 								var suffixnum = v.uid.substring(v.uid.length-1);
 								$('.suffixnum').html(suffixnum);
 								$('.suffixnum').show();
+								$('.actionstart').css('visibility','hidden');
 							}else{
 								numberflag=true;
 								if(i==0){
@@ -470,6 +471,7 @@ canvas {
 							    	location=location;
 							    }
 							});
+							$('.ui_title_bar').hide();
 						}
 					}else{
 						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确,或者所抽的奖项是否已经抽完。");

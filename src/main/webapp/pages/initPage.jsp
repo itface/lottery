@@ -341,28 +341,43 @@
 		function setTotalprizenumDis(v){
 			if(v=='号码'){
 				$('#tr_prizenum').show();
-				$('#tr_totalprizenum').show();
+				//$('#tr_totalprizenum').show();
 			}else{
 				$('#prizenum').val(0);
-				$('#totalprizenum').val(0);
+				//$('#totalprizenum').val(0);
 				$('#tr_prizenum').hide();
-				$('#tr_totalprizenum').hide();
+				//$('#tr_totalprizenum').hide();
 			}
 		}
 		function validatePrizenum(){
 			var type = $('#prizetype').val();
 			var total = $('#totalprizenum').val();
 			var per = $('#prizenum').val();
-			if(type=='号码'&&(per==''||per<=0)){
-				return "每次中奖人数必须大于0";
-			}else if(total!=''&&total>0){
+			if(total!=''&&total<0){
+				return "总中奖人数不能小于0";
+			}
+			if(type=='号码'||type=='用户'){
 				if(per==''||per<=0){
 					return "每次中奖人数必须大于0";
-				}else if(total%per!=0){
+				}else if(total>0&&total%per!=0){
 					return "总中奖数必须是每次中奖数的倍数";
 				}
 			}
+			/*
+			if(total==''||total<=0){
+				return "每次中奖人数必须大于0";
+			}
+			if(type=='号码'&&(per==''||per<=0)){
+				return "每次中奖人数必须大于0";
+			}else if(type=='号码'&&total%per!=0){
+				return "总中奖数必须是每次中奖数的倍数";
+			}else if(total!=''&&total>0){
+				if(per==''||per<=0){
+					return "每次中奖人数必须大于0";
+				}
+			}*/
 			return "";
+			
 		}
 		var basePath = '${ctx}/prizesetting';
 		jQuery("#list").jqGrid({
@@ -385,7 +400,7 @@
 		   		{name:'totalprizenum',index:'totalprizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>为空，不限制抽奖次数</span>" }},
 		   		{name:'prizenum',index:'prizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>总中奖数必须是每次中奖数的倍数</span>" }},
 		   		{name:'jp',index:'jp',editable:true,editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},
-		   		{name:'jppic',index:'jppic',width:200,editable:true},
+		   		{name:'jppic',index:'jppic',width:200,editable:true,hidden:true},
 		   		{name:'indexorder',index:'indexorder',editable:true,edittype:'custom',editoptions:{custom_element:my_input,custom_value:my_value},editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>"}}},
 		   		{name:'sm',index:'sm',editable:true}
 		   	],
@@ -427,12 +442,12 @@
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true, width:1,key:true},
 		   		{name:'status',index:'status',hidden:true},
-		   		{name:'prizetype',hidden:true,index:'prizetype',editable:true,editoptions:{value:"用户"}},
+		   		{name:'prizetype',index:'prizetype',editable:true,hidden:true,editoptions:{value:"用户"}},
 		   		{name:'prizename',index:'prizename',editable:true,editrules:{required:true}},
 		   		{name:'totalprizenum',index:'totalprizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>为0时不限制抽奖次数</span>" }},
 		   		{name:'prizenum',index:'prizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>总中奖数必须是每次中奖数的倍数</span>" }},
 		   		{name:'jp',index:'jp',editable:true,editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},
-		   		{name:'jppic',index:'jppic',width:200,editable:true},
+		   		{name:'jppic',index:'jppic',width:200,editable:false,hidden:true},
 		   		{name:'indexorder',index:'indexorder',editable:true,edittype:'custom',editoptions:{custom_element:my_input,custom_value:my_value},editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>"}}},
 		   		{name:'sm',index:'sm',editable:true}
 		   	],

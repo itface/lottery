@@ -72,7 +72,7 @@ public class ExcelReader {
         int rowNum = sheet.getLastRowNum();
         if(rowNum>0){
         	 List<User> all = new ArrayList<User>(rowNum);
-        	 Set<User> users = new HashSet<User>(rowNum);
+        	 //Set<User> users = new HashSet<User>(rowNum);
              row = sheet.getRow(0);
              int colNum = row.getPhysicalNumberOfCells();
              // 正文内容应该从第二行开始,第一行为表头的标题
@@ -88,10 +88,11 @@ public class ExcelReader {
                      j++;
                  }
                  user.setIndexorder(i);
-                 if(!users.contains(user)){
-                	  users.add(user);
-                	  all.add(user);
-                 }
+                 all.add(user);
+//                 if(!users.contains(user)){
+//                	  users.add(user);
+//                	  all.add(user);
+//                 }
              }
              return all;
         }

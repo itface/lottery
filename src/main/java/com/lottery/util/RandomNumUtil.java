@@ -48,14 +48,16 @@ public class RandomNumUtil {
 		return null;
 	}
 	public  List<User> getRandomOfUser(List<User> list,int length){
-		if(list!=null&&list.size()>0&&length>0){
-			int persizeRatio = 10;
-			double dataRatio = 0.3;
+		int listlength = list==null?0:list.size();
+		if(list!=null&&listlength>0&&length>0&&listlength>=length){
+			double dataRatio = 0.3;//要查询的人数跟总人数的的比列小于此值时，则用getRandom1与getRandom2方法的交集中取一个
 			List<User> users = new ArrayList<User>(length);
 			Set<Integer> set = new HashSet<Integer>(length);
+			Set<User> tempusers = new HashSet<User>();
 			int listSize = list.size();
 			double realDataRadio = length*1d/listSize;
 			if(realDataRadio<=dataRatio){
+				int persizeRatio = 10;//每次取总人数的百分比
 				int persize = listSize%persizeRatio==0?listSize/persizeRatio:listSize/persizeRatio+1;
 				for(int j=0;j<length;j++){
 					Set<Integer> set1 = getRandom1(listSize,persize);
@@ -67,14 +69,16 @@ public class RandomNumUtil {
 						while(it.hasNext()){
 							int index = it.next();
 							if(set2.contains(index)&&!set.contains(index)){
-								set.add(index);
 								//index是1到list的长度之间的任意一个数，可以当作是长度，因为作为下标是要減1
 								User u = list.get(index-1);
-								users.add(u);
-								//把u的状态设置为已抽过
-								u.setStatus(-1);
-								flag=false;
-								break;
+								//校验这个序号对应的人是否已经抽过，因为可能存在同一个人有多条记录的情况
+								if(!tempusers.contains(u)){
+									set.add(index);
+									//users.add(u);
+									tempusers.add(u);
+									flag=false;
+									break;
+								}
 							}
 						}
 						if(flag){
@@ -82,20 +86,25 @@ public class RandomNumUtil {
 						}
 					}
 				}
+				users.addAll(tempusers);
 				return users;
 			}else{
-				Set<Integer> set1 = getRandom1(listSize,length);
-				if(set1!=null){
-					Iterator<Integer> it = set1.iterator();
-					while(it.hasNext()){
-						int index = it.next();
-						User u = list.get(index-1);
-						users.add(u);
-						//把u的状态设置为已抽过
-						u.setStatus(-1);
+				while(tempusers.size()<length){
+					//为了校验是否有重复的人（可能序号不同，但是人相同，即一个人又多条记录在人员表中），每次随机取一个下标
+					Set<Integer> set1 = getRandom1(listSize,1);
+					if(set1!=null){
+						Iterator<Integer> it = set1.iterator();
+						while(it.hasNext()){
+							int index = it.next();
+							User u = list.get(index-1);
+							if(!tempusers.contains(u)){
+								tempusers.add(u);
+							}
+						}
 					}
-					return users;
 				}
+				users.addAll(tempusers);
+				return users;
 			}
 		}
 		return null;
