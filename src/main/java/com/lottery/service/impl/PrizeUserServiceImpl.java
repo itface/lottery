@@ -84,7 +84,7 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 						boolean numberflag = false;
 						for(PrizeUser pu : templist){
 							if(Prize.PRIZETYPE_SUFFIXNUM.equals(pu.getPrizetype())){
-								String suffixnum = pu.getUid().substring(pu.getUid().length()-1);
+								String suffixnum = pu.getUsernumber().substring(pu.getUsernumber().length()-1);
 								sb.append("<tr>");
 								sb.append("<td colspan='6'>&nbsp;</td>");
 								sb.append("</tr>");
@@ -104,14 +104,14 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 									sb.append("</td>");
 									sb.append("</tr>");
 									sb.append("<tr class='wr-table-td-inner wr-table-tr-row' style='line-height:10px'>");
-									sb.append("<td>").append(pu.getUid()).append("</td>");
+									sb.append("<td>").append(pu.getUsernumber()).append("</td>");
 									indexorders.add(pu.getIndexorder());
 								}else if(count%5!=0){
-									sb.append("<td>").append(pu.getUid()).append("</td>");
+									sb.append("<td>").append(pu.getUsernumber()).append("</td>");
 								}else{
 									sb.append("</tr>");
 									sb.append("<tr  class='wr-table-td-inner wr-table-tr-row'>");
-									sb.append("<td>").append(pu.getUid()).append("</td>");
+									sb.append("<td>").append(pu.getUsernumber()).append("</td>");
 								}
 								count++;
 							}else if(Prize.PRIZETYPE_USER.equals(pu.getPrizetype())){

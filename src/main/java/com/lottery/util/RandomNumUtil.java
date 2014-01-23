@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Set;
 
 import com.lottery.domain.NumberPool;
+import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.SuffixNum;
 import com.lottery.domain.User;
 
@@ -20,12 +21,13 @@ public class RandomNumUtil {
 	 * @param max
 	 * @return
 	 */
-	public long getRandomOfSuffixnum(Set<SuffixNum> set,int min,int max){
+	public long getRandomOfSuffixnum(Set<SuffixNum> set,int min,int max,PrizeSerial prizeSerial){
 		if(set!=null&&set.size()>0){
 			long num = Math.round(Math.random()*(max-min)+min);
 			while(true){
 				num = Math.round(Math.random()*(max-min)+min);
 				SuffixNum s = new SuffixNum();
+				s.setPrizeSerial(prizeSerial);
 				s.setSuffixnum((int)num);
 				if(set.contains(s)){
 					return num;
@@ -34,27 +36,29 @@ public class RandomNumUtil {
 		}
 		return -1;
 	}
-	public  List<NumberPool> getRandomOfNumber(List<NumberPool> list,int length){
-		int listlength = list==null?0:list.size();
-		if(list!=null&&listlength>0&&listlength>=length){
-			List<NumberPool> numberPoolas = new ArrayList<NumberPool>(length);
-			Set<Integer> set = getRandom3(0,list.size(),length,null);
+	public  Set<NumberPool> getRandomOfNumber(Set<NumberPool> sets,int length){
+		if(sets!=null&&sets.size()>0&&sets.size()>=length){
+			List<NumberPool> all = new ArrayList<NumberPool>();
+			all.addAll(sets);
+			Set<NumberPool> numberPoolas = new HashSet<NumberPool>();
+			Set<Integer> set = getRandom3(1,sets.size(),length,null);
 			Iterator<Integer> it = set.iterator();
 			while(it.hasNext()){
 				int n = it.next();
-				numberPoolas.add(list.get(n-1));
+				numberPoolas.add(all.get(n-1));
 			}
 			return numberPoolas;
 		}
 		return null;
 	}
-	public  List<User> getRandomOfUser(List<User> list,int length){
+	public  Set<User> getRandomOfUser(List<User> list,Set<User> excludeusers,int length,int distinctlength){
 		int listlength = list==null?0:list.size();
-		if(list!=null&&listlength>0&&length>0&&listlength>=length){
+		if(list!=null&&listlength>0&&length>0&&listlength>=distinctlength&&distinctlength>=length){
 			double dataRatio = 0.3;//要查询的人数跟总人数的的比列小于此值时，则用getRandom1与getRandom2方法的交集中取一个
-			List<User> users = new ArrayList<User>(length);
-			Set<Integer> set = new HashSet<Integer>(length);
-			Set<User> tempusers = new HashSet<User>();
+			Set<User> users = new HashSet<User>();
+			Set<Integer> set = new HashSet<Integer>();
+			excludeusers=excludeusers==null?new HashSet<User>():excludeusers;
+			//Set<User> tempusers = new HashSet<User>();
 			int listSize = list.size();
 			double realDataRadio = length*1d/listSize;
 			if(realDataRadio<=dataRatio){
@@ -74,10 +78,10 @@ public class RandomNumUtil {
 								//index是1到list的长度之间的任意一个数，可以当作是长度，因为作为下标是要減1
 								User u = list.get(index);
 								//校验这个序号对应的人是否已经抽过，因为可能存在同一个人有多条记录的情况
-								if(!tempusers.contains(u)){
+								if(!users.contains(u)&&!excludeusers.contains(u)){
 									set.add(index);
 									//users.add(u);
-									tempusers.add(u);
+									users.add(u);
 									flag=false;
 									break;
 								}
@@ -88,10 +92,9 @@ public class RandomNumUtil {
 						}
 					}
 				}
-				users.addAll(tempusers);
 				return users;
 			}else{
-				while(tempusers.size()<length){
+				while(users.size()<length){
 					//为了校验是否有重复的人（可能序号不同，但是人相同，即一个人又多条记录在人员表中），每次随机取一个下标
 					Set<Integer> set1 = getRandom1(listSize,1);
 					if(set1!=null){
@@ -99,13 +102,12 @@ public class RandomNumUtil {
 						while(it.hasNext()){
 							int index = it.next();
 							User u = list.get(index-1);
-							if(!tempusers.contains(u)){
-								tempusers.add(u);
+							if(!users.contains(u)&&!excludeusers.contains(u)){
+								users.add(u);
 							}
 						}
 					}
 				}
-				users.addAll(tempusers);
 				return users;
 			}
 		}
@@ -288,11 +290,8 @@ public class RandomNumUtil {
 		return list;
 	}  
 	public static void main(String[] args){
-		RandomNumUtil util = new RandomNumUtil();
-		Set<Integer> set = util.getRandom3(1, 2116, 10,null);
-		Iterator<Integer> it = set.iterator();
-		while(it.hasNext()){
-			System.out.println(it.next());
-		}
+		int minn=1;
+		int maxn=4;
+		System.out.println(Math.round(Math.random()*(maxn-minn)+minn));
 	}
 }

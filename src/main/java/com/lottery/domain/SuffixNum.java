@@ -69,10 +69,8 @@ public class SuffixNum implements Serializable{
 	public int hashCode() {
 		// TODO Auto-generated method stub
 		int result = 17;
+		result = 37*result+(int) (prizeSerial.getId() ^ (prizeSerial.getId()>>>32));
 		result = 37*result+(int) (suffixnum ^ (suffixnum>>>32));
-		//result = 37*result+(uid==null?0:uid.hashCode());
-		//result = 37*result+displayOrder;
-		//result = 37*result+(this.url==null?0:url.hashCode());
 		return result;
 	}
 	@Override
@@ -82,7 +80,7 @@ public class SuffixNum implements Serializable{
 			return false;
 		}
 		SuffixNum obj2 = (SuffixNum)obj;
-		return this.suffixnum==obj2.getSuffixnum();
+		return prizeSerial.getId()==obj2.getPrizeSerial().getId()&&this.suffixnum==obj2.getSuffixnum();
 	}
 	
 }

@@ -59,4 +59,15 @@ public class SuffixNumServiceServiceImpl implements SuffixNumService{
 		
 		return dao.findTotalCount("select count(*) as num from SuffixNum t where t.prizeid=?1", new Object[]{prizeid});
 	}
+//
+//	/**
+//	 * true为已抽过
+//	 */
+//	@Override
+//	public boolean chenckYcNum(long serialid,int num) {
+//		// TODO Auto-generated method stub
+//		long count =  dao.findTotalCount("select count(*) as num from SuffixNum t where t.prizeSerial.id=?1 and t.suffixnum=?2", new Object[]{serialid,num});
+//
+//		return count>0?true:false;
+//	}
 }

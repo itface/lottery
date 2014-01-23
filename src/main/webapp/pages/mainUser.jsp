@@ -373,28 +373,6 @@
 			$('.actionstart').css('visibility','hidden');
 			$('.actionend').css('visibility','visible');
 			lotterystatus='run';
-			/*
-			var prizenum = $('#prizenum').html();
-			if(prizenum!=null&&prizenum!=''&&parseInt(prizenum)>0){
-				$.ajax({
-					url:'${ctx}/index/checkuser?prizelength='+prizenum,
-					async:false,
-					cache:false,
-					success:function(obj){
-						$(document).lottery("start");
-						setUserlistFlag="run";
-						setMusic(startmusic);
-						$('.actionstart').css('visibility','hidden');
-						$('.actionend').css('visibility','visible');
-						//$('.userList').empty();
-						//$('.userListTable').hide();
-						$('.img').hide();
-					}
-				});
-			}else{
-				alert("奖项的中奖名额必须大于0。");
-				return;
-			}*/
 		});
 		$('.actionend').bind('click',function(){
 			$('.actionstart').css('visibility','visible');
@@ -407,7 +385,7 @@
 				success:function(obj){
 					var s = "<div class='wr_table userListTable' style='margin-top: 40px;'><table class='userList' border='0' cellspacing='0' cellpadding='0' width='100%'>";
 					$(document).lottery("init");
-					if(obj!=null&&obj.length>0){
+					if(obj!=null&&obj!='null'&&obj!=undefined&&obj!=''&&typeof obj!='string'&&obj.length>0){
 						$(obj).each(function(i,v){
 							if(i==0){
 									s += "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.prizename+"——"+v.indexordername+"</td></tr>";

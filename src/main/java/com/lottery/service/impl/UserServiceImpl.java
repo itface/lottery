@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,9 +60,9 @@ public class UserServiceImpl implements UserService{
 	public void updateUserStatus(List<User> users) {
 		// TODO Auto-generated method stub
 		if(users!=null&&users.size()>0){
-			StringBuffer sb = new StringBuffer(" and t.uid in ('-1'");
+			StringBuffer sb = new StringBuffer(" and t.usernumber in ('-1'");
 			for(User user : users){
-				sb.append(",'").append(user.getUid()).append("'");
+				sb.append(",'").append(user.getUsernumber()).append("'");
 			}
 			sb.append(")");
 			dao.executeUpdate("update User t set t.status=-1 where 1=1 "+sb.toString(), null);
@@ -79,9 +80,9 @@ public class UserServiceImpl implements UserService{
 		dao.executeUpdate("update User t set t.status=0", null);
 	}
 	@Override
-	public long findActiveUserNum() {
+	public long findDistinctActiveUserNum() {
 		// TODO Auto-generated method stub
-		long num = dao.findTotalCount("select count(t.id) as num from User t where t.status=0", null);
+		long num = dao.findTotalCount("select count(distinct t.usernumber) as num from User t where t.status=0", null);
 		return num;
 	}
 	@Override
@@ -194,13 +195,29 @@ public class UserServiceImpl implements UserService{
 			if(rule!=null&&!"".equals(rule)){
 				sb.append(" and ").append(rule).append(" ");
 			}
-			long num = dao.findTotalCount("select count(*) as num from User t where t.status=0 "+sb.toString(), null);
+			long num = dao.findTotalCount("select count(distinct t.usernumber) as num from User t where t.status=0 "+sb.toString(), null);
 			return "符合该条件的人员数："+num;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return e.getMessage();
 		}
+	}
+	@Override
+	public boolean checkRepeat(Set<User> set) {
+		// TODO Auto-generated method stub
+		boolean flag = true;
+		if(set!=null&&set.size()>0){
+			StringBuffer sb = new StringBuffer(" and t.usernumber in ('-1'");
+			for(User user : set){
+				String number= user.getUsernumber();
+				sb.append(",'").append(number).append("'");
+			}
+			sb.append(")");
+			long count = dao.findTotalCount("select count(*) as num from User t where t.status=-1 "+sb.toString(), null);
+			flag = count>0?true:false;
+		}
+		return flag;
 	}
 
 	

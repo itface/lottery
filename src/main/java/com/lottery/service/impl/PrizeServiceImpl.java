@@ -174,30 +174,30 @@ public class PrizeServiceImpl implements PrizeService{
 		return null;
 	}
 
-	/**
-	 * 判断奖项是否超出总的中奖数
-	 * 返回true代表已经抽完，返回false说明没抽完
-	 */
-	@Override
-	public boolean checkfinish(Prize prize) {
-		// TODO Auto-generated method stub
-		if(prize!=null){
-			if(!Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())&&prize.getTotalprizenum()>0){
-				List<PrizeUser> list = prizeUserService.findPrizeUserById(prize.getId());
-				if(list!=null&&list.size()<prize.getTotalprizenum()){
-					return false;
-				}
-			}else if(Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())){
-				long ycry = suffixNumService.getYcNum(prize.getId());
-				if(prize.getTotalprizenum()==0||(prize.getTotalprizenum()>0&&ycry<prize.getTotalprizenum())){
-					return false;
-				}
-			}else{
-				return false;
-			}
-			
-		}
-		return true;
-	}
+//	/**
+//	 * 判断奖项是否超出总的中奖数
+//	 * 返回true代表已经抽完，返回false说明没抽完
+//	 */
+//	@Override
+//	public boolean checkfinish(Prize prize) {
+//		// TODO Auto-generated method stub
+//		if(prize!=null){
+//			if(!Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())&&prize.getTotalprizenum()>0){
+//				List<PrizeUser> list = prizeUserService.findPrizeUserById(prize.getId());
+//				if(list!=null&&list.size()<prize.getTotalprizenum()){
+//					return false;
+//				}
+//			}else if(Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())){
+//				long ycry = suffixNumService.getYcNum(prize.getId());
+//				if(prize.getTotalprizenum()==0||(prize.getTotalprizenum()>0&&ycry<prize.getTotalprizenum())){
+//					return false;
+//				}
+//			}else{
+//				return false;
+//			}
+//			
+//		}
+//		return true;
+//	}
 
 }

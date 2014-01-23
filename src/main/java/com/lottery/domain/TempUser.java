@@ -23,8 +23,6 @@ public class TempUser implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
  
-	private String uid;
-
 	private String usernumber;
     private String username;
     private String dept;
@@ -38,7 +36,7 @@ public class TempUser implements Serializable{
 		// TODO Auto-generated method stub
 		int result = 17;
 		//result = 37*result+(int) (id ^ (id>>>32));
-		result = 37*result+(uid==null?0:uid.hashCode());
+		result = 37*result+(usernumber==null?0:usernumber.hashCode());
 		//result = 37*result+displayOrder;
 		//result = 37*result+(this.url==null?0:url.hashCode());
 		return result;
@@ -50,8 +48,8 @@ public class TempUser implements Serializable{
 			return false;
 		}
 		TempUser obj2 = (TempUser)obj;
-		if(this.uid!=null&&!"".equals(uid)){
-			return this.uid==obj2.getUid();
+		if(this.usernumber!=null&&!"".equals(usernumber)){
+			return this.usernumber==obj2.getUsernumber();
 		}else{
 			return false;
 		}
@@ -63,7 +61,6 @@ public class TempUser implements Serializable{
 		this.dept=user.getDept();
 		this.indexorder=user.getIndexorder();
 		this.region=user.getRegion();
-		this.uid=user.getUid();
 		this.username=user.getUsername();
 		this.usernumber=user.getUsernumber();
 		this.ywdy=user.getYwdy();
@@ -74,12 +71,6 @@ public class TempUser implements Serializable{
 	}
 	public void setId(long id) {
 		this.id = id;
-	}
-	public String getUid() {
-		return uid;
-	}
-	public void setUid(String uid) {
-		this.uid = uid;
 	}
 	public String getUsername() {
 		return username;

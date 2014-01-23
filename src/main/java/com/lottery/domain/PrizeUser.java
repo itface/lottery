@@ -42,7 +42,6 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	private String sm;
 	private String jp;
 	
-	private String uid;
 	private String usernumber;
     private String username;
     private String dept;
@@ -79,7 +78,6 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 		if(user!=null){
 			this.region=user.getRegion();
 			this.dept=user.getDept();
-			this.uid=user.getUid();
 			this.username=user.getUsername();
 			this.usernumber=user.getUsernumber();
 			this.ywdy=user.getYwdy();
@@ -104,7 +102,6 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 		if(numberPool!=null){
 			this.region=numberPool.getNumber()+"";
 			this.dept=numberPool.getNumber()+"";
-			this.uid=numberPool.getNumber()+"";
 			this.username=numberPool.getNumber()+"";
 			this.usernumber=numberPool.getNumber()+"";
 			this.ywdy=numberPool.getNumber()+"";
@@ -161,12 +158,6 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	}
 	public void setJp(String jp) {
 		this.jp = jp;
-	}
-	public String getUid() {
-		return uid;
-	}
-	public void setUid(String uid) {
-		this.uid = uid;
 	}
 	public String getUsernumber() {
 		return usernumber;

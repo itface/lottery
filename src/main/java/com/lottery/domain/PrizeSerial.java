@@ -185,6 +185,43 @@ public class PrizeSerial implements Serializable{
 		}
 		return set;
 	}
+	public Set<NumberPool> getActiveNumberPool(){
+		Set<NumberPool> set = new HashSet<NumberPool>();
+		if(numberpools!=null&&numberpools.size()>0){
+			Iterator<NumberPool> it = numberpools.iterator();
+			while(it.hasNext()){
+				NumberPool nb = it.next();
+				if(nb.getStatus()==0){
+					set.add(nb);
+				}
+			}
+		}
+		return set;
+	}
+	public boolean checkSuffixNumRepeat(int number){
+		if(suffixnums!=null&&suffixnums.size()>0){
+			Iterator<SuffixNum> it = suffixnums.iterator();
+			while(it.hasNext()){
+				SuffixNum suffixNum = it.next();
+				if(suffixNum.getPrizeid()!=0&&suffixNum.getSuffixnum()==number){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public boolean checkNumberPoolRepeat(Set<NumberPool> set){
+		if(numberpools!=null&&numberpools.size()>0){
+			Iterator<NumberPool> it = numberpools.iterator();
+			while(it.hasNext()){
+				NumberPool nb = it.next();
+				if(nb.getStatus()==-1&&set.contains(nb)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	public void updateSuffixNum(int num,long prizeid){
 		if(suffixnums!=null&&suffixnums.size()>0){
 			Iterator<SuffixNum> it = suffixnums.iterator();

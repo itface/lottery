@@ -58,9 +58,21 @@ public class NumberPool implements Serializable{
 	public void setPrizeSerial(PrizeSerial prizeSerial) {
 		this.prizeSerial = prizeSerial;
 	}
-	
-	
-	
-	
-	
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		int result = 17;
+		result = 37*result+(int) (prizeSerial.getId() ^ (prizeSerial.getId()>>>32));
+		result = 37*result+(int) (number ^ (number>>>32));
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if(!(obj instanceof SuffixNum)){
+			return false;
+		}
+		NumberPool obj2 = (NumberPool)obj;
+		return prizeSerial.getId()==obj2.getPrizeSerial().getId()&&this.number==obj2.getNumber();
+	}
 }

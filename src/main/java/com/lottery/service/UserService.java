@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,8 @@ public interface UserService {
 	public String testFindActiveUserByBalanceRule(BalanceRule balanceRule);
 	public void updateUserStatus(List<User> users);
 	public void updateAllUserStatus();
-	public long findActiveUserNum();
+	public long findDistinctActiveUserNum();
 	public long countTotalUser();
 	public void getUserPercentage(Map<String,Percentage> dymap,Map<String,Percentage> ywdymap,Map<String,Percentage> usernumbermap);
+	public boolean checkRepeat(Set<User> list);
 }

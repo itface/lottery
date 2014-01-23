@@ -33,7 +33,7 @@ public class User implements Serializable,Comparable<User>{
 //	@Pattern(regexp = "[^'<>=\\\\]*", message = "帐号不能包含特殊字符")
 //	@Length(max=100,message="帐号长度不能超过100")
 //	@Column(name="uid",length = 100, unique = true)
-	private String uid;
+	//private String uid;
 	private String usernumber;
     private String username;
     private String dept;
@@ -49,7 +49,7 @@ public class User implements Serializable,Comparable<User>{
 		// TODO Auto-generated method stub
 		int result = 17;
 		//result = 37*result+(int) (id ^ (id>>>32));
-		result = 37*result+(uid==null?0:uid.hashCode());
+		result = 37*result+(usernumber==null?0:usernumber.hashCode());
 		//result = 37*result+displayOrder;
 		//result = 37*result+(this.url==null?0:url.hashCode());
 		return result;
@@ -61,8 +61,8 @@ public class User implements Serializable,Comparable<User>{
 			return false;
 		}
 		User obj2 = (User)obj;
-		if(this.uid!=null&&!"".equals(uid)){
-			return this.uid.equals(obj2.getUid());
+		if(this.usernumber!=null&&!"".equals(usernumber)){
+			return this.usernumber.equals(obj2.getUsernumber());
 		}else{
 			return false;
 		}
@@ -73,12 +73,12 @@ public class User implements Serializable,Comparable<User>{
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getUid() {
-		return uid;
-	}
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
+//	public String getUid() {
+//		return uid;
+//	}
+//	public void setUid(String uid) {
+//		this.uid = uid;
+//	}
 	public String getUsername() {
 		return username;
 	}

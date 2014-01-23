@@ -163,7 +163,7 @@ canvas {
 						var prizecount={};
 						$(obj).each(function(i,v){
 							if(v.prizetype=='尾号'){
-								var suffixnum = v.uid.substring(v.uid.length-1);
+								var suffixnum = v.usernumber.substring(v.usernumber.length-1);
 								if(suffixnums[suffixnum]!=suffixnum){
 									suffixnums[suffixnum]=suffixnum;
 									//s+='<li>&nbsp;</li>';
@@ -454,11 +454,11 @@ canvas {
 				success:function(obj){
 					var s = "<div style='width:1200px;'><div style='height:130px'></div>";
 					var numberflag=false;
-					if(obj!=null&&obj.length>0){
+					if(obj!=null&&obj!='null'&&obj!=undefined&&typeof obj!='string'&&obj!=''&&obj.length>0){
 						var count=0;
 						$(obj).each(function(i,v){
 							if(v.prizetype=='尾号'){
-								var suffixnum = v.uid.substring(v.uid.length-1);
+								var suffixnum = v.usernumber.substring(v.usernumber.length-1);
 								$('.suffixnum').html(suffixnum);
 								$('.suffixnum').show();
 								$('.actionstart').css('visibility','hidden');
@@ -467,13 +467,13 @@ canvas {
 								if(i==0){
 									s+="<div class='resultmsgheader'>"+v.prizename+" 第"+v.sameprizeindexorder+"次，中奖号码：</div>";
 									s+="<div>";
-									s+="<div class='resultmsgbody'>"+v.uid+"</div>";
+									s+="<div class='resultmsgbody'>"+v.usernumber+"</div>";
 								}else if(i%4==0){
-									s+="<div class='resultmsgbody'>"+v.uid+"</div>";
+									s+="<div class='resultmsgbody'>"+v.usernumber+"</div>";
 									s+="</div>";
 									s+="<div>";
 								}else{
-									s+="<div class='resultmsgbody'>"+v.uid+"</div>";
+									s+="<div class='resultmsgbody'>"+v.usernumber+"</div>";
 								}
 								count=i;
 							}

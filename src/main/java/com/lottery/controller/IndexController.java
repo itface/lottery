@@ -124,7 +124,7 @@ public class IndexController {
 		if(id!=null&&!"".equals(id)&&!"0".equals(id)){
 			Prize prize = prizeSettingService.findById(Long.parseLong(id));
 			if(prize!=null){
-				boolean flag = actionService.checkActionFlag(prize.getId());
+				boolean flag = actionService.checkActionFlag(prize);
 				map.put("prizeid",id);
 				map.put("actionstartbtnshow",flag?"visible":"hidden");
 				map.put("lotterystatus", flag?"init":"stop");
@@ -275,14 +275,6 @@ public class IndexController {
 	@RequestMapping(value="/resultreport",method = RequestMethod.GET)
 	public @ResponseBody Object resultreport(){
 		return prizeUserService.findPrizeUserOfCurrentByType(Prize.PRIZETYPE_USER);
-	}
-	@RequestMapping(value="/checkuser")
-	public @ResponseBody boolean checkuser(int prizelength){
-		long totaluser  = userService.findActiveUserNum();
-		if(prizelength>totaluser||prizelength<1){
-			return false;
-		}
-		return true;
 	}
 	@RequestMapping(value="/prizeuserlist",method = RequestMethod.GET)
 	public @ResponseBody Object prizeuserlist(long prizeid){

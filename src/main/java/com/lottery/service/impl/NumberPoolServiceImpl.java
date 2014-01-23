@@ -66,12 +66,16 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 
 	@Override
 	@Transactional
-	public void updateNumberPoolStatus(List<NumberPool> list) {
+	public void updateNumberPoolStatus(Set<NumberPool> set,long serialid){
 		// TODO Auto-generated method stub
-		if(list!=null&&list.size()>0){
-			for(NumberPool numberPool : list){
+		if(set!=null&&set.size()>0){
+			StringBuffer sb = new StringBuffer(" and t.number in(-1");
+			for(NumberPool numberPool : set){
 				numberPool.setStatus(-1);
+				sb.append(",").append(numberPool.getNumber());
 			}
+			sb.append(")");
+			dao.executeUpdate("update NumberPool t set t.status=-1 where t.prizeSerial.id=?1 "+sb.toString(), new Object[]{serialid});
 		}
 	}
 
@@ -93,6 +97,30 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 	public long findAllActiveNumberPoolNum(String serialnum) {
 		// TODO Auto-generated method stub
 		return dao.findTotalCount("select count(*) as num from NumberPool t where t.status=0 and t.prizeSerial.num='"+serialnum+"'", null);
+	}
+
+//	@Override
+//	public boolean checkRepeat(List<NumberPool> list,String serialnum) {
+//		// TODO Auto-generated method stub
+//		
+//		boolean flag = true;
+//		if(list!=null&&list.size()>0){
+//			StringBuffer sb = new StringBuffer(" and t.number in (-1");
+//			for(NumberPool np : list){
+//				int number= np.getNumber();
+//				sb.append(",").append(number);
+//			}
+//			sb.append(")");
+//			long count = dao.findTotalCount("select count(*) as num from NumberPool t where t.status=-1 and t.prizeSerial.num='"+serialnum+"' "+sb.toString(), null);
+//			flag = count>0?true:false;
+//		}
+//		return flag;
+//	}
+
+	@Override
+	public long countNumberPoolBySuffixnum(String serialnum, int suffixnum) {
+		// TODO Auto-generated method stub
+		return dao.findTotalCount("select count(*) as num from NumberPool t where  t.number like '%"+suffixnum+"' and t.status=0 and t.prizeSerial.num='"+serialnum+"'", null);
 	}
 
 }

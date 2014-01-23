@@ -19,7 +19,6 @@ public class BackupUser implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
  
-	private String uid;
 
 	private String usernumber;
 	
@@ -41,7 +40,6 @@ public class BackupUser implements Serializable{
 		this.indexorder=user.getIndexorder();
 		this.region=user.getRegion();
 		this.status=user.getStatus();
-		this.uid=user.getUid();
 		this.username=user.getUsername();
 		this.usernumber=user.getUsernumber();
 		this.ywdy=user.getYwdy();
@@ -53,12 +51,6 @@ public class BackupUser implements Serializable{
 	}
 	public void setId(long id) {
 		this.id = id;
-	}
-	public String getUid() {
-		return uid;
-	}
-	public void setUid(String uid) {
-		this.uid = uid;
 	}
 	public String getUsername() {
 		return username;
