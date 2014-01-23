@@ -17,4 +17,5 @@ public interface BalanceRuleService {
 	public String getOrderSelection(String indexorder);
 	public int getBalanceRuleNum();
 	public String testBalanceRule(long id);
+	public String getYcjxId(String serialnum);
 }

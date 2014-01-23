@@ -1,7 +1,10 @@
 package com.lottery.service.impl;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +19,6 @@ import com.lottery.domain.Percentage;
 import com.lottery.domain.Prize;
 import com.lottery.domain.PrizeSerial;
 import com.lottery.domain.PrizeUser;
-import com.lottery.domain.SuffixNum;
 import com.lottery.service.PrizeSerialService;
 import com.lottery.service.PrizeUserService;
 @Service
@@ -45,27 +47,135 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 //	}
 
 	@Override
-	public List<PrizeUser> findCurrentPrizeUser() {
+	public String findPrizeUserHtmlOfCurrent() {
+		// TODO Auto-generated method stub
+		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+		if(prizeSerial!=null){
+			return this.getPrizeUserHtml(prizeSerial);
+		}
+		return "";
+	}
+
+	@Override
+	public String findPrizeUserHtmlOfHistory(String serialnum) {
+		// TODO Auto-generated method stub
+		PrizeSerial prizeSerial = prizeSerialService.getPrizeSerialByNum(serialnum);
+		if(prizeSerial!=null){
+			return this.getPrizeUserHtml(prizeSerial);
+		}
+		return "";
+	}
+	private String getPrizeUserHtml(PrizeSerial prizeSerial){
+		StringBuffer sb = new StringBuffer();
+		if(prizeSerial!=null){
+			Set<Prize> prizes = prizeSerial.getPrizes();
+			if(prizes!=null&&prizes.size()>0){
+				sb.append("<table class='userList' border='0' cellspacing='0' cellpadding='0' width='100%'>");
+				sb.append("<tr class='wr-table-hd-inner'><td colspan='6' style='text-align:left;padding-left:20px'>抽奖活动：").append(prizeSerial.getName()).append("（").append(prizeSerial.getNum()).append("）</td></tr>");
+				List<Prize> prizelist = new ArrayList<Prize>();
+				prizelist.addAll(prizes);
+				Collections.sort(prizelist);
+				for(Prize prize : prizelist){
+					List<PrizeUser> templist = this.findPrizeUserById(prize.getId());
+					if(templist!=null&&templist.size()>0){
+						Collections.sort(templist);
+						int count = 0;
+						Set<Integer> indexorders = new HashSet<Integer>();
+						boolean numberflag = false;
+						for(PrizeUser pu : templist){
+							if(Prize.PRIZETYPE_SUFFIXNUM.equals(pu.getPrizetype())){
+								String suffixnum = pu.getUid().substring(pu.getUid().length()-1);
+								sb.append("<tr>");
+								sb.append("<td colspan='6'>&nbsp;</td>");
+								sb.append("</tr>");
+								sb.append("<tr class='wr-table-hd-inner'>");
+								sb.append("<td colspan='6' style='text-align:left;padding-left:20px'>");
+								sb.append(pu.getPrizename()).append(" 第").append(pu.getSameprizeindexorder()).append("次 <span style='color:red;'>尾号：").append(suffixnum).append("</span>");
+								sb.append("</td>");
+								sb.append("</tr>");
+							}else if(Prize.PRIZETYPE_NUMBER.equals(pu.getPrizetype())){
+								numberflag=true;
+								if(!indexorders.contains(pu.getIndexorder())){
+									sb.append("<tr>");
+									sb.append("<td colspan='6'>&nbsp;</td>");
+									sb.append("</tr>");
+									sb.append("<tr class='wr-table-hd-inner'>");
+									sb.append("<td colspan='6' style='text-align:left;padding-left:20px'>").append(pu.getPrizename()).append(" 第").append(pu.getSameprizeindexorder()).append("次 ");
+									sb.append("</td>");
+									sb.append("</tr>");
+									sb.append("<tr class='wr-table-td-inner wr-table-tr-row' style='line-height:10px'>");
+									sb.append("<td>").append(pu.getUid()).append("</td>");
+									indexorders.add(pu.getIndexorder());
+								}else if(count%5!=0){
+									sb.append("<td>").append(pu.getUid()).append("</td>");
+								}else{
+									sb.append("</tr>");
+									sb.append("<tr  class='wr-table-td-inner wr-table-tr-row'>");
+									sb.append("<td>").append(pu.getUid()).append("</td>");
+								}
+								count++;
+							}else if(Prize.PRIZETYPE_USER.equals(pu.getPrizetype())){
+								if(!indexorders.contains(pu.getIndexorder())){
+									indexorders.add(pu.getIndexorder());
+									count=0;
+									sb.append("<tr>");
+									sb.append("<td colspan='6'>&nbsp;</td>");
+									sb.append("</tr>");
+									sb.append("<tr class='wr-table-hd-inner' style='height:50px; line-height:50px; '>");
+									sb.append("<td colspan='6' style='text-align:left;padding-left:20px;'>").append(pu.getPrizename()).append(" 第").append(pu.getSameprizeindexorder()).append("次 ");
+									sb.append("</tr>");
+									sb.append("<tr class='wr-table-hd-inner' style='height:30px; line-height:30px'>");
+									sb.append("<td width='100px'>序号</td>");
+									sb.append("<td width='130px'>姓名</td>");
+									sb.append("<td width='130px'>员工编号</td>");
+									sb.append("<td width='130px'>地域</td>");
+									sb.append("<td width='130px'>业务单元</td>");
+									sb.append("</tr>");
+								}
+								sb.append("<tr class='wr-table-td-inner wr-table-tr-row'>");
+								sb.append("<td>").append(++count).append("</td>");
+								sb.append("<td>").append(pu.getUsername()).append("</td>");
+								sb.append("<td>").append(pu.getUsernumber()).append("</td>");
+								sb.append("<td>").append(pu.getRegion()).append("</td>");
+								sb.append("<td>").append(pu.getYwdy()).append("</td>");
+								sb.append("</tr>");
+							}
+						}
+						if(numberflag&&count%5!=0){
+							sb.append("</tr>");
+						}
+					}
+				}
+				sb.append("</table>");
+			}
+		}
+		return sb.toString();
+	}
+	@Override
+	public List<PrizeUser> findPrizeUserOfCurrentByType(String prizetype) {
 		// TODO Auto-generated method stub
 		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
 		if(prizeSerial!=null){
 			String serialnum = prizeSerial.getNum();
-			return dao.find("from PrizeUser t where t.prizeserialnum=?1 order by t.indexorder asc", new Object[]{serialnum});
+			return this.findPrizeUserOfHistoryByType(serialnum, prizetype);
 		}
 		return null;
 	}
 
 	@Override
-	public List<PrizeUser> findPrizeUserBySerialnum(String serialnum) {
+	public List<PrizeUser> findPrizeUserOfHistoryByType(String serialnum,String prizetype) {
 		// TODO Auto-generated method stub
-		return dao.find("from PrizeUser t where t.prizeserialnum=?1 order by t.indexorder asc", new Object[]{serialnum});
-
+		if(prizetype!=null&&!"".equals(prizetype)){
+			return dao.find("from PrizeUser t where t.prizeserialnum=?1 and t.prizetype=?2 order by t.indexorder asc", new Object[]{serialnum,prizetype});
+		}else{
+			return dao.find("from PrizeUser t where t.prizeserialnum=?1 order by t.indexorder asc", new Object[]{serialnum});
+		}
 	}
 
 	@Override
 	public void getUserPercentage(Map<String,Percentage> dymap,Map<String,Percentage> ywdymap,Map<String,Percentage> usernumbermap) {
 		// TODO Auto-generated method stub
-		List<PrizeUser> list = findCurrentPrizeUser();
+		List<PrizeUser> list = findPrizeUserOfCurrentByType(Prize.PRIZETYPE_USER);
 		if(list!=null&&list.size()>0){
 			int total = list.size();
 			int persize =1000;
@@ -172,32 +282,68 @@ public class PrizeUserServiceImpl implements PrizeUserService{
 		return num>0?true:false;
 	}
 
+	/**
+	 * 根 据奖项id取获奖名单
+	 */
 	@Override
-	public List<PrizeUser> findCurrentPrizeUserByType(long prizeid) {
+	public List<PrizeUser> findPrizeUserById(long prizeid) {
 		// TODO Auto-generated method stub
-		return dao.find("from PrizeUser t where t.prizeid=?1", new Object[]{prizeid});
-	}
-
-	@Override
-	public List<PrizeUser> getPrizeUserList(String type) {
-		// TODO Auto-generated method stub
-		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
-		if(prizeSerial!=null){
-			String serialnum = prizeSerial.getNum();
-			if(Prize.PRIZETYPE_URL_USER.equals(type)){
-				return dao.find("from PrizeUser t where t.prizeserialnum=?1 and t.prizetype=?2 order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum,Prize.PRIZETYPE_USER});
-			}else if(Prize.PRIZETYPE_URL_NOT_USER.equals(type)){
-				return dao.find("from PrizeUser t where t.prizeserialnum=?1 and (t.prizetype=?2 or t.prizetype=?3) order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum,Prize.PRIZETYPE_SUFFIXNUM,Prize.PRIZETYPE_NUMBER});
-			}else{
-				return dao.find("from PrizeUser t where t.prizeserialnum=?1 order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum});
+		List<PrizeUser> list = dao.find("from PrizeUser t where t.prizeid=?1 order by t.indexorder desc", new Object[]{prizeid});
+		if(list!=null&&list.size()>0){
+			PrizeUser prizeuser = list.get(0);
+			if(Prize.PRIZETYPE_SUFFIXNUM.equals(prizeuser.getPrizetype())){
+				List<PrizeUser> list2 = new ArrayList<PrizeUser>();
+				Map<String,PrizeUser> map = new HashMap<String,PrizeUser>();
+				for(PrizeUser pu : list){
+					String key = pu.getPrizeid()+":"+pu.getIndexorder();
+					if(!map.containsKey(key)){
+						map.put(key, pu);
+						list2.add(pu);
+					}
+				}
+				return list2;
 			}
 		}
-		return null;
+		return list;
 	}
+
+//	@Override
+//	public List<PrizeUser> getPrizeUserList(long prizeid) {
+//		// TODO Auto-generated method stub
+//		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
+//		if(prizeSerial!=null){
+//			
+//			String serialnum = prizeSerial.getNum();
+//			if(type!=null&&!"".equals(type)){
+//				return dao.find("from PrizeUser t where t.prizeserialnum=?1 and t.prizetype=?2 order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum,type});
+//			}else{
+//				return dao.find("from PrizeUser t where t.prizeserialnum=?1 order by t.indexorder desc,t.usernumber asc", new Object[]{serialnum});
+//			}
+//		}
+//		return this.findPrizeUserById(prizeid);
+//	}
 
 	@Override
 	public long countPrizeUserByType(long prizeid,String serialnum) {
 		// TODO Auto-generated method stub
 		return dao.findTotalCount("select count(distinct t.indexorder) as num from PrizeUser t where t.prizeid=?1 and t.prizeserialnum=?2", new Object[]{prizeid,serialnum});
 	}
+
+	@Override
+	public String getYcjxId(String serialnum) {
+		// TODO Auto-generated method stub
+		List list = dao.find("select distinct(t.prizeid) from PrizeUser t where t.prizeserialnum=?1", new Object[]{serialnum});
+		StringBuffer sb = new StringBuffer("{0:0");
+		if(list!=null&&list.size()>0){
+			for(int i=0;i<list.size();i++){
+				String id = (Long)list.get(i)+"";
+				sb.append(",").append(id).append(":").append(id);
+			}
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+
+
+	
 }

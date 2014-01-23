@@ -75,7 +75,7 @@ public class IndexController {
 			prize.setId(0);
 			prize.setPrizetype("");
 			prize.setIndexorder(0);
-			prize.setPrizename("空闲");
+			prize.setPrizename("屏保");
 			if(list!=null&&list.size()>0){
 				list.add(prize);
 				Collections.sort(list);
@@ -127,6 +127,7 @@ public class IndexController {
 				boolean flag = actionService.checkActionFlag(prize.getId());
 				map.put("prizeid",id);
 				map.put("actionstartbtnshow",flag?"visible":"hidden");
+				map.put("lotterystatus", flag?"init":"stop");
 				if(Prize.PRIZETYPE_USER.equals(prize.getPrizetype())){
 					map.put("userlist", userService.findAllActiveUserame());
 					return new ModelAndView("/mainUser",map);
@@ -154,7 +155,8 @@ public class IndexController {
 		if(currentPrizeSerial!=null){
 			map.put("pnum", currentPrizeSerial.getId());
 			map.put("name", currentPrizeSerial.getName());
-			
+			map.put("ycjxid",prizeUserService.getYcjxId(currentPrizeSerial.getNum()));
+			map.put("ycbalanceid",balanceRuleService.getYcjxId(currentPrizeSerial.getNum()));
 			map.put("suffixnumfrom", currentPrizeSerial.getSuffixnumfrom()==-1?"":currentPrizeSerial.getSuffixnumfrom());
 			map.put("suffixnumto", currentPrizeSerial.getSuffixnumto()==-1?"":currentPrizeSerial.getSuffixnumto());
 			map.put("suffixnumexclude", currentPrizeSerial.getSuffixnumexclude());
@@ -185,6 +187,8 @@ public class IndexController {
 			map.put("name", "");
 			map.put("uploadshow", true);
 			map.put("prizeuserofnum", false);
+			map.put("ycjxid","{}");
+			map.put("ycbalanceid","{}");
 		}
 		return new ModelAndView("/initPage",map);
 	}
@@ -203,18 +207,15 @@ public class IndexController {
 	@RequestMapping(value="/currentprizepage",method = RequestMethod.GET)
 	public ModelAndView currentprizepage(){
 		Map<String,Object> map = new HashMap<String,Object>();
-		List<PrizeUser> list = prizeUserService.findCurrentPrizeUser();
-		map.put("prizelist", list);
+		map.put("resulthtml",prizeUserService.findPrizeUserHtmlOfCurrent());
 		return new ModelAndView("/prizeCurrent",map);
 	}
 	@RequestMapping(value="/historyprizepage")
 	public ModelAndView historyprizepage(String prizeSerials){
 		Map<String,Object> map = new HashMap<String,Object>();
 		List<PrizeSerial> prizeSerialsList = prizeSerialService.getInActivePrizeSerial();
-		List<PrizeUser> list = prizeUserService.findPrizeUserBySerialnum(prizeSerials);
 		map.put("prizeSerials", prizeSerialsList==null?new ArrayList():prizeSerialsList);
-		map.put("prizelist", list);
-		map.put("prizeSerialid", prizeSerials);
+		map.put("resulthtml",prizeUserService.findPrizeUserHtmlOfHistory(prizeSerials));
 		return new ModelAndView("/prizeHistory",map);
 	}
 	@RequestMapping(value="/resultreportpage",method = RequestMethod.GET)
@@ -273,7 +274,7 @@ public class IndexController {
 	}
 	@RequestMapping(value="/resultreport",method = RequestMethod.GET)
 	public @ResponseBody Object resultreport(){
-		return prizeUserService.findCurrentPrizeUser();
+		return prizeUserService.findPrizeUserOfCurrentByType(Prize.PRIZETYPE_USER);
 	}
 	@RequestMapping(value="/checkuser")
 	public @ResponseBody boolean checkuser(int prizelength){
@@ -284,8 +285,8 @@ public class IndexController {
 		return true;
 	}
 	@RequestMapping(value="/prizeuserlist",method = RequestMethod.GET)
-	public @ResponseBody Object prizeuserlist(String type){
-		return prizeUserService.getPrizeUserList(type);
+	public @ResponseBody Object prizeuserlist(long prizeid){
+		return prizeUserService.findPrizeUserById(prizeid);
 	}
 	@RequestMapping(value="/getusernum",method = RequestMethod.GET)
 	public @ResponseBody long getusernum(){

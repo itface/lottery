@@ -36,7 +36,7 @@ a:hover {
 }
 .jingpin{	
 	top: 280px;
-	right: 75px;
+	right: 175px;
 	position: absolute;
 	color: #fff;
 	font-size: 50px;
@@ -129,14 +129,14 @@ a:hover {
 }
 .div_left {
 	width:450px;
-	height:860px;
+	height:845px;
 	position:absolute;
 	top:0px;
 	left:0px;
 	font-size:14px;
 	padding:10px;
 	color:#fff;
-	padding-top: 130px;
+	padding-top: 120px;
 	padding-left: 20px;
 	overflow:hidden;
 }

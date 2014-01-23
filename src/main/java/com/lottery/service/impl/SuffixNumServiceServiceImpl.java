@@ -1,8 +1,5 @@
 package com.lottery.service.impl;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +23,7 @@ public class SuffixNumServiceServiceImpl implements SuffixNumService{
 		// TODO Auto-generated method stub
 		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
 		if(prizeSerial!=null){
-			prizeSerial.getSuffixnums().clear();
+			dao.executeUpdate("delete from SuffixNum t where t.prizeSerial.id=?1", new Object[]{prizeSerial.getId()});
 		}
 	}
 
@@ -57,9 +54,9 @@ public class SuffixNumServiceServiceImpl implements SuffixNumService{
 	}
 
 	@Override
-	public long getYcNum(String serialnum) {
+	public long getYcNum(long prizeid) {
 		// TODO Auto-generated method stub
 		
-		return dao.findTotalCount("select count(*) as num from SuffixNum t where t.status=-1 and t.prizeSerial.num=?1", new Object[]{serialnum});
+		return dao.findTotalCount("select count(*) as num from SuffixNum t where t.prizeid=?1", new Object[]{prizeid});
 	}
 }

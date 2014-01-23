@@ -35,13 +35,14 @@ public class RandomNumUtil {
 		return -1;
 	}
 	public  List<NumberPool> getRandomOfNumber(List<NumberPool> list,int length){
-		if(list!=null&&list.size()>0&&length>0){
+		int listlength = list==null?0:list.size();
+		if(list!=null&&listlength>0&&listlength>=length){
 			List<NumberPool> numberPoolas = new ArrayList<NumberPool>(length);
 			Set<Integer> set = getRandom3(0,list.size(),length,null);
 			Iterator<Integer> it = set.iterator();
 			while(it.hasNext()){
 				int n = it.next();
-				numberPoolas.add(list.get(n));
+				numberPoolas.add(list.get(n-1));
 			}
 			return numberPoolas;
 		}
@@ -68,9 +69,10 @@ public class RandomNumUtil {
 						boolean flag = true;
 						while(it.hasNext()){
 							int index = it.next();
+							index=index-1;
 							if(set2.contains(index)&&!set.contains(index)){
 								//index是1到list的长度之间的任意一个数，可以当作是长度，因为作为下标是要減1
-								User u = list.get(index-1);
+								User u = list.get(index);
 								//校验这个序号对应的人是否已经抽过，因为可能存在同一个人有多条记录的情况
 								if(!tempusers.contains(u)){
 									set.add(index);
@@ -258,6 +260,11 @@ public class RandomNumUtil {
 		}
 		return null;
 	}
+	/**
+	 * 上传人员时，随机存
+	 * @param list
+	 * @return
+	 */
 	 public  List<User> getRandomList(List<User> list){ 
 		if(list!=null&&list.size()>0){
 			int length = list.size();

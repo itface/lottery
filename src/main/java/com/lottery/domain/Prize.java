@@ -1,7 +1,10 @@
 package com.lottery.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -47,6 +51,7 @@ public class Prize implements Serializable,Comparable<Prize>{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "prizeserial_id", referencedColumnName = "id")
 	private PrizeSerial prizeSerial=new PrizeSerial();
+	
 	
 //	@JsonIgnore
 //	@OneToMany(fetch=FetchType.LAZY,cascade = {CascadeType.REFRESH,CascadeType.PERSIST},mappedBy="prize")  
@@ -139,7 +144,7 @@ public class Prize implements Serializable,Comparable<Prize>{
 		this.totalprizenum = totalprizenum;
 	}
 	public String getPrizelistlabel() {
-		return totalprizenum+"_"+prizename+"_"+prizenum;
+		return prizename+"_"+totalprizenum+"_"+prizenum;
 	}
 	public void setPrizelistlabel(String prizelistlabel) {
 		this.prizelistlabel = prizelistlabel;

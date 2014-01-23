@@ -19,6 +19,7 @@ import com.lottery.domain.PrizeUser;
 import com.lottery.service.PrizeSerialService;
 import com.lottery.service.PrizeService;
 import com.lottery.service.PrizeUserService;
+import com.lottery.service.SuffixNumService;
 import com.lottery.util.JsonUtils;
 @Service
 public class PrizeServiceImpl implements PrizeService{
@@ -29,6 +30,8 @@ public class PrizeServiceImpl implements PrizeService{
 	private PrizeSerialService prizeSerialService;
 	@Autowired
 	private PrizeUserService prizeUserService;
+	@Autowired
+	private SuffixNumService suffixNumService;
 	
 	@Override
 	public int getPrizeOrder(long id) {
@@ -171,15 +174,22 @@ public class PrizeServiceImpl implements PrizeService{
 		return null;
 	}
 
+	/**
+	 * 判断奖项是否超出总的中奖数
+	 * 返回true代表已经抽完，返回false说明没抽完
+	 */
 	@Override
 	public boolean checkfinish(Prize prize) {
 		// TODO Auto-generated method stub
 		if(prize!=null){
-			if(prize.getTotalprizenum()>0){
-				List<PrizeUser> list = prizeUserService.findCurrentPrizeUserByType(prize.getId());
-				if(list!=null&&list.size()>=prize.getTotalprizenum()){
-					return true;
-				}else{
+			if(!Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())&&prize.getTotalprizenum()>0){
+				List<PrizeUser> list = prizeUserService.findPrizeUserById(prize.getId());
+				if(list!=null&&list.size()<prize.getTotalprizenum()){
+					return false;
+				}
+			}else if(Prize.PRIZETYPE_SUFFIXNUM.equals(prize.getPrizetype())){
+				long ycry = suffixNumService.getYcNum(prize.getId());
+				if(prize.getTotalprizenum()==0||(prize.getTotalprizenum()>0&&ycry<prize.getTotalprizenum())){
 					return false;
 				}
 			}else{

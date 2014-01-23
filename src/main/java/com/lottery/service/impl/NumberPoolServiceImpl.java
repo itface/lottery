@@ -1,6 +1,8 @@
 package com.lottery.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lottery.dao.BaseDao;
 import com.lottery.domain.NumberPool;
 import com.lottery.domain.PrizeSerial;
-import com.lottery.domain.User;
 import com.lottery.service.NumberPoolService;
 import com.lottery.service.PrizeSerialService;
 @Service
@@ -27,7 +28,7 @@ public class NumberPoolServiceImpl implements NumberPoolService{
 		//dao.executeUpdate("delete from NumberPool t", null);
 		PrizeSerial prizeSerial = prizeSerialService.getActivePrizeSerial();
 		if(prizeSerial!=null){
-			prizeSerial.getNumberpools().clear();
+			dao.executeUpdate("delete from NumberPool t where t.prizeSerial.id=?1", new Object[]{prizeSerial.getId()});
 		}
 	}
 

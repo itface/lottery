@@ -218,7 +218,7 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 		this.prizeid = prizeid;
 	}
 	public String getIndexordername() {
-		return "第"+indexorder+"次";
+		return "第"+sameprizeindexorder+"次";
 	}
 	public void setIndexordername(String indexordername) {
 		this.indexordername = indexordername;
@@ -247,9 +247,7 @@ public class PrizeUser implements Serializable,Comparable<PrizeUser>{
 	@Override
 	public int compareTo(PrizeUser o) {
 		// TODO Auto-generated method stub
-		return this.usernumber.compareTo(o.getUsernumber());
+		//return this.usernumber.compareTo(o.getUsernumber());
+		return this.indexorder-o.indexorder;
 	}
-
-	
-	
 }

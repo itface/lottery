@@ -70,13 +70,13 @@ public  class PrizeSerialServiceImpl implements PrizeSerialService{
 		// TODO Auto-generated method stub
 		PrizeSerial prizeSerial = this.getActivePrizeSerial();
 		if(!(prizeSerial.getNumberpoolfrom()==numberpoolfrom&&prizeSerial.getNumberpoolto()==numberpoolto&&(prizeSerial.getNumberpoolexclude()==null?"":prizeSerial.getNumberpoolexclude()).equals(numberpoolexclude))){
-			prizeSerial.getNumberpools().clear();
+			numberPoolService.deleteAll();
 			if(numberpoolfrom!=-1&&numberpoolto!=-1){
 				numberPoolService.saveList(numberpoolfrom, numberpoolto, numberpoolexclude);
 			}
 		}
-		if(!(prizeSerial.getSuffixnumfrom()==suffixnumfrom&&prizeSerial.getSuffixnumto()==suffixnumto&&(prizeSerial.getSuffixnumexclude()==null?"":prizeSerial.getSuffixnumexclude()).equals(numberpoolexclude))){
-			prizeSerial.getSuffixnums().clear();
+		if(!(prizeSerial.getSuffixnumfrom()==suffixnumfrom&&prizeSerial.getSuffixnumto()==suffixnumto&&(prizeSerial.getSuffixnumexclude()==null?"":prizeSerial.getSuffixnumexclude()).equals(suffixnumexclude))){
+			suffixNumService.deleteAll();
 			if(suffixnumfrom!=-1&&suffixnumto!=-1){
 				suffixNumService.saveList(suffixnumfrom, suffixnumto, suffixnumexclude);
 			}

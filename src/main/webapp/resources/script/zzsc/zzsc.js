@@ -126,7 +126,8 @@
 		function createATag(arr,start,end){
 			if(arr!=null&&arr.length>0){
 				for(var i=start;i<end&&i<arr.length;i++){
-					$("#tagscloud").append('<a href="javascript:void(0);" class="tagc'+(i%3+1)+'">'+arr[i]+'</a>');
+					var v = arr[i].substring(0,4);
+					$("#tagscloud").append('<a href="javascript:void(0);" class="tagc'+(i%3+1)+'">'+v+'</a>');
 				}
 			}
 		}
@@ -140,7 +141,7 @@
 		var maxuser=600;
 		var userlistpernum = arr.length>maxuser?maxuser:arr.length;
 		var setTimeoutTime=40;
-		var perLoopTime=30000;
+		var perLoopTime=10000;
 		var looptimes=perLoopTime/setTimeoutTime;
 		var count=0;
 		
@@ -182,9 +183,11 @@
 					var start = userlistflag*userlistpernum;
 					for(var i=0;i<aA.length;i++){
 						if(start+i<arr.length){
-							aA.item(i).innerHTML=arr[start+i];
+							var v = arr[start+i].substring(0,4);
+							aA.item(i).innerHTML=v;
 						}else{
 							start=0;
+							var v = arr[start].substring(0,4);
 							aA.item(i).innerHTML=arr[start];
 						}
 					}

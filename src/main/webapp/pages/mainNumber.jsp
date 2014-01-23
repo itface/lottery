@@ -30,9 +30,9 @@ canvas {
 	position:absolute;
 	top:120px;
 	left:20px;
-	width:470px;
+	width:480px;
 	background:#000;
-	font-size:30px;
+	font-size:33px;
 	line-height:34px;
 	color:#0F0;
 	padding-bottom:10px;
@@ -48,20 +48,21 @@ canvas {
 }
 .resultmsgheader{
 	text-align:center;
-	line-height: 60px;
-	height: 60px;
+	line-height: 80px;
+	height: 130px;
 	font-weight: bold;
-	font-size: 30px;
+	font-size: 60px;
 	font-family: 微软雅黑;
 	margin-top: -140px;
 }
 .resultmsgbody{
 	font-family: 微软雅黑;
 	color: red;
-	font-size: 30px;
-	line-height: 50px;
-	width:120px;
+	font-size: 80px;
+	line-height: 110px;
+	width:240px;
 	float:left;
+	text-align: center;
 }
 </style>
 </head>
@@ -98,7 +99,7 @@ canvas {
   <div class="prizeclass jingpin" style=""></div>
 </div>
 	<script>
-	
+	var lotterystatus="${lotterystatus}";
 	$(document).ready(function(){
 		var initflag = ${initflag};
 		var prizelistjson = ${prizelistjson};
@@ -106,6 +107,7 @@ canvas {
 		var bgmusic='${bgmusic}';
 		var startmusic='${startmusic}';
 		var stopmusic='${stopmusic}';
+		
 		//效果所用到的参数
 		var drops = [];
 		var font_size = 20;
@@ -114,7 +116,7 @@ canvas {
 		function init(){
 			window.onload=setPrizelist;//设置当前奖项的名称
 			initdrawnum();
-			setInterval(dodrawnum, 90);
+			setInterval(dodrawnum, 70);
 			$('#jsddm').easymenu();
 			setPrizeuser();//设置获奖名单
 			setMusic(bgmusic);
@@ -146,11 +148,11 @@ canvas {
 			}
 		}
 		function speed1(){
-			setInterval(dodrawnum, 3);
+			setInterval(dodrawnum, 1);
 		}
 		function setPrizeuser(){
 			$.ajax({
-				url:'${ctx}/index/prizeuserlist?type=num',
+				url:'${ctx}/index/prizeuserlist?prizeid='+prizeid,
 				async:false,
 				cache:false,
 				success:function(obj){
@@ -176,7 +178,7 @@ canvas {
 									}
 									s+='<li><a href="javascript:void(0);"  style="cursor: default;clear:both; width:400px; padding-top: 20px;padding-bottom: 10px;"><span style="display:inline-block;color:white ">'+v.prizename+'&nbsp;第'+v.sameprizeindexorder+'次</span></a></li>';
 								}
-								s+='<li><a href="javascript:void(0);" style="cursor: default;padding-bottom: 10px;inline-block;width:72px">'+v.username+'</a></li>';
+								s+='<li><a href="javascript:void(0);" style="cursor: default;padding-bottom: 10px;inline-block;width:75px;text-align:center">'+v.username+'</a></li>';
 							}
 						});
 						$('.left').html(s);
@@ -235,6 +237,7 @@ canvas {
 			    	location=location;
 			    }
 			});
+			 $('.ui_title_bar').hide();
 		});
 		$('.musicsetting').bind('click',function(){
 			var dialog = $.dialog({
@@ -254,6 +257,7 @@ canvas {
 			    	location=location;
 			    }
 			});
+			 $('.ui_title_bar').hide();
 		});
 		$('.endprize').bind('click',function(){
 			/*
@@ -269,7 +273,7 @@ canvas {
 						async:false,
 						success:function(obj){
 							alert('本批次抽奖活动已结束！');
-							location=location;
+							location='${ctx}/index';
 						}
 				});
 				$(window).blockUI('remove');
@@ -320,6 +324,7 @@ canvas {
 			    content: 'url:${ctx}/index/resultreportpage',
 			    title:''
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.currentprize').bind('click',function(){
@@ -330,8 +335,8 @@ canvas {
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 1200,
-		    	height: 550,
+			    width: 900,
+		    	height: 750,
 			    min:false,
 			    max:true,
 			    cancel:true,
@@ -340,14 +345,15 @@ canvas {
 			    content: 'url:${ctx}/index/currentprizepage',
 			    title:''
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.historyprize').bind('click',function(){
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 1200,
-		    	height: 550,
+			    width: 900,
+		    	height: 750,
 			    min:false,
 			    max:false,
 			    cancel:true,
@@ -356,6 +362,7 @@ canvas {
 			    content: 'url:${ctx}/index/historyprizepage',
 			    title:''
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.setting').bind('click',function(){
@@ -369,7 +376,7 @@ canvas {
 			    max:false,
 			    cancel:false,
 			    background: '#FFF',
-			    opacity: 0.5,
+			    opacity: 0.2,
 			    content: 'url:${ctx}/index/initpage',
 			    title:'',
 			    close:function(){
@@ -383,6 +390,7 @@ canvas {
 					callback: function(){this.close();},
 				}]
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.initUser').bind('click',function(){
@@ -406,6 +414,19 @@ canvas {
 			$('.suffixnum').hide();
 			location=location;
 		});
+		$(document).bind('keypress',function(e){
+			//空格键开始，回车键结束
+			if(lotterystatus=='init'&&e.which==32){
+				//lotterystatus='run';
+				$('.actionstart').trigger('click');
+				return;
+			}
+			if(lotterystatus=='run'&&e.which==13){
+				//lotterystatus='stop';
+				$('.actionend').trigger('click');
+				return;
+			}
+		});
 		$('.actionstart').bind('click',function(){
 			/*
 			if(initflag==false||initflag=='false'){
@@ -421,6 +442,7 @@ canvas {
 			setMusic(startmusic);
 			$('.actionstart').css('visibility','hidden');
 			$('.actionend').css('visibility','visible');
+			lotterystatus='run';
 		});
 		$('.actionend').bind('click',function(){
 			$('.actionstart').css('visibility','visible');
@@ -430,9 +452,10 @@ canvas {
 				async:false,
 				cache:false,
 				success:function(obj){
-					var s = "<div style='width:600px'>";
+					var s = "<div style='width:1200px;'><div style='height:130px'></div>";
 					var numberflag=false;
 					if(obj!=null&&obj.length>0){
+						var count=0;
 						$(obj).each(function(i,v){
 							if(v.prizetype=='尾号'){
 								var suffixnum = v.uid.substring(v.uid.length-1);
@@ -442,29 +465,33 @@ canvas {
 							}else{
 								numberflag=true;
 								if(i==0){
-									s+="<div class='resultmsgheader'>"+v.prizename+" 等"+v.sameprizeindexorder+"次，中奖号码：</div>";
+									s+="<div class='resultmsgheader'>"+v.prizename+" 第"+v.sameprizeindexorder+"次，中奖号码：</div>";
 									s+="<div>";
 									s+="<div class='resultmsgbody'>"+v.uid+"</div>";
 								}else if(i%4==0){
 									s+="<div class='resultmsgbody'>"+v.uid+"</div>";
 									s+="</div>";
+									s+="<div>";
 								}else{
 									s+="<div class='resultmsgbody'>"+v.uid+"</div>";
 								}
+								count=i;
 							}
 						});
-						s+="</div>";
+						if(count>0&&count%4!=0){
+							s+="</div>";
+						}
 						if(numberflag){
 							var dialog = $.dialog({
 						 		id:'dia',
 							    lock: true,
-							    width: 700,
-						    	height: 400,
+							    width: 1300,
+						    	height: 500,
 							    min:false,
 							    max:false,
 							    cancel:true,
 							    background: '#FFF',
-							    opacity: 0.5,
+							    opacity: 0,
 							    content: s,
 							    title:'',
 							    close:function(){
@@ -477,6 +504,7 @@ canvas {
 						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确,或者所抽的奖项是否已经抽完。");
 					}
 					//setPrizeuser();
+					lotterystatus='stop';
 					setMusic(stopmusic);
 				}
 			});

@@ -12,13 +12,17 @@
 </head>
 <body>
 	<form action='${ctx}/index/historyprizepage'>
-		<div>
-			抽奖名称:<form:select id="prizeSerials" value="${prizeSerialid}"  name="prizeSerials" path="prizeSerials"  items="${prizeSerials}" itemValue="num" itemLabel="name"/><button/>查询</button>
+		<div style="padding-left: 25px;padding-top: 30px;">
+			抽奖名称:<form:select id="prizeSerials" value="${prizeSerialid}" style='width: 200px;'  name="prizeSerials" path="prizeSerials"  items="${prizeSerials}" itemValue="num" itemLabel="name"/><button/>查询</button>
 		</div>
+		<div class="wr_table userListTable">
+			${resulthtml}
+		</div>
+		<!-- 
 		<div class="wr_table" style="width:1150px;">
 			<table style='border-collapse: collapse;' border="0" cellspacing="0" cellpadding="0" width="100%">
 				<thead class="wr_table_header">
-		          <tr class="wr-table-hd-inner">
+		          <tr class="wr-table-hd-inner-history">
 					<td width='5%'>序号</td>
 					<td width='11%'>抽奖活动批号</td>
 					<td width='6%'>抽奖次数</td>
@@ -50,6 +54,7 @@
 				</c:forEach>
 			</table>
 		</div>
+		 -->
 	</form>
 	
 </body>

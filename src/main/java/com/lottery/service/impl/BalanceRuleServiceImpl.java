@@ -144,4 +144,19 @@ public class BalanceRuleServiceImpl implements BalanceRuleService{
 		return userService.testFindActiveUserByBalanceRule(this.findById(id));
 	}
 
+	@Override
+	public String getYcjxId(String serialnum) {
+		// TODO Auto-generated method stub
+		List list = dao.find("select id from BalanceRule t where t.prizeSerial.num=?1 and t.ycxx>0", new Object[]{serialnum});
+		StringBuffer sb = new StringBuffer("{0:0");
+		if(list!=null&&list.size()>0){
+			for(int i=0;i<list.size();i++){
+				String id = (Long)list.get(i)+"";
+				sb.append(",").append(id).append(":").append(id);
+			}
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+
 }

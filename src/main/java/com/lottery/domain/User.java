@@ -62,7 +62,7 @@ public class User implements Serializable,Comparable<User>{
 		}
 		User obj2 = (User)obj;
 		if(this.uid!=null&&!"".equals(uid)){
-			return this.uid==obj2.getUid();
+			return this.uid.equals(obj2.getUid());
 		}else{
 			return false;
 		}

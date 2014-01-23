@@ -47,7 +47,8 @@
 </body>
 <script>
 
-		 
+		 var ycjxid=${ycjxid};
+		 var ycbalanceid=${ycbalanceid};
 		 var pnum=${pnum};//活动批次号
 		 var uploadshow = ${uploadshow};
 		 var usernum=0;//人员池中的人数
@@ -340,13 +341,11 @@
 		}
 		function setTotalprizenumDis(v){
 			if(v=='号码'){
+				//$('#prizenum').val('');
 				$('#tr_prizenum').show();
-				//$('#tr_totalprizenum').show();
 			}else{
-				$('#prizenum').val(0);
-				//$('#totalprizenum').val(0);
+				$('#prizenum').val(1);
 				$('#tr_prizenum').hide();
-				//$('#tr_totalprizenum').hide();
 			}
 		}
 		function validatePrizenum(){
@@ -363,19 +362,6 @@
 					return "总中奖数必须是每次中奖数的倍数";
 				}
 			}
-			/*
-			if(total==''||total<=0){
-				return "每次中奖人数必须大于0";
-			}
-			if(type=='号码'&&(per==''||per<=0)){
-				return "每次中奖人数必须大于0";
-			}else if(type=='号码'&&total%per!=0){
-				return "总中奖数必须是每次中奖数的倍数";
-			}else if(total!=''&&total>0){
-				if(per==''||per<=0){
-					return "每次中奖人数必须大于0";
-				}
-			}*/
 			return "";
 			
 		}
@@ -390,14 +376,14 @@
 		    },
 			autowidth: false,
 		    width:920,
-		   	height:110,
+		   	height:200,
 		   colNames: ['ID','状态','奖项类别','奖项名称','总中奖数','每次中奖人数','奖品','奖品照片文件名','顺序','说明'],
 		   	colModel:[
 		   		{name:'id',index:'id',hidden:true, width:1,key:true},
 		   		{name:'status',index:'status',hidden:true},
 		   		{name:'prizetype',index:'prizetype',editable:true,edittype:'select', editoptions:{value:"尾号:尾号，每次在0-9之中抽一个数;号码:号码，每人的抽奖票上有一个唯一的数字编号",dataInit:function(el){$(el).bind('change',function(){setTotalprizenumDis($(el).val());});}}},
 		   		{name:'prizename',index:'prizename',editable:true,editrules:{required:true}},
-		   		{name:'totalprizenum',index:'totalprizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>为空，不限制抽奖次数</span>" }},
+		   		{name:'totalprizenum',index:'totalprizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>为0，不限制抽奖次数</span>" }},
 		   		{name:'prizenum',index:'prizenum',editable:true,editrules:{integer:true},formoptions:{elmsuffix:"<span style='color:red'>总中奖数必须是每次中奖数的倍数</span>" }},
 		   		{name:'jp',index:'jp',editable:true,editrules:{required:true,formoptions:{elmsuffix:"  <font color=red>*</font>" }}},
 		   		{name:'jppic',index:'jppic',width:200,editable:true,hidden:true},
@@ -414,10 +400,23 @@
 			multiselect: true,
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
 		    	//editData为添加的参数，是为了让参数能正常的put到后台
-		    	$('#list').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath,viewPagerButtons:false,afterComplete:function(){jQuery("#list2").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptions();setTotalprizenumDis($('#prizetype').val());}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	if($('#jqg_list_'+rowid).length>0){
+		    		$('#list').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:600,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath,viewPagerButtons:false,afterComplete:function(){jQuery("#list2").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptions();setTotalprizenumDis($('#prizetype').val());}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	}
+		    },
+		    gridComplete:function(){//ycbalanceid
+		    	var rowData= jQuery("#list").jqGrid('getRowData');
+		    	//var numberOfRecords  = jQuery("#list").jqGrid('getGridParam',"records");
+				for(var i=0;i<rowData.length;i++){
+					var rowId = rowData[i].id;
+					if(ycjxid[rowId]!=undefined&&ycjxid[rowId]!=''&&ycjxid[rowId]>0){
+						$('#jqg_list_'+rowId).remove();
+					}
+				}
+				$('#cb_list').hide();
 		    }
 		});
-		jQuery("#list").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:435,recreateForm:true,closeAfterAdd:true,afterComplete:function(){jQuery("#list2").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();setTotalprizenumDis($('#prizetype').val());},onclickSubmit:function(){return {list_id:0,id:0,pnum:pnum};}},{url:basePath,reloadAfterSubmit:true,jqModal:false});
+		jQuery("#list").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:600,recreateForm:true,closeAfterAdd:true,afterComplete:function(){jQuery("#list2").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();setTotalprizenumDis($('#prizetype').val());},onclickSubmit:function(){return {list_id:0,id:0,pnum:pnum};}},{url:basePath,reloadAfterSubmit:true,jqModal:false});
 		var topPagerDiv = $("#list_toppager")[0];
 		$("#edit_list_top", topPagerDiv).remove();
 		$("#list_toppager_center", topPagerDiv).remove();
@@ -461,10 +460,24 @@
 			multiselect: true,
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
 		    	//editData为添加的参数，是为了让参数能正常的put到后台
-		    	$('#list2').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST",afterComplete:function(){jQuery("#list").trigger("reloadGrid");}, url: basePath2,viewPagerButtons:false,beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptions();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	if($('#jqg_list2_'+rowid).length>0){
+			    	
+			    	$('#list2').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:150,left:200,width:600,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST",afterComplete:function(){jQuery("#list").trigger("reloadGrid");}, url: basePath2,viewPagerButtons:false,beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptions();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	}
+		    },
+		    gridComplete:function(){
+		    	var rowData= jQuery("#list2").jqGrid('getRowData');
+		    	//var numberOfRecords  = jQuery("#list").jqGrid('getGridParam',"records");
+				for(var i=0;i<rowData.length;i++){
+					var rowId = rowData[i].id;
+					if(ycjxid[rowId]!=undefined&&ycjxid[rowId]!=''&&ycjxid[rowId]>0){
+						$('#jqg_list2_'+rowId).remove();
+					}
+				}
+				$('#cb_list2').hide();
 		    }
 		});
-		jQuery("#list2").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:435,recreateForm:true,closeAfterAdd:true,afterComplete:function(){jQuery("#list").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath2,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();},onclickSubmit:function(){return {list2_id:0,id:0,pnum:pnum};}},{url:basePath2,reloadAfterSubmit:true,jqModal:false});
+		jQuery("#list2").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:150,left:200,width:600,recreateForm:true,closeAfterAdd:true,afterComplete:function(){jQuery("#list").trigger("reloadGrid");},beforeSubmit:function(postdata, formid){var vs = validatePrizenum();if(vs!=''){return[false,vs];}if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath2,viewPagerButtons:false,afterShowForm:function(){updateSelectOptions();},onclickSubmit:function(){return {list2_id:0,id:0,pnum:pnum};}},{url:basePath2,reloadAfterSubmit:true,jqModal:false});
 		var topPagerDiv = $("#list2_toppager")[0];
 		$("#edit_list2_top", topPagerDiv).remove();
 		$("#list2_toppager_center", topPagerDiv).remove();
@@ -508,19 +521,22 @@
 				var ids = jQuery("#list3").jqGrid('getDataIDs');
 				for(var i=0;i < ids.length;i++){
 					var cl = ids[i];
+					if(ycbalanceid[cl]!=undefined&&ycbalanceid[cl]>0){
+						$('#jqg_list3_'+cl).remove();
+					}
 					var be = "<input type='button' value='测试' onclick='test("+cl+")'/>"; 
 					jQuery("#list3").jqGrid('setRowData',ids[i],{act:be});
 				}	
-				
+				$('#cb_list3').hide();
 			},
 			ondblClickRow:function(rowid,iCol,cellcontent,e){
 		    	//只有允许修改人员的时候可以修改分组均衡
-		    	if(uploadshow==true){
-		    		$('#list3').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:350,left:200,width:435,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath3,viewPagerButtons:false,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptionsOfList3();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
+		    	if($('#jqg_list3_'+rowid).length>0){
+		    		$('#list3').jqGrid('editGridRow',rowid,{editData:{_method:'put'},top:350,left:200,width:600,reloadAfterSubmit:true,modal:true,closeAfterEdit:true,recreateForm:true,mtype: "POST", url: basePath3,viewPagerButtons:false,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},afterShowForm:function(){updateSelectOptionsOfList3();}});//var postdata=jQuery('#monitorGrid').jqGrid('getGridParam','postData');
 		    	}
 		    }
 		});
-		jQuery("#list3").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:350,left:200,width:435,recreateForm:true,closeAfterAdd:true,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath3,viewPagerButtons:false,afterShowForm:function(){updateSelectOptionsOfList3();},onclickSubmit:function(){return {list3_id:0,id:0,ycxx:0,pnum:pnum};}},{url:basePath3,reloadAfterSubmit:true,jqModal:false});
+		jQuery("#list3").jqGrid('navGrid','',{edit:false,cloneToTop:true},{},{mtype: "POST",top:350,left:200,width:600,recreateForm:true,closeAfterAdd:true,beforeSubmit:function(postdata, formid){if(!postdata.totalprizenum){postdata.totalprizenum=0;}if(!postdata.prizenum){postdata.prizenum=0;}return[true,''];},reloadAfterSubmit:true,modal:true,url:basePath3,viewPagerButtons:false,afterShowForm:function(){updateSelectOptionsOfList3();},onclickSubmit:function(){return {list3_id:0,id:0,ycxx:0,pnum:pnum};}},{url:basePath3,reloadAfterSubmit:true,jqModal:false});
 		var topPagerDiv = $("#list3_toppager")[0];
 		$("#edit_list3_top", topPagerDiv).remove();
 		$("#list3_toppager_center", topPagerDiv).remove();

@@ -178,21 +178,20 @@ public class PrizeSerial implements Serializable{
 			Iterator<SuffixNum> it = suffixnums.iterator();
 			while(it.hasNext()){
 				SuffixNum suffixNum = it.next();
-				if(suffixNum.getStatus()==0){
+				if(suffixNum.getPrizeid()==0){
 					set.add(suffixNum);
 				}
 			}
 		}
 		return set;
 	}
-	public void updateSuffixNum(int num){
-		Set<SuffixNum> set = new HashSet<SuffixNum>();
+	public void updateSuffixNum(int num,long prizeid){
 		if(suffixnums!=null&&suffixnums.size()>0){
 			Iterator<SuffixNum> it = suffixnums.iterator();
 			while(it.hasNext()){
 				SuffixNum suffixNum = it.next();
 				if(suffixNum.getSuffixnum()==num){
-					suffixNum.setStatus(-1);
+					suffixNum.setPrizeid(prizeid);
 				}
 			}
 		}

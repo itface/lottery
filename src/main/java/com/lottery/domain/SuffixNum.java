@@ -25,13 +25,14 @@ public class SuffixNum implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private int suffixnum;
-	private int status;
+	//private int status;
+	private long prizeid;
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "prizeserial_id", referencedColumnName = "id")
 	private PrizeSerial prizeSerial=new PrizeSerial();
 	
-	
+
 	
 	public int getId() {
 		return id;
@@ -45,17 +46,23 @@ public class SuffixNum implements Serializable{
 	public void setSuffixnum(int suffixnum) {
 		this.suffixnum = suffixnum;
 	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
+//	public int getStatus() {
+//		return status;
+//	}
+//	public void setStatus(int status) {
+//		this.status = status;
+//	}
 	public PrizeSerial getPrizeSerial() {
 		return prizeSerial;
 	}
 	public void setPrizeSerial(PrizeSerial prizeSerial) {
 		this.prizeSerial = prizeSerial;
+	}
+	public long getPrizeid() {
+		return prizeid;
+	}
+	public void setPrizeid(long prizeid) {
+		this.prizeid = prizeid;
 	}
 	
 	@Override

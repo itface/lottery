@@ -77,6 +77,7 @@
 			    	location=location;
 			    }
 			});
+			 $('.ui_title_bar').hide();
 		});
 		$('.musicsetting').bind('click',function(){
 			var dialog = $.dialog({
@@ -96,6 +97,7 @@
 			    	location=location;
 			    }
 			});
+			 $('.ui_title_bar').hide();
 		});
 		$('.endprize').bind('click',function(){
 			/*
@@ -140,6 +142,7 @@
 			    content: 'url:${ctx}/index/resultreportpage',
 			    title:''
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.currentprize').bind('click',function(){
@@ -150,8 +153,8 @@
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 1200,
-		    	height: 550,
+			    width: 900,
+		    	height: 750,
 			    min:false,
 			    max:true,
 			    cancel:true,
@@ -160,14 +163,15 @@
 			    content: 'url:${ctx}/index/currentprizepage',
 			    title:''
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.historyprize').bind('click',function(){
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 1200,
-		    	height: 550,
+			    width: 900,
+		    	height: 750,
 			    min:false,
 			    max:false,
 			    cancel:true,
@@ -176,13 +180,14 @@
 			    content: 'url:${ctx}/index/historyprizepage',
 			    title:''
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.setting').bind('click',function(){
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 950,
+			    width: 1100,
 		    	height: 900,
 		    	top: '1%',
 			    min:false,
@@ -203,6 +208,7 @@
 					callback: function(){this.close();},
 				}]
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.initUser').bind('click',function(){

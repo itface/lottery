@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/blockUI/blockUI.css'/>">
 <link rel="stylesheet" type="text/css" href="<c:url value='/resources/script/zzsc/zzsc.css'/>">
-<link rel="stylesheet" type="text/css" href="<c:url value='/resources/table/table.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/table/table_userprizeofuser.css'/>">
 <script src="<c:url value='/resources/script/jquery-1.7.2.min.js'/>"  type="text/javascript"></script>
 <script src="<c:url value='/resources/script/lhgdialog/lhgdialog.js'/>" type="text/javascript"></script>
 <script type="text/javascript" src="<c:url value='/resources/script/blockUI/blockUI.js'/>" ></script>
@@ -52,7 +52,7 @@
   </div>
 </div>
 	<script>
-	
+	var lotterystatus="${lotterystatus}";
 	$(document).ready(function(){
 		var initflag = ${initflag};
 		var prizelistjson = ${prizelistjson};
@@ -79,7 +79,7 @@
 		}
 		function setPrizeuser(){
 			$.ajax({
-				url:'${ctx}/index/prizeuserlist?type=user',
+				url:'${ctx}/index/prizeuserlist?prizeid='+prizeid,
 				async:false,
 				cache:false,
 				success:function(obj){
@@ -97,9 +97,9 @@
 									//$('#prizelist').val(v.prizeid);
 									//setPrizelist();
 								}
-				                s+='<li><a href="javascript:void(0);" class="prizeindex" style="cursor: default;font-size:20px;font-size: 30px;color:yellow;">'+v.prizename+'&nbsp;第'+v.sameprizeindexorder+'次</a></li>';
+				                s+='<li><a href="javascript:void(0);" class="prizeindex" style="cursor: default;font-size:20px;font-size: 28px;color:yellow;">'+v.prizename+'&nbsp;第'+v.sameprizeindexorder+'次</a></li>';
 							}
-							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:30px;">'+v.username+'</span><span style="font-size:20px">&nbsp;'+v.usernumber+'</span><span style="font-size:20px">&nbsp;'+v.region+'</span><span style="font-size:20px;">&nbsp;'+v.ywdy+'</span></a></li>';
+							s+='<li><a href="javascript:void(0);" style="cursor: default;"><span style="font-size:28px;font-weight:bold">'+v.username+'</span><span style="font-size:22px">&nbsp;'+v.usernumber+'</span><span style="font-size:22px">&nbsp;'+v.region+'</span><span style="font-size:22px;">&nbsp;'+v.ywdy+'</span></a></li>';
 						});
 						$('.div_left').html(s);
 					}
@@ -182,6 +182,7 @@
 			    	location=location;
 			    }
 			});
+			 $('.ui_title_bar').hide();
 		});
 		$('.musicsetting').bind('click',function(){
 			var dialog = $.dialog({
@@ -201,6 +202,7 @@
 			    	location=location;
 			    }
 			});
+			 $('.ui_title_bar').hide();
 		});
 		$('.endprize').bind('click',function(){
 			/*
@@ -216,7 +218,7 @@
 						async:false,
 						success:function(obj){
 							alert('本批次抽奖活动已结束！');
-							location=location;
+							location='${ctx}/index';
 						}
 				});
 				$(window).blockUI('remove');
@@ -258,6 +260,7 @@
 			    content: 'url:${ctx}/index/resultreportpage',
 			    title:''
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.currentprize').bind('click',function(){
@@ -268,8 +271,8 @@
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 1200,
-		    	height: 550,
+			    width: 900,
+		    	height: 750,
 			    min:false,
 			    max:true,
 			    cancel:true,
@@ -278,14 +281,15 @@
 			    content: 'url:${ctx}/index/currentprizepage',
 			    title:''
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.historyprize').bind('click',function(){
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 1200,
-		    	height: 550,
+			    width: 900,
+				height: 750,
 			    min:false,
 			    max:false,
 			    cancel:true,
@@ -294,13 +298,14 @@
 			    content: 'url:${ctx}/index/historyprizepage',
 			    title:''
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.setting').bind('click',function(){
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 950,
+			    width: 1050,
 		    	height: 900,
 		    	top: '1%',
 			    min:false,
@@ -321,6 +326,7 @@
 					callback: function(){this.close();},
 				}]
 			});
+			 $('.ui_title_bar').hide();
 			$.dialog.data('dialog',dialog);
 		});
 		$('.initUser').bind('click',function(){
@@ -340,6 +346,17 @@
 				});
 			}
 		});
+		$(document).bind('keypress',function(e){
+			//空格键开始，回车键结束
+			if(lotterystatus=='init'&&e.which==32){
+				$('.actionstart').trigger('click');
+				return;
+			}
+			if(lotterystatus=='run'&&e.which==13){
+				$('.actionend').trigger('click');
+				return;
+			}
+		});
 		$('.actionstart').bind('click',function(){
 			/*
 			if(initflag==false||initflag=='false'){
@@ -355,6 +372,7 @@
 			setMusic(startmusic);
 			$('.actionstart').css('visibility','hidden');
 			$('.actionend').css('visibility','visible');
+			lotterystatus='run';
 			/*
 			var prizenum = $('#prizenum').html();
 			if(prizenum!=null&&prizenum!=''&&parseInt(prizenum)>0){
@@ -387,7 +405,7 @@
 				async:false,
 				cache:false,
 				success:function(obj){
-					var s = "<div class='wr_table userListTable'><table class='userList' border='0' cellspacing='0' cellpadding='0' width='100%'>";
+					var s = "<div class='wr_table userListTable' style='margin-top: 40px;'><table class='userList' border='0' cellspacing='0' cellpadding='0' width='100%'>";
 					$(document).lottery("init");
 					if(obj!=null&&obj.length>0){
 						$(obj).each(function(i,v){
@@ -415,13 +433,13 @@
 						var dialog = $.dialog({
 					 		id:'dia',
 						    lock: true,
-						    width: 900,
-					    	height: 400,
+						    width: 1300,
+					    	height: 500,
 						    min:false,
 						    max:false,
 						    cancel:true,
 						    background: '#FFF',
-						    opacity: 0.5,
+						    opacity: 0,
 						    content: s,
 						    title:'获奖名单',
 						    close:function(){
@@ -433,6 +451,7 @@
 						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确,或者所抽的奖项是否已经抽完。");
 					}
 					//setPrizeuser();
+					lotterystatus='stop';
 					setMusic(stopmusic);
 				}
 			});
