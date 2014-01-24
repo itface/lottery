@@ -19,9 +19,9 @@ body{
 		<span class='title'></span>
 	</div>
 	<div>
-		<div id="chart3" style="margin-top:20px; margin-left:20px; width:300px; height:300px;float:left"></div>
-		<div id="chart2" style="margin-top:20px; margin-left:20px; width:300px; height:300px;float:left"></div>
-		<div id="chart1" style="margin-top:20px; margin-left:20px; width:500px; height:300px;float:left"></div>
+		<div id="chart3" style="margin-top:20px; margin-left:20px; width:500px; height:470px;float:left"></div>
+		<div id="chart2" style="margin-top:20px; margin-left:20px; width:300px; height:470px;float:left"></div>
+		<div id="chart1" style="margin-top:20px; margin-left:20px; width:500px; height:470px;float:left"></div>
 	</div>
 	<div>
 		<div style="float:left;padding-top:20px;">

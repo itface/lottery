@@ -132,8 +132,8 @@
 			var dialog = $.dialog({
 		 		id:'dia',
 			    lock: true,
-			    width: 1200,
-		    	height: 550,
+			    width: 1400,
+		    	height: 850,
 			    min:false,
 			    max:false,
 			    cancel:true,
