@@ -51,16 +51,16 @@ canvas {
 	line-height: 80px;
 	height: 130px;
 	font-weight: bold;
-	font-size: 60px;
+	font-size: 80px;
 	font-family: 微软雅黑;
 	margin-top: -140px;
 }
 .resultmsgbody{
 	font-family: 微软雅黑;
 	color: red;
-	font-size: 80px;
+	font-size: 110px;
 	line-height: 110px;
-	width:240px;
+	width:310px;
 	float:left;
 	text-align: center;
 }
@@ -452,7 +452,7 @@ canvas {
 				async:false,
 				cache:false,
 				success:function(obj){
-					var s = "<div style='width:1200px;'><div style='height:130px'></div>";
+					var s = "<div style='width:1600px;padding-left:30px;'><div style='height:130px'></div>";
 					var numberflag=false;
 					if(obj!=null&&obj!='null'&&obj!=undefined&&typeof obj!='string'&&obj!=''&&obj.length>0){
 						var count=0;
@@ -485,8 +485,8 @@ canvas {
 							var dialog = $.dialog({
 						 		id:'dia',
 							    lock: true,
-							    width: 1300,
-						    	height: 500,
+							    width: 1600,
+						    	height: 550,
 							    min:false,
 							    max:false,
 							    cancel:true,
