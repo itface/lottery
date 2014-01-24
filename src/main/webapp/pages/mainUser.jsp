@@ -403,7 +403,7 @@
 							s += '<td>'+(v['username']==null?'':v['username'])+'</td>';
 							s += '<td>'+(v['usernumber']==null?'':v['usernumber'])+'</td>';
 							s += '<td>'+(v['region']==null?'':v['region'])+'</td>';
-							s += '<td>'+(v['ywdy2']==null?'':v['ywdy'])+'</td>';
+							s += '<td>'+(v['ywdy']==null?'':v['ywdy'])+'</td>';
 							s += '</tr>';
 						});
 						s+="</table></div>";

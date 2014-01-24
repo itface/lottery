@@ -19,9 +19,9 @@ body{
 		<span class='title'></span>
 	</div>
 	<div>
-		<div id="chart3" style="margin-top:20px; margin-left:20px; width:500px; height:470px;float:left"></div>
-		<div id="chart2" style="margin-top:20px; margin-left:20px; width:300px; height:470px;float:left"></div>
-		<div id="chart1" style="margin-top:20px; margin-left:20px; width:500px; height:470px;float:left"></div>
+		<div id="chart3" style="margin-top:20px; margin-left:20px; width:400px; height:470px;float:left"></div>
+		<div id="chart2" style="margin-top:20px; margin-left:20px; width:400px; height:470px;float:left"></div>
+		<div id="chart1" style="margin-top:20px; margin-left:20px; width:400px; height:470px;float:left"></div>
 	</div>
 	<div>
 		<div style="float:left;padding-top:20px;">
@@ -52,7 +52,7 @@ body{
 				</tr>
 			</table>
 		</div>
-		<div style="float:left;padding-left:30px;padding-top:20px;">
+		<div style="float:left;padding-top:20px;">
 			<table border="1px solid #ccc" style="border-collapse:collapse;">
 				<tr>
 						<td width='80px'>地域分布</td>
@@ -149,12 +149,12 @@ $(document).ready(function() {
 						}
 					}
 					{
-						var ywdy2 = v['ywdy2'];
-						var value= map3[ywdy2];
+						var ywdy = v['ywdy'];
+						var value= map3[ywdy];
 						if(value!=null&&value!=''&&value!=undefined){
-							map3[ywdy2]=value+1;
+							map3[ywdy]=value+1;
 						}else{
-							map3[ywdy2]=1;
+							map3[ywdy]=1;
 						}
 					}
 				});

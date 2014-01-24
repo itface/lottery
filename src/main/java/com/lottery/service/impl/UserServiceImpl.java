@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService{
 			Map<String,Integer> tusernumbermap = new HashMap<String,Integer>();
 			for(User user : list){
 				String dy = user.getRegion();
-				String ywdy = user.getYwdy2();
+				String ywdy = user.getYwdy();
 				String usernumber = user.getUsernumber();
 				while(usernumber.indexOf('0')==0){
 					usernumber=usernumber.substring(1);
