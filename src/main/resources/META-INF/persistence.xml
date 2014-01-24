@@ -6,6 +6,7 @@
         	<!--property name="hibernate.proxool.existing_pool" value="true"/-->
         	<property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
         	<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+        	
 			<!-- 
         	<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
         	<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
