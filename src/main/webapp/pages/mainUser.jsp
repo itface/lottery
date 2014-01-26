@@ -14,7 +14,8 @@
 <script src="<c:url value='/resources/script/zzsc/zzsc.js'/>" type="text/javascript"></script>
 <script src="<c:url value='/resources/script/zzsc/menu.js'/>" type="text/javascript"></script>
 <style>
-
+.hide{opacity:0;}
+.show{opacity:1; transition:all 1s ease-in-out .1s}
 </style>
 </head>
 <body  style='background:url(${ctx}/resources/bg/${bgname})'>
@@ -57,7 +58,7 @@
 		var initflag = ${initflag};
 		var prizelistjson = ${prizelistjson};
 		var prizeid = ${prizeid};
-		var userlist = '${userlist}';
+		var userlist = "${userlist}";
 		var bgmusic='${bgmusic}';
 		var startmusic='${startmusic}';
 		var stopmusic='${stopmusic}';
@@ -388,7 +389,7 @@
 					if(obj!=null&&obj!='null'&&obj!=undefined&&obj!=''&&typeof obj!='string'&&obj.length>0){
 						$(obj).each(function(i,v){
 							if(i==0){
-									s += "<tr class='wr-table-hd-inner'><td colspan='6'>"+v.prizename+"——"+v.indexordername+"</td></tr>";
+									s += "<tr class='wr-table-hd-inner' style='height: 80px;'><td colspan='6'>"+v.prizename+"——"+v.indexordername+"</td></tr>";
 									s += '<tr class="wr-table-hd-inner">';
 									s += '<td width="50px">序号</td>';
 									s += '<td width="100px">姓名</td>';
@@ -398,7 +399,7 @@
 									
 									s += '</tr>';
 							}
-							s += '<tr class="wr-table-td-inner wr-table-tr-row">';
+							s += '<tr class="wr-table-td-inner wr-table-tr-row displayel hide">';
 							s += '<td>'+(i+1)+'</td>';
 							s += '<td>'+(v['username']==null?'':v['username'])+'</td>';
 							s += '<td>'+(v['usernumber']==null?'':v['usernumber'])+'</td>';
@@ -425,6 +426,10 @@
 						    }
 						});
 						 $('.ui_title_bar').hide();
+						 $('.displayel').each(function(i,v){
+						 	var number = i*2000;
+						 	setItem(v,number);
+						 });
 					}else{
 						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确,或者所抽的奖项是否已经抽完。");
 					}
@@ -435,6 +440,12 @@
 			});
 		});
 	});
+	function setItem(v,numberMillis) {
+		setTimeout(function(){$(v).removeClass('hide').addClass('show')},numberMillis);
+		//setTimeout(function(){$(v).fadeIn('slow');},numberMillis);
+		//setTimeout(function(){$(v).css('visibility','visible');},numberMillis);
+	}
+   
 	</script>
   </body>
 </html>

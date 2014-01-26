@@ -64,6 +64,8 @@ canvas {
 	float:left;
 	text-align: center;
 }
+.hide{opacity:0;}
+.show{opacity:1; transition:all 1s ease-in-out .1s}
 </style>
 </head>
 <body style="overflow:hidden">
@@ -467,13 +469,13 @@ canvas {
 								if(i==0){
 									s+="<div class='resultmsgheader'>"+v.prizename+" 第"+v.sameprizeindexorder+"次，中奖号码：</div>";
 									s+="<div>";
-									s+="<div class='resultmsgbody'>"+v.usernumber+"</div>";
+									s+="<div class='resultmsgbody displayel hide'>"+v.usernumber+"</div>";
 								}else if(i%4==0){
-									s+="<div class='resultmsgbody'>"+v.usernumber+"</div>";
+									s+="<div class='resultmsgbody displayel hide'>"+v.usernumber+"</div>";
 									s+="</div>";
 									s+="<div>";
 								}else{
-									s+="<div class='resultmsgbody'>"+v.usernumber+"</div>";
+									s+="<div class='resultmsgbody displayel hide'>"+v.usernumber+"</div>";
 								}
 								count=i;
 							}
@@ -499,6 +501,13 @@ canvas {
 							    }
 							});
 							$('.ui_title_bar').hide();
+							$('.displayel').each(function(i,v){
+							 	//$(v).animate({height: 'toggle',speed:20000, opacity: 'toggle'});
+							 	//$.when(function(){setTimeout(function(){$(v).css('visibility','visible');},1000);})
+							 	//.done(function(){alert(1);});
+							 	var number = i*1000;
+							 	setItem(v,number);
+							 });
 						}
 					}else{
 						alert("抱歉，没有抽到符合要求的奖，请检查奖项设置是否正确,或者所抽的奖项是否已经抽完。");
@@ -510,6 +519,10 @@ canvas {
 			});
 		});
 	});
+	function setItem(v,numberMillis) {
+		//setTimeout(function(){$(v).animate({visibility:'visible',display:''},'slow');},numberMillis);
+		setTimeout(function(){$(v).removeClass('hide').addClass('show')},numberMillis);
+	}
 	</script>
   </body>
 </html>
