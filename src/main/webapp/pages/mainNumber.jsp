@@ -112,7 +112,7 @@ canvas {
 		
 		//效果所用到的参数
 		var drops = [];
-		var font_size = 20;
+		var font_size = 30;
 		var chinese = "348034823482304832048470147014714017428239452393274369147104734724237413470".split("");
 		init();
 		function init(){
@@ -150,7 +150,7 @@ canvas {
 			}
 		}
 		function speed1(){
-			setInterval(dodrawnum, 1);
+			setInterval(dodrawnum, 6);
 		}
 		function setPrizeuser(){
 			$.ajax({
